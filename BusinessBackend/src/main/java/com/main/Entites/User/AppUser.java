@@ -37,44 +37,4 @@ public class AppUser implements Serializable {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
     private Employee employee;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getAppUserName() {
-        return appUserName;
-    }
-
-    public void setAppUserName(String appUserName) {
-        this.appUserName = appUserName;
-    }
-
-    public String getAppUserPassword() {
-        return appUserPassword;
-    }
-
-    public void setAppUserPassword(String appUserPassword) {
-        this.appUserPassword = appUserPassword;
-    }
-
-    public String getAppUserGroup() {
-        return appUserGroup;
-    }
-
-    public void setAppUserGroup(String appUserGroup) {
-        this.appUserGroup = appUserGroup;
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
 }

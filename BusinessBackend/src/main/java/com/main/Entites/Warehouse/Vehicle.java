@@ -36,40 +36,4 @@ public class Vehicle implements Serializable {
     public List<Route> getRouteList() {
         return routeList;
     }
-
-    public void setRouteList(List<Route> routeList) {
-        this.routeList = routeList;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getManufacturer() {
-        return manufacturer;
-    }
-
-    public String getVehicleType() {
-        return vehicleType;
-    }
-
-    public String getLicensePlateNumber() {
-        return licensePlateNumber;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setManufacturer(String manufacturer) {
-        this.manufacturer = manufacturer;
-    }
-
-    public void setVehicleType(String vehicleType) {
-        this.vehicleType = vehicleType;
-    }
-
-    public void setLicensePlateNumber(String licensePlateNumber) {
-        this.licensePlateNumber = licensePlateNumber;
-    }
 }

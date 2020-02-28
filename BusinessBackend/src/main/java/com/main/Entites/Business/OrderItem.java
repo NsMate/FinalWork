@@ -37,44 +37,4 @@ public class OrderItem implements Serializable {
     @JoinColumn(name = "bus_order_id", referencedColumnName = "id")
     @JsonIgnore
     private BusinessOrder businessOrder;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public BigDecimal getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(BigDecimal quantity) {
-        this.quantity = quantity;
-    }
-
-    public BigDecimal getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(BigDecimal discount) {
-        this.discount = discount;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public BusinessOrder getBusinessOrder() {
-        return businessOrder;
-    }
-
-    public void setBusinessOrder(BusinessOrder businessOrder) {
-        this.businessOrder = businessOrder;
-    }
 }
