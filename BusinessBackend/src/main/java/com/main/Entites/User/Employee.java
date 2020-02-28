@@ -31,7 +31,7 @@ public class Employee implements Serializable {
     @NotNull
     private String lastName;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "employee")
+    @OneToOne(mappedBy = "employee")
     @JsonIgnore
     private AppUser appUser;
 }

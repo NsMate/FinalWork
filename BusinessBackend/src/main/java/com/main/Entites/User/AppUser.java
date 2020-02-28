@@ -34,7 +34,7 @@ public class AppUser implements Serializable {
     @NotNull
     private String appUserGroup;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
     private Employee employee;
 }
