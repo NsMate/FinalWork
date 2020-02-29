@@ -1,7 +1,9 @@
 package com.main.Controllers.Business;
 
+import com.main.Entites.Business.BusinessOrder;
 import com.main.Entites.Business.Invoice;
 import com.main.Entites.Business.Partner;
+import com.main.Repositories.Business.BusinessOrderRepository;
 import com.main.Repositories.Business.InvoiceRepository;
 import com.main.Repositories.Business.PartnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ public class PartnerController {
 
     @Autowired
     private InvoiceRepository invoiceRepository;
+
+    @Autowired
+    private BusinessOrderRepository businessOrderRepository;
 
     @GetMapping("")
     public ResponseEntity<Iterable<Partner>> getAll(){
@@ -89,8 +94,8 @@ public class PartnerController {
         }
     }
 
-    @PutMapping("/{id}/invoice_items")
-    public ResponseEntity<Iterable<Invoice>> modifyInvocieItemOnInoviceById(@PathVariable Long id, @RequestBody List<Invoice> invoices) {
+    @PutMapping("/{id}/invoices")
+    public ResponseEntity<Iterable<Invoice>> modifyInvocieItemOnPartnerById(@PathVariable Long id, @RequestBody List<Invoice> invoices) {
         Optional<Partner> oldPartner = partnerRepository.findById(id);
         if (oldPartner.isPresent()) {
             Partner partner = oldPartner.get();
@@ -104,6 +109,50 @@ public class PartnerController {
             partner.setInvoices(invoices);
             partnerRepository.save(partner);
             return ResponseEntity.ok(invoices);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/{id}/orders")
+    public ResponseEntity<Iterable<BusinessOrder>> getAllOrdersById(@PathVariable Long id) {
+        Optional<Partner> partner = partnerRepository.findById(id);
+        if (partner.isPresent()) {
+            return ResponseEntity.ok(partner.get().getBusinessOrders());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/{id}/orders")
+    public ResponseEntity<BusinessOrder> insertOrdersToPartnerById(@PathVariable Long id, @RequestBody BusinessOrder businessOrder) {
+        Optional<Partner> foundPartner = partnerRepository.findById(id);
+        if (foundPartner.isPresent()) {
+            Partner partner = foundPartner.get();
+            BusinessOrder newOrder = businessOrderRepository.save(businessOrder);
+            partner.getBusinessOrders().add(businessOrder);
+            businessOrderRepository.save(businessOrder);  // have to trigger from the @JoinTable side
+            return ResponseEntity.ok(newOrder);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/{id}/orders")
+    public ResponseEntity<Iterable<BusinessOrder>> modifyOrderOnPartnerById(@PathVariable Long id, @RequestBody List<BusinessOrder> businessOrders) {
+        Optional<Partner> oldPartner = partnerRepository.findById(id);
+        if (oldPartner.isPresent()) {
+            Partner partner = oldPartner.get();
+
+            for (BusinessOrder businessOrder : businessOrders) {
+                if (businessOrder.getId() == null) {
+                    businessOrderRepository.save(businessOrder);
+                }
+            }
+
+            partner.setBusinessOrders(businessOrders);
+            partnerRepository.save(partner);
+            return ResponseEntity.ok(businessOrders);
         } else {
             return ResponseEntity.notFound().build();
         }

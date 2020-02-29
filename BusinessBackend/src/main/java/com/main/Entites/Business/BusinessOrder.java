@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -26,6 +27,10 @@ public class BusinessOrder implements Serializable {
     @Column(name = "due_date")
     @NotNull
     private Date dueDate;
+
+    @Column(name = "create_date")
+    @CreationTimestamp
+    private Date createDate;
 
     @ManyToOne
     @JoinColumn(name = "partner_id", referencedColumnName = "id")
