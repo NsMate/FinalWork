@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthorizationService } from '../services/authorization-service.service';
+import { Router } from '@angular/router';
+import { Validators, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-login-form',
@@ -7,9 +10,37 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginFormComponent implements OnInit {
 
-  constructor() { }
+  message: string;
+  hidePassword = true;
 
-  ngOnInit(): void {
+  form = this.formBuilder.group({
+    username: ['', [ Validators.required ]],
+    password: ['', [ Validators.required ]],
+  });
+
+  get username() { return this.form.get('username'); }
+  get password() { return this.form.get('password'); }
+
+  constructor(
+    private authService: AuthorizationService,
+    private router: Router,
+    private formBuilder: FormBuilder
+  ) { }
+
+  ngOnInit() {
   }
 
+  async onSubmit() {
+    try {
+      this.message = null;
+      await this.authService.login(this.username.value, this.password.value);
+      if (this.authService.redirectUrl) {
+        this.router.navigate([this.authService.redirectUrl]);
+      } else {
+        this.router.navigate(['/']);
+      }
+    } catch (e) {
+      this.message = 'Cannot log in!';
+    }
+  }
 }
