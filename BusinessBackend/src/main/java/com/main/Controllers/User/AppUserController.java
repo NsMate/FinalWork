@@ -5,6 +5,7 @@ import com.main.Repositories.User.AppUserRepository;
 import com.main.Security.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -19,6 +20,9 @@ public class AppUserController {
 
     @Autowired
     private AuthenticatedUser authenticatedUser;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @GetMapping("")
     public ResponseEntity<Iterable<AppUser>> getAll(){
@@ -63,13 +67,13 @@ public class AppUserController {
         if (oUser.isPresent()) {
             return ResponseEntity.badRequest().build();
         }
-        appUser.setAppUserPassword(passwordEncoder.encode(appUser.getPassword()));
+        appUser.setAppUserPassword(passwordEncoder.encode(appUser.getAppUserPassword()));
         appUser.setAppUserGroup(appUser.getAppUserGroup());
         return ResponseEntity.ok(appUserRepository.save(appUser));
     }
 
     @PostMapping("login")
     public ResponseEntity<AppUser> login() {
-        return ResponseEntity.ok(authenticatedUser.getUser());
+        return ResponseEntity.ok(authenticatedUser.getAppUser());
     }
 }
