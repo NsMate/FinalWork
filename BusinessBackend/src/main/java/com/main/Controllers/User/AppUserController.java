@@ -2,6 +2,7 @@ package com.main.Controllers.User;
 
 import com.main.Entites.User.AppUser;
 import com.main.Repositories.User.AppUserRepository;
+import com.main.Security.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,9 @@ public class AppUserController {
     @Autowired
     AppUserRepository appUserRepository;
 
+    @Autowired
+    private AuthenticatedUser authenticatedUser;
+
     @GetMapping("")
     public ResponseEntity<Iterable<AppUser>> getAll(){
         return ResponseEntity.ok(appUserRepository.findAll());
@@ -29,12 +33,6 @@ public class AppUserController {
         }else{
             return ResponseEntity.notFound().build();
         }
-    }
-
-    @PostMapping("")
-    public ResponseEntity<AppUser> newAppUser(@RequestBody AppUser appUser){
-        AppUser newUser = appUserRepository.save(appUser);
-        return ResponseEntity.ok(newUser);
     }
 
     @PutMapping("/{id}")
@@ -57,5 +55,21 @@ public class AppUserController {
         }else{
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PostMapping("register")
+    public ResponseEntity<AppUser> register(@RequestBody AppUser appUser) {
+        Optional<AppUser> oUser = appUserRepository.findByAppUserName(appUser.getAppUserName());
+        if (oUser.isPresent()) {
+            return ResponseEntity.badRequest().build();
+        }
+        appUser.setAppUserPassword(passwordEncoder.encode(appUser.getPassword()));
+        appUser.setAppUserGroup(appUser.getAppUserGroup());
+        return ResponseEntity.ok(appUserRepository.save(appUser));
+    }
+
+    @PostMapping("login")
+    public ResponseEntity<AppUser> login() {
+        return ResponseEntity.ok(authenticatedUser.getUser());
     }
 }
