@@ -1,0 +1,21 @@
+table {
+    width: 80%;
+    margin: 0 auto 0 auto;
+}
+
+th{
+    height: 50px;
+}
+
+th,td{
+    width: 40%;
+}
+
+h1{
+    margin-left: 40px;
+    text-align: center;
+}
+
+th.mat-sort-header-sorted {
+    color: black;
+}
