@@ -1,1 +1,29 @@
+<mat-toolbar color="primary" *ngIf="getAuthService().isLoggedIn">
+  <mat-toolbar-row>
+    <h1 style="color: black;"> Rapid </h1>
+    <span class="menu-spacer">   </span>
+    <div>
+      <button mat-button [matMenuTriggerFor]="vallalat"> Vállalat </button>
+      <mat-menu #vallalat="matMenu">
+        <a mat-menu-item [routerLink]="'/main'"> Saját vállalat </a>
+        <a mat-menu-item [routerLink]="'/main'"> Dolgozók </a>
+        <a mat-menu-item [routerLink]="'/main'"> Termékek </a>
+      </mat-menu>
+      <button mat-button [matMenuTriggerFor]="penz"> Pénzügy </button>
+      <mat-menu #penz="matMenu">
+        <a mat-menu-item [routerLink]="'/main'"> Számlák </a>
+        <a mat-menu-item [routerLink]="'/main'"> Ajánlatok </a>
+        <a mat-menu-item [routerLink]="'/main'"> Partnerek </a>
+        <a mat-menu-item [routerLink]="'/main'"> Kiadások </a>
+      </mat-menu>
+      <button mat-button [matMenuTriggerFor]="raktar"> Raktárkezelés </button>
+      <mat-menu #raktar="matMenu">
+        <a mat-menu-item [routerLink]="'/main'"> Gépjárművek </a>
+        <a mat-menu-item [routerLink]="'/main'"> Raktárak </a>
+      </mat-menu>
+      <button mat-button [routerLink]="'/main'"> Forgalomkezelés </button>
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>
+
 <router-outlet></router-outlet>
