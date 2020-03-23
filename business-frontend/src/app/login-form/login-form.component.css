@@ -1,0 +1,22 @@
+*{
+    margin: 0;
+}
+
+.passwordField, .usernameField, .saveButton{
+    position: absolute;
+}
+
+.passwordField{
+    left: 60vh;
+    top: 40vh;
+}
+
+.usernameField{
+    left: 60vh;
+    top: 30vh;
+}
+
+.saveButton{
+    left: 90vh;
+    top: 40vh;
+}
