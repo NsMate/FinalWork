@@ -32,9 +32,14 @@ public class AppUser implements Serializable {
 
     @Column(name = "app_user_group")
     @NotNull
-    private String appUserGroup;
+    @Enumerated(EnumType.STRING)
+    private Role appUserGroup;
 
     @OneToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
     private Employee employee;
+
+    public enum Role {
+        ROLE_LOGISTICS, ROLE_FINANCE, ROLE_ADMIN
+    }
 }

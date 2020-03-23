@@ -21,6 +21,7 @@ public class InvoiceItemController {
         return ResponseEntity.ok(invoiceItemRepository.findAll());
     }
 
+    /*
     @GetMapping("/{id}")
     public ResponseEntity<InvoiceItem> findInvoiceItemById(@PathVariable Long id){
         Optional<InvoiceItem> invoiceItem = invoiceItemRepository.findById(id);
@@ -58,4 +59,5 @@ public class InvoiceItemController {
             return ResponseEntity.notFound().build();
         }
     }
+     */
 }
