@@ -46,5 +46,9 @@ export class AuthorizationService {
     httpOptions.headers = httpOptions.headers.set('Authorization', ``);
     this.isLoggedIn = false;
     this.appUser = null;
+    window.location.reload();
+    localStorage.removeItem("loggedIn");
+    localStorage.removeItem("name");
+    localStorage.removeItem("password");
   }
 }

@@ -1,0 +1,11 @@
+.example-spacer {
+    flex: 1 1 auto;
+}
+
+.logout-button{
+    margin-left: 15px;
+}
+
+.menu-spacer{
+    margin-right: 10px;
+}
