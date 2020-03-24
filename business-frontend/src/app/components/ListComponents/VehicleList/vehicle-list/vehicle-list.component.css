@@ -5,10 +5,11 @@ table {
 
 th{
     height: 50px;
+    font-size: medium;
 }
 
 th,td{
-    width: 40%;
+    width: 30%;
 }
 
 h1{

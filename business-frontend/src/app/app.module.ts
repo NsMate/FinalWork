@@ -7,8 +7,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { VehicleOverviewDialog } from './components/ListComponents/VehicleList/vehicle-list/vehicle-list.component'
 
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatDialogModule } from '@angular/material/dialog'
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,13 +21,15 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { VehicleListComponent } from './components/ListComponents/VehicleList/vehicle-list/vehicle-list.component';
 import { MatTableModule } from '@angular/material/table';
-import { MatSortModule } from '@angular/material/sort'
+import { MatSortModule } from '@angular/material/sort';
+import { MatSelectModule } from '@angular/material/select'
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginFormComponent,
-    VehicleListComponent
+    VehicleListComponent,
+    VehicleOverviewDialog
   ],
   imports: [
     BrowserModule,
@@ -44,7 +48,9 @@ import { MatSortModule } from '@angular/material/sort'
     MatSidenavModule,
     MatListModule,
     MatTableModule,
-    MatSortModule
+    MatSortModule,
+    MatDialogModule,
+    MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]
