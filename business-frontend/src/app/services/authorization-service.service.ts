@@ -30,9 +30,12 @@ export class AuthorizationService {
       httpOptions.headers = httpOptions.headers.set('Authorization', `Basic ${token}`);
       const user = await this.http.post<AppUser>(`${this.authUrl}/login`, {}, httpOptions).toPromise();
       this.isLoggedIn = true;
-      this.appUser = user;
+      this.appUser = user;      
       console.log(user);
-      return Promise.resolve(this.appUser);
+      localStorage.setItem("loggedIn", "true");
+      localStorage.setItem("name", appUserName);
+      localStorage.setItem("password", appUserPassword);
+      return Promise.resolve(this.appUser);      
     } catch (e) {
       console.log(e);
       return Promise.reject();
