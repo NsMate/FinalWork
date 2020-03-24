@@ -6,6 +6,7 @@ table {
 th{
     height: 50px;
     font-size: medium;
+    color: black;
 }
 
 th,td{
@@ -14,9 +15,15 @@ th,td{
 
 h1{
     margin-left: 40px;
+    margin-bottom: 18px;
     text-align: center;
 }
 
 th.mat-sort-header-sorted {
     color: black;
+}
+
+.newButton{
+    margin-left: 10%;
+    margin-bottom: 18px;
 }

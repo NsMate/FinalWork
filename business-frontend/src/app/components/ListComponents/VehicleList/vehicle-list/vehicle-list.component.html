@@ -1,6 +1,8 @@
 
 <h1>Gépjárművek</h1>
 
+<button mat-flat-button (click)="openDialog()" class="newButton" color="primary">Új gépjármű</button>
+
 <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
   
     <ng-container matColumnDef="id">
@@ -26,5 +28,3 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
-
-  <button mat-flat-button (click)="openDialog()" style="margin-left: 10%;" color="primary">Új gépjármű</button>

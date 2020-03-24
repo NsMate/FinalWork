@@ -3,26 +3,26 @@
 </div>
 
 <div mat-dialog-content>
-  <form #addForm="ngForm">
+  <form #addForm="ngForm" [formGroup]="vehicleForm">
     <div>
       <h2>Gyártó</h2>
       <mat-form-field appearance="standard">
-        <input matInput placeholder="eg. Opel" [(ngModel)]="data.vehicle.manufacturer" name="manufacturer">
+        <input matInput placeholder="eg. Opel" [(ngModel)]="data.vehicle.manufacturer" name="manufacturer" formControlName="manufacturer">
       </mat-form-field>
     </div>
     <div>
       <h2>Rendszám</h2>
       <mat-form-field appearance="standard">
-        <input matInput placeholder="ABC-123" [(ngModel)]="data.vehicle.licensePlateNumber" name="licensePlate">
+        <input matInput placeholder="ABC-123" [(ngModel)]="data.vehicle.licensePlateNumber" name="licensePlate" formControlName="licensePlate">
       </mat-form-field>
     </div>
     <div>
       <h2>Rendeltetés</h2>
       <mat-form-field appearance="standard">
         <mat-label>{{ data.vehicle.vehicleType }}</mat-label>
-        <mat-select [(value)]="data.vehicle.vehicleType">
+        <mat-select [(value)]="data.vehicle.vehicleType" formControlName="type">
           <mat-option value="Személyes">Személyes</mat-option>
-          <mat-option value="Transport">Transport</mat-option>
+          <mat-option value="Transport">Szállítás</mat-option>
           <mat-option value="Combi">Combi</mat-option>
         </mat-select>
       </mat-form-field>
@@ -31,5 +31,5 @@
 </div>
 
 <div mat-dialog-action>
-  <button mat-flat-button (click)="savingVehicle()" color="primary" style="margin: 0 auto 0 auto;">Mentés</button>
+  <button mat-flat-button (click)="savingVehicle()" [disabled]="vehicleForm.invalid" color="primary" style="margin: 0 auto 0 auto;">Mentés</button>
 </div>

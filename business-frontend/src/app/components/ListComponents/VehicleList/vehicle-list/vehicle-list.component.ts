@@ -5,7 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 export interface DialogData{
   vehicle: Vehicle,
@@ -24,13 +24,11 @@ export class VehicleListComponent implements OnInit {
   public chosenVehicle: Vehicle;
   public newVehicle: boolean;
 
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
-
-  //CONSTRUCOR AND INIT
   constructor(
     private vehicleService: VehicleService,
     public vehicleDialog: MatDialog
   ) { }
+
 
   async ngOnInit(): Promise<void> {
     this.vehicles = await this.vehicleService.getVehicles();
@@ -38,7 +36,13 @@ export class VehicleListComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
+  //Sorting and column displaying for the mat-table
+  //
+
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
   displayedColumns: string[] = ['id', 'manufacturer', 'licensePlateNumber', 'type'];
+
+  //Function for opening the dialog for new and exsiting vehicle
 
   openDialog(vehicle?: Vehicle): void {
     if(vehicle == null){
@@ -58,6 +62,8 @@ export class VehicleListComponent implements OnInit {
 
 
 //Component for the dialog window for editing and new vehicles
+//
+//
 
 @Component({
   selector: 'vehicle-overview-dialog',
@@ -69,8 +75,11 @@ export class VehicleOverviewDialog{
     public dialogRef: MatDialogRef<VehicleOverviewDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private vehicleService: VehicleService,
-    public routing: Router
+    private formBuilder: FormBuilder
   ){}
+
+  
+  //Function for saving or editing a vehicle
 
   async savingVehicle(): Promise<void>{
     if(this.data.isNew){
@@ -80,4 +89,18 @@ export class VehicleOverviewDialog{
     }
     window.location.reload();
   }
+
+  //Validation for the vehicle form
+  //
+
+  vehicleForm = this.formBuilder.group({
+    'type': new FormControl (this.data.vehicle.vehicleType, Validators.required),
+    'licensePlate': new FormControl (this.data.vehicle.licensePlateNumber, Validators.compose([Validators.pattern("[A-Z][A-Z][A-Z]-[0-9][0-9][0-9]"), Validators.required])),
+    'manufacturer': new FormControl (this.data.vehicle.manufacturer, Validators.compose([Validators.required, Validators.pattern("[A-Za-z]*")]))
+  })
+
+  get type() { return this.vehicleForm.get('type'); }
+  get licensePlate() { return this.vehicleForm.get('licensePlate'); }
+  get manufacturer() { return this.vehicleForm.get('manufacturer'); }
+
 }
