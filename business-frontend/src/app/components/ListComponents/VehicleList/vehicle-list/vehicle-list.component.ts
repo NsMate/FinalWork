@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { ConfdialogComponent } from 'src/app/components/ConfirmationDialog/confdialog/confdialog.component';
 
 export interface DialogData{
   vehicle: Vehicle,
@@ -75,8 +76,23 @@ export class VehicleOverviewDialog{
     public dialogRef: MatDialogRef<VehicleOverviewDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private vehicleService: VehicleService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    public confDialog: MatDialog
   ){}
+
+  openConfDialog(){
+    const dialogRef = this.confDialog.open(ConfdialogComponent,{
+      width: '300px'
+    });
+
+    dialogRef.afterClosed().subscribe(async result => {
+      if(result){
+       await  this.vehicleService.deleteVehicle(this.data.vehicle.id).then(() => {
+          window.location.reload();
+        });
+      }
+    })
+  }
 
   
   //Function for saving or editing a vehicle

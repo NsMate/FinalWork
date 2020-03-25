@@ -27,3 +27,7 @@ th.mat-sort-header-sorted {
     margin-left: 10%;
     margin-bottom: 18px;
 }
+
+a:hover{
+    cursor: pointer;
+}

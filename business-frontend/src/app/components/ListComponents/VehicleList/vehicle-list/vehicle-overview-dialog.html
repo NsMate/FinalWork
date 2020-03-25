@@ -30,6 +30,8 @@
   </form>
 </div>
 
-<div mat-dialog-action>
-  <button mat-flat-button (click)="savingVehicle()" [disabled]="vehicleForm.invalid" color="primary" style="margin: 0 auto 0 auto;">Mentés</button>
+<div mat-dialog-action style="display: flex; justify-content: space-evenly;">
+  <button mat-flat-button (click)="savingVehicle()" [disabled]="vehicleForm.invalid" color="primary">Mentés</button>
+
+  <button mat-flat-button (click)="openConfDialog()" *ngIf="!data.isNew" color="primary" >Törlés</button>
 </div>

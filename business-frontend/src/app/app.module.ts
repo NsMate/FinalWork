@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { VehicleOverviewDialog } from './components/ListComponents/VehicleList/vehicle-list/vehicle-list.component'
+import { ConfdialogComponent } from './components/ConfirmationDialog/confdialog/confdialog.component'
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDialogModule } from '@angular/material/dialog'
@@ -22,14 +23,15 @@ import { MatListModule } from '@angular/material/list';
 import { VehicleListComponent } from './components/ListComponents/VehicleList/vehicle-list/vehicle-list.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
-import { MatSelectModule } from '@angular/material/select'
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginFormComponent,
     VehicleListComponent,
-    VehicleOverviewDialog
+    VehicleOverviewDialog,
+    ConfdialogComponent
   ],
   imports: [
     BrowserModule,
