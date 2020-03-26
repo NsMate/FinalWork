@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoginFormComponent } from './login-form/login-form.component'
 import { VehicleListComponent } from './components/ListComponents/VehicleList/vehicle-list/vehicle-list.component';
 import { AuthGuard } from './AuthorizationGuard/auth-guard';
+import { SchedulerComponent } from './components/Scheduler/scheduler/scheduler.component';
 
 
 const routes: Routes = [
@@ -19,6 +20,11 @@ const routes: Routes = [
   {
     path: 'main',
     component: VehicleListComponent,
+    canActivate: [ AuthGuard ]
+  },
+  {
+    path: 'schedule',
+    component: SchedulerComponent,
     canActivate: [ AuthGuard ]
   }
 ];

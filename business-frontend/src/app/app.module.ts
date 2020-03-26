@@ -24,6 +24,9 @@ import { VehicleListComponent } from './components/ListComponents/VehicleList/ve
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { SchedulerComponent } from './components/Scheduler/scheduler/scheduler.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +34,8 @@ import { MatSelectModule } from '@angular/material/select';
     LoginFormComponent,
     VehicleListComponent,
     VehicleOverviewDialog,
-    ConfdialogComponent
+    ConfdialogComponent,
+    SchedulerComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +56,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatTableModule,
     MatSortModule,
     MatDialogModule,
-    MatSelectModule
+    MatSelectModule,
+    CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory })
   ],
   providers: [],
   bootstrap: [AppComponent]
