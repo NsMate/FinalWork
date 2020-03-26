@@ -5,6 +5,7 @@ import { LoginFormComponent } from './login-form/login-form.component'
 import { VehicleListComponent } from './components/ListComponents/VehicleList/vehicle-list/vehicle-list.component';
 import { AuthGuard } from './AuthorizationGuard/auth-guard';
 import { SchedulerComponent } from './components/Scheduler/scheduler/scheduler.component';
+import { WarehouseListComponent } from './components/ListComponents/WarehouseList/warehouse-list/warehouse-list.component';
 
 
 const routes: Routes = [
@@ -25,6 +26,11 @@ const routes: Routes = [
   {
     path: 'schedule',
     component: SchedulerComponent,
+    canActivate: [ AuthGuard ]
+  },
+  {
+    path: 'warehouses',
+    component: WarehouseListComponent,
     canActivate: [ AuthGuard ]
   }
 ];

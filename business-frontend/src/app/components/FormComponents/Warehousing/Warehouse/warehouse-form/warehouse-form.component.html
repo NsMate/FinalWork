@@ -1,0 +1,29 @@
+<form [formGroup]="warehouseForm">
+    <h1>Raktár részletei</h1>
+    <div class="addressRow">
+        <div class="zip">
+            <h3>Irányítószám</h3>
+            <mat-form-field appearance="standard">
+                <input matInput placeholder="eg. 2660" name="zipCode" formControlName="zipCode">
+            </mat-form-field>
+        </div>
+        <div class="city">
+            <h3>Város</h3>
+            <mat-form-field appearance="standard">
+                <input matInput placeholder="eg. Budapest" name="city" formControlName="city">
+            </mat-form-field>
+        </div>
+        <div class="stree">
+            <h3>Út / Utca</h3>
+            <mat-form-field appearance="standard">
+                <input matInput placeholder="eg. Móricz Zsigmond utca" name="street" formControlName="street">
+            </mat-form-field>
+        </div>
+        <div class="streetNumber">
+            <h3>Házszám</h3>
+            <mat-form-field appearance="standard">
+                <input matInput placeholder="eg. 12" name="streetNumber" formControlName="streetNumber">
+            </mat-form-field>
+        </div>
+    </div>
+</form>

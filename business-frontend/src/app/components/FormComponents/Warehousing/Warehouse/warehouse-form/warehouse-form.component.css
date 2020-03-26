@@ -1,0 +1,4 @@
+.addressRow{
+    display: flex;
+    justify-content: space-between;
+}

@@ -27,6 +27,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { SchedulerComponent } from './components/Scheduler/scheduler/scheduler.component';
+import { WarehouseListComponent } from './components/ListComponents/WarehouseList/warehouse-list/warehouse-list.component';
+import { WarehouseFormComponent } from './components/FormComponents/Warehousing/Warehouse/warehouse-form/warehouse-form.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,9 @@ import { SchedulerComponent } from './components/Scheduler/scheduler/scheduler.c
     VehicleListComponent,
     VehicleOverviewDialog,
     ConfdialogComponent,
-    SchedulerComponent
+    SchedulerComponent,
+    WarehouseListComponent,
+    WarehouseFormComponent
   ],
   imports: [
     BrowserModule,
