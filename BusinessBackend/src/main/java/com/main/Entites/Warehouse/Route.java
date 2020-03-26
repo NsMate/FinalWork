@@ -45,4 +45,8 @@ public class Route implements Serializable {
     @JoinColumn(name = "vehicle_id", referencedColumnName = "id")
     @JsonIgnore
     private Vehicle vehicle;
+
+    @OneToOne(mappedBy = "route")
+    @JsonIgnore
+    private CalendarEvent calendarEvent;
 }
