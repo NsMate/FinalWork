@@ -3,8 +3,12 @@ import {
   ChangeDetectorRef,
   Component,
   Injectable,
-  ViewEncapsulation
+  ViewEncapsulation,
+  OnInit
 } from '@angular/core';
+
+import { RouteEvent } from '../../../models/Warehousing/RouteEvent/route-event'
+
 import { CalendarEvent, CalendarEventTitleFormatter } from 'angular-calendar';
 import { WeekViewHourSegment } from 'calendar-utils';
 import { fromEvent } from 'rxjs';
@@ -12,6 +16,7 @@ import { finalize, takeUntil } from 'rxjs/operators';
 import { addDays, addMinutes, endOfWeek, addHours, startOfDay } from 'date-fns';
 import localeHu from '@angular/common/locales/hu'
 import { registerLocaleData } from '@angular/common';
+import { CalendarEventService } from 'src/app/services/Warehousing/CalendarEvent/calendar-event.service';
 
 function floorToNearest(amount: number, precision: number) {
   return Math.floor(amount / precision) * precision;
@@ -49,18 +54,17 @@ export class CustomEventTitleFormatter extends CalendarEventTitleFormatter {
   styleUrls: ['./scheduler.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class SchedulerComponent {
-viewDate = new Date();
+export class SchedulerComponent implements OnInit{
+  viewDate = new Date();
+
+  public tmpEventArray: RouteEvent[] = [];
 
   events: CalendarEvent[] = [
     {
-      id: 1,
-      title: 'Bejövő forgalom',
-      start: addHours(startOfDay(new Date()),5),
-      end: new Date(),
-      draggable: true,
+      title: "Example",
+      start: addDays(new Date(),1),
       meta: {
-        tmpEvent: true
+        tmpEvent: true,
       }
     }
   ];
@@ -71,8 +75,16 @@ viewDate = new Date();
 
   weekStartsOn: 0 = 0;
 
-  constructor(private cdr: ChangeDetectorRef) {
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private calendarEventService: CalendarEventService
+    ) {
     registerLocaleData(localeHu)
+  }
+
+  async ngOnInit(): Promise<void>{
+    this.tmpEventArray = await this.calendarEventService.getCalendarEvents();
+    await this.loadDataFromDatabase();
   }
 
   startDragToCreate(
@@ -127,6 +139,19 @@ viewDate = new Date();
   private refresh() {
     this.events = [...this.events];
     this.cdr.detectChanges();
+  }
+
+  loadDataFromDatabase(){
+    this.tmpEventArray.forEach(element => {
+      this.events.push({
+        title: element.event_title,
+        start: addDays(new Date,2),
+        meta: {
+          tmpEvent: true,
+        }
+      })
+    })
+    this.refresh();
   }
 
 }
