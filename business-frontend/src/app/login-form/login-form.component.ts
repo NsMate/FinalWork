@@ -43,4 +43,8 @@ export class LoginFormComponent implements OnInit {
       this.message = 'Cannot log in!';
     }
   }
+
+  getAuthService(): AuthorizationService{
+    return this.authService;
+  }
 }
