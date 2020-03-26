@@ -14,7 +14,6 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-@Table(name = "calendar_event")
 public class CalendarEvent {
 
     @Id
