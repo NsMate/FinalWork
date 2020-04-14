@@ -1,3 +1,21 @@
 mwl-calendar-week-view{
     height: 100%;
 }
+
+.tmp{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.btn-group{
+    justify-content: space-evenly;
+}
+
+.text-center{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: scale(3);
+}

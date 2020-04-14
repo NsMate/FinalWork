@@ -1,9 +1,10 @@
+<mat-icon class="backGround">local_shipping</mat-icon>
 
 <h1>Gépjárművek</h1>
 
-<button mat-flat-button (click)="openDialog()" class="newButton" color="primary">Új gépjármű</button>
+<button mat-raised-button (click)="openDialog()" class="newButton" color="primary"><mat-icon>plus_one</mat-icon> Új gépjármű </button>
 
-<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+<table mat-table [dataSource]="dataSource" matSort matSortActive="id" matSortDirection="asc" class="mat-elevation-z8">
   
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>

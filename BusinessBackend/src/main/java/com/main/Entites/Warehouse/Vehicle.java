@@ -1,5 +1,6 @@
 package com.main.Entites.Warehouse;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class Vehicle implements Serializable {
+public class Vehicle implements Serializable{
 
     @Id
     @GeneratedValue
@@ -30,10 +31,13 @@ public class Vehicle implements Serializable {
     @NotNull
     private String licensePlateNumber;
 
-    @OneToMany(mappedBy = "vehicle")
+    @OneToMany(mappedBy = "vehicle", cascade = CascadeType.REMOVE
+    )
+    @JsonIgnore
     private List<Route> routeList;
 
-    public List<Route> getRouteList() {
-        return routeList;
-    }
+    @ManyToOne
+    @JoinColumn(name = "warehouse_id", referencedColumnName = "id")
+    @JsonIgnore
+    private Warehouse warehouse;
 }

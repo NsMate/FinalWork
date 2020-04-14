@@ -1,0 +1,34 @@
+<mat-icon class="backGround">storefront</mat-icon>
+
+<h1> Termékeink </h1>
+
+<button mat-raised-button color="primary" (click)="openProductGroupDialog()" class="newGroupButton"><mat-icon>plus_one</mat-icon> Új termékcsoport </button>
+
+<mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+    <!-- This is the tree node template for leaf nodes -->
+    <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+      <!-- use a disabled button to provide padding for tree leaf -->
+      <button mat-icon-button disabled></button>
+      <a (click)="openProductOrProductGroupDialog(node.group,node.id,node.groupId)"> {{node.name}} </a>
+      <button mat-raised-button 
+              color="accent" 
+              *ngIf="node.group" 
+              (click)="openProductDialog(node.id)" 
+              class="newProductButton"><mat-icon>add</mat-icon> Új termék </button>
+    </mat-tree-node>
+    <!-- This is the tree node template for expandable nodes -->
+    <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
+      <button mat-icon-button matTreeNodeToggle
+              [attr.aria-label]="'toggle ' + node.name">
+        <mat-icon class="mat-icon-rtl-mirror">
+          {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+        </mat-icon>
+      </button>
+      <a (click)="openProductGroupDialog(node.id)"> {{node.name}} </a>
+      <button mat-raised-button 
+              color="accent" 
+              *ngIf="node.group" 
+              (click)="openProductDialog(node.id)" 
+              class="newProductButton"><mat-icon>add</mat-icon> Új termék </button>
+    </mat-tree-node>
+</mat-tree>

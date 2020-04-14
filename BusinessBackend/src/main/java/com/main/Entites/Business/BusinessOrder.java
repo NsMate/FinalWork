@@ -34,7 +34,7 @@ public class BusinessOrder implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "partner_id", referencedColumnName = "id")
-    @JsonIgnore
+
     private Partner partner;
 
     @OneToMany(mappedBy = "businessOrder")

@@ -1,6 +1,9 @@
 package com.main.Entites.User;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.main.Entites.Warehouse.Warehouse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,6 +19,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Table(name = "employee")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Employee implements Serializable {
 
     @Id
@@ -31,7 +37,21 @@ public class Employee implements Serializable {
     @NotNull
     private String lastName;
 
-    @OneToOne(mappedBy = "employee")
-    @JsonIgnore
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
+    @Column(name = "department")
+    @NotNull
+    private String department;
+
+    @OneToOne(mappedBy = "employee", cascade = CascadeType.REMOVE)
     private AppUser appUser;
+
+    @ManyToOne
+    @JoinColumn(name = "warehouse_id", referencedColumnName = "id")
+    @JsonIgnore
+    private Warehouse warehouse;
 }

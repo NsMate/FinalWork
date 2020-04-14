@@ -17,7 +17,7 @@ import java.sql.Date;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Table(name = "route")
-public class Route implements Serializable {
+public class Route implements Serializable{
 
     @Id
     @GeneratedValue
@@ -29,7 +29,6 @@ public class Route implements Serializable {
     private String routeType;
 
     @Column(name = "destination")
-    @NotNull
     private String destination;
 
     @Column(name = "delivery_date")
@@ -38,12 +37,10 @@ public class Route implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "warehouse_id", referencedColumnName = "id")
-    @JsonIgnore
     private Warehouse warehouse;
 
     @ManyToOne
     @JoinColumn(name = "vehicle_id", referencedColumnName = "id")
-    @JsonIgnore
     private Vehicle vehicle;
 
     @OneToOne(mappedBy = "route")

@@ -21,7 +21,7 @@ public class StockController {
         return ResponseEntity.ok(stockRepository.findAll());
     }
 
-    /*
+
     @GetMapping("/{id}")
     public ResponseEntity<Stock> getStockById(@PathVariable Long id){
         Optional<Stock> stock = stockRepository.findById(id);
@@ -43,6 +43,7 @@ public class StockController {
         Optional<Stock> oldStock = stockRepository.findById(id);
         if(oldStock.isPresent()){
             stock.setId(id);
+            stock.setWarehouse(oldStock.get().getWarehouse());
             return ResponseEntity.ok(stockRepository.save(stock));
         }else{
             return ResponseEntity.notFound().build();
@@ -59,5 +60,5 @@ public class StockController {
             return ResponseEntity.notFound().build();
         }
     }
-     */
+
 }

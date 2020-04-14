@@ -82,6 +82,7 @@ public class BusinessOrderController {
             BusinessOrder businessOrder = oldBusinessOrder.get();
             OrderItem newOrderItem = orderItemRepository.save(orderItem);
             businessOrder.getOrderItemList().add(newOrderItem);
+            orderItem.setBusinessOrder(businessOrder);
             orderItemRepository.save(orderItem);  // have to trigger from the @JoinTable side
             return ResponseEntity.ok(newOrderItem);
         } else {
@@ -97,6 +98,7 @@ public class BusinessOrderController {
 
             for (OrderItem orderItem : orderItems) {
                 if (orderItem.getId() == null) {
+                    orderItem.setBusinessOrder(businessOrder);
                     orderItemRepository.save(orderItem);
                 }
             }

@@ -1,0 +1,44 @@
+<div mat-dialog-title>
+    <h1 style="text-align: center;">Tétel részletei </h1>
+  </div>
+  
+  <div mat-dialog-content>
+    <form #addForm="ngForm" [formGroup]="itemForm">
+        <div>
+            <h2>Termék / szolgáltatás</h2>
+            <mat-form-field appearance="standard">
+              <input matInput placeholder="eg. Dizájn" [(ngModel)]="data.invoiceItem.product" name="product" formControlName="product">
+            </mat-form-field>
+        </div>
+      <div>
+        <h2>Mennyiség</h2>
+        <mat-form-field appearance="standard">
+          <input matInput placeholder="eg. 100" [(ngModel)]="data.invoiceItem.quantity" name="quantity" formControlName="quantity">
+        </mat-form-field>
+      </div>
+      <div>
+        <h2>Egység</h2>
+        <mat-form-field appearance="standard">
+          <input matInput placeholder="eg. óra" [(ngModel)]="data.invoiceItem.unit" name="unit" formControlName="unit">
+        </mat-form-field>
+      </div>
+      <div>
+        <h2>Ár</h2>
+        <mat-form-field appearance="standard">
+          <input matInput placeholder="eg. 1000" [(ngModel)]="data.invoiceItem.price" name="price" formControlName="price">
+        </mat-form-field>
+      </div>
+      <div>
+        <h2>Leírás</h2>
+        <mat-form-field appearance="standard">
+          <textarea matInput [(ngModel)]="data.invoiceItem.description" name="description" formControlName="description"></textarea>
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+  
+  <div mat-dialog-action style="display: flex; justify-content: space-evenly;">
+    <button mat-raised-button (click)="saveItem()" [disabled]="itemForm.invalid" color="primary"><mat-icon>save</mat-icon> Mentés</button>
+  
+    <button mat-raised-button  *ngIf="!data.isNew" (click)="openConfDialog()" color="warn" ><mat-icon>delete</mat-icon> Törlés</button>
+  </div>

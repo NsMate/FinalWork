@@ -31,3 +31,22 @@ th.mat-sort-header-sorted {
 a:hover{
     cursor: pointer;
 }
+
+.backGround{
+    opacity: 5%;
+    position: absolute;
+    transform: scale(33);
+    z-index: -1;
+    top: 50%;
+    left: 25%;
+}
+
+::ng-deep .success {
+    background: green;
+    color: white;
+}
+
+::ng-deep .error {
+    background: red;
+    color: white;
+}

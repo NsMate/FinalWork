@@ -1,7 +1,9 @@
 package com.main.Controllers.User;
 
 import com.main.Entites.User.AppUser;
+import com.main.Entites.User.Employee;
 import com.main.Repositories.User.AppUserRepository;
+import com.main.Repositories.User.EmployeeRepository;
 import com.main.Security.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,9 @@ public class AppUserController {
 
     @Autowired
     private AuthenticatedUser authenticatedUser;
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -44,13 +49,14 @@ public class AppUserController {
         Optional<AppUser> oldUser = appUserRepository.findById(id);
         if(oldUser.isPresent()){
             appUser.setId(id);
+            appUser.setAppUserPassword(passwordEncoder.encode(appUser.getAppUserPassword()));
             return ResponseEntity.ok(appUserRepository.save(appUser));
         }else{
             return ResponseEntity.notFound().build();
         }
     }
 
-    @DeleteMapping("")
+    @DeleteMapping("/{id}")
     public ResponseEntity deleteAppUserById(@PathVariable Long id){
         Optional<AppUser> oldUser = appUserRepository.findById(id);
         if(oldUser.isPresent()){
@@ -61,14 +67,16 @@ public class AppUserController {
         }
     }
 
-    @PostMapping("register")
-    public ResponseEntity<AppUser> register(@RequestBody AppUser appUser) {
+    @PostMapping("/{id}/register")
+    public ResponseEntity<AppUser> register(@PathVariable Long id, @RequestBody AppUser appUser) {
         Optional<AppUser> oUser = appUserRepository.findByAppUserName(appUser.getAppUserName());
-        if (oUser.isPresent()) {
+        Optional<Employee> choosenEmployee = employeeRepository.findById(id);
+        if (oUser.isPresent() || !choosenEmployee.isPresent()) {
             return ResponseEntity.badRequest().build();
         }
         appUser.setAppUserPassword(passwordEncoder.encode(appUser.getAppUserPassword()));
         appUser.setAppUserGroup(appUser.getAppUserGroup());
+        appUser.setEmployee(choosenEmployee.get());
         return ResponseEntity.ok(appUserRepository.save(appUser));
     }
 

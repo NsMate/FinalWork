@@ -6,6 +6,15 @@ import { VehicleListComponent } from './components/ListComponents/VehicleList/ve
 import { AuthGuard } from './AuthorizationGuard/auth-guard';
 import { SchedulerComponent } from './components/Scheduler/scheduler/scheduler.component';
 import { WarehouseListComponent } from './components/ListComponents/WarehouseList/warehouse-list/warehouse-list.component';
+import { WarehouseFormComponent } from './components/FormComponents/Warehousing/Warehouse/warehouse-form/warehouse-form.component';
+import { EmployeeListComponent } from './components/ListComponents/EmployeeList/employee-list/employee-list.component';
+import { EmployeeFormComponent } from './components/FormComponents/Business/employee-form/employee-form.component';
+import { ProductTreeComponent } from './components/ProductTreeComponent/product-tree/product-tree.component';
+import { InvoiceListComponent } from './components/ListComponents/Invoice/invoice-list/invoice-list.component';
+import { PartnerListComponent } from './components/ListComponents/Partner/partner-list/partner-list.component';
+import { OfferListComponent } from './components/ListComponents/OfferList/offer-list/offer-list.component';
+import { PartnerFormComponent } from './components/FormComponents/Partner/partner-form/partner-form.component';
+import { InvoiceFormComponent } from './components/FormComponents/Invoice/invoice-form/invoice-form.component';
 
 
 const routes: Routes = [
@@ -19,7 +28,7 @@ const routes: Routes = [
     component: LoginFormComponent
   },
   {
-    path: 'main',
+    path: 'vehicleList',
     component: VehicleListComponent,
     canActivate: [ AuthGuard ]
   },
@@ -31,6 +40,51 @@ const routes: Routes = [
   {
     path: 'warehouses',
     component: WarehouseListComponent,
+    canActivate: [ AuthGuard ]
+  },
+  {
+    path: 'warehouseForm',
+    component: WarehouseFormComponent,
+    canActivate: [ AuthGuard ]
+  },
+  {
+    path: 'employeeList',
+    component: EmployeeListComponent,
+    canActivate: [ AuthGuard ]
+  },
+  {
+    path: 'employeeForm',
+    component: EmployeeFormComponent,
+    canActivate: [ AuthGuard ]
+  },
+  {
+    path: 'productTree',
+    component: ProductTreeComponent,
+    canActivate: [ AuthGuard ]
+  },
+  {
+    path: 'invoiceList',
+    component: InvoiceListComponent,
+    canActivate: [ AuthGuard ]
+  },
+  {
+    path: 'partnerList',
+    component: PartnerListComponent,
+    canActivate: [ AuthGuard ]
+  },
+  {
+    path: 'offerList',
+    component: OfferListComponent,
+    canActivate: [ AuthGuard ]
+  },
+  {
+    path: 'partnerForm',
+    component: PartnerFormComponent,
+    canActivate: [ AuthGuard ]
+  },
+  {
+    path: 'invoiceForm',
+    component: InvoiceFormComponent,
     canActivate: [ AuthGuard ]
   }
 ];

@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -29,12 +30,23 @@ public class InvoiceItem implements Serializable {
     @Column(name = "discount")
     private BigDecimal discount;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "invoice_id", referencedColumnName = "id")
     @JsonIgnore
     private Invoice invoice;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    private Product product;
+    @Column(name = "product")
+    @NotNull
+    private String product;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "unit")
+    @NotNull
+    private String unit;
+
+    @Column(name = "price")
+    @NotNull
+    private String price;
 }

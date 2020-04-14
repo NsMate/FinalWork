@@ -1,0 +1,31 @@
+<mat-icon class="backGround">list_alt</mat-icon>
+
+<h1>Rendeléseink</h1>
+
+<button mat-raised-button class="newButton" color="primary">Új rendelés</button>
+
+<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+  
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
+      <td mat-cell *matCellDef="let order"> <a > {{order.id}} </a> </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="partner">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Partner </th>
+      <td mat-cell *matCellDef="let order"> <a> {{order.partner.partnerName}} </a>  </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="creationDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Létrehozva </th>
+      <td mat-cell *matCellDef="let order"> <a > {{order.issueDate}} </a> </td>
+    </ng-container>
+
+    <ng-container matColumnDef="dueDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Határidő </th>
+      <td mat-cell *matCellDef="let order"> <a > {{order.dueDate}} </a> </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>

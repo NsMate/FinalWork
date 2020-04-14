@@ -1,0 +1,59 @@
+<div mat-dialog-title>
+    <h1 style="text-align: center;" *ngIf="data.isNew"> Termék létrehozása </h1>
+    <h1 style="text-align: center;" *ngIf="!data.isNew"> Termék módosítása </h1>
+</div>
+  
+<div mat-dialog-content>
+    <form #addForm="ngForm" [formGroup]="productForm">
+      <div>
+        <h2>A termék csoportja: {{ modifiedProductGroup.groupName }}</h2>
+        <h2>Termék neve</h2>
+        <mat-form-field appearance="standard">
+          <input matInput placeholder="eg. Alma" [(ngModel)]="data.product.productName" name="productName" formControlName="productName">
+          <mat-error *ngIf="productName.errors?.required && (productName.dirty || productName.touched)"> Kérem adja meg a termék nevét! </mat-error>
+          <mat-error *ngIf="productName.errors?.pattern && (productName.dirty || productName.touched)"> Helytelen formátum (pl. Alma) </mat-error>
+        </mat-form-field>
+      </div>
+      <div>
+        <h2>Termék ára</h2>
+        <mat-form-field appearance="standard">
+          <input matInput placeholder="eg. 1000" [(ngModel)]="data.product.price" name="productPrice" formControlName="productPrice">
+          <mat-error *ngIf="productPrice.errors?.required && (productPrice.dirty || productPrice.touched)"> Kérem adja meg a termék árát! </mat-error>
+          <mat-error *ngIf="productPrice.errors?.pattern && (productPrice.dirty || productPrice.touched)"> Helytelen formátum (pl. 10000) </mat-error>
+        </mat-form-field>
+      </div>
+      <div>
+        <h2>Valuta</h2>
+        <mat-form-field appearance="standard">
+          <mat-label>{{ data.product.currency }}</mat-label>
+          <mat-select [(ngModel)]="data.product.currency" formControlName="currency">
+            <mat-option value="HUF">HUF</mat-option>
+            <mat-option value="EUR">EUR</mat-option>
+          </mat-select>
+          <mat-error *ngIf="currency.errors?.required && (currency.dirty || currency.touched)"> Kérem adja meg a termék valutáját! </mat-error>
+        </mat-form-field>
+      </div>
+      <div>
+        <h2>Termék leírása</h2>
+        <mat-form-field appearance="standard"> 
+          <textarea matInput placeholder="Leírás" [(ngModel)]="data.product.productDescription" name="productDescription" formControlName="productDescription"></textarea>
+          <mat-error *ngIf="productDescription.errors?.pattern && (productDescription.dirty || productDescription.touched)"> Betűvel kell kezdődnie! </mat-error>
+        </mat-form-field>
+      </div>
+      <div>
+        <h2>Termék kódja</h2>
+        <mat-form-field appearance="standard"> 
+          <input matInput placeholder="eg 1001" [(ngModel)]="data.product.code" name="productCode" formControlName="productCode">
+          <mat-error *ngIf="productCode.errors?.required && (productCode.dirty || productCode.touched)"> Kérem adja meg a termék kódját! </mat-error>
+          <mat-error *ngIf="productCode.errors?.pattern && (productCode.dirty || productCode.touched)"> Helytelen formátum (pl. 1002) </mat-error>
+          <mat-error *ngIf="productCode.errors?.codeTaken && (productCode.dirty || productCode.touched)"> A kód már használatban van </mat-error>
+        </mat-form-field>
+      </div>
+    </form>
+</div>
+  
+<div mat-dialog-action style="display: flex; justify-content: space-evenly;">
+    <button mat-raised-button (click)="saveProduct()" [disabled]="productForm.invalid" color="primary">Mentés</button>
+  
+    <button mat-raised-button *ngIf="!data.isNew" (click)="openConfDialog()" color="primary" >Törlés</button>
+</div>

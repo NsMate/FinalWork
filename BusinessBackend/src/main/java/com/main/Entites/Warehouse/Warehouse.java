@@ -1,5 +1,7 @@
 package com.main.Entites.Warehouse;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.main.Entites.User.Employee;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -40,9 +42,16 @@ public class Warehouse implements Serializable {
     @NotNull
     private String streetNumber;
 
-    @OneToMany(mappedBy = "warehouse",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "warehouse")
+    private List<Employee> employeeList;
+
+    @OneToMany(mappedBy = "warehouse", cascade = CascadeType.REMOVE)
     private List<Stock> stockList;
 
-    @OneToMany(mappedBy = "warehouse", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "warehouse", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private List<Route> routeList;
+
+    @OneToMany(mappedBy = "warehouse")
+    private List<Vehicle> vehicleList;
 }

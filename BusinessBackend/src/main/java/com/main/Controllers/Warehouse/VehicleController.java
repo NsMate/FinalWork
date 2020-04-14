@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin
@@ -56,6 +57,16 @@ public class VehicleController {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/freeVehicles")
+    public ResponseEntity<Iterable<Vehicle>> getFreeVehicles(){
+        List<Vehicle> vehicles = vehicleRepository.getFreeVehicles();
+        if(vehicles.isEmpty()){
+            return null;
+        }else{
+            return ResponseEntity.ok(vehicles);
         }
     }
 }

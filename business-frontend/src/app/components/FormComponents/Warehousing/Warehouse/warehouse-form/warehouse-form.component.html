@@ -1,29 +1,123 @@
+<mat-icon class="backGround">local_shipping</mat-icon>
+
 <form [formGroup]="warehouseForm">
-    <h1>Raktár részletei</h1>
+    <h1 class="header">Raktár részletei</h1>
+
+    <button mat-raised-button 
+            (click)="saveWarehouse()" 
+            class="saveButton" 
+            color="primary"><mat-icon>save</mat-icon> Raktár mentése </button>
+
     <div class="addressRow">
         <div class="zip">
             <h3>Irányítószám</h3>
             <mat-form-field appearance="standard">
-                <input matInput placeholder="eg. 2660" name="zipCode" formControlName="zipCode">
+                <input matInput placeholder="eg. 2660" name="zipCode" formControlName="zipCode" [(ngModel)]="detailedWarehouse.zipCode">
+                <mat-error *ngIf="zipCode.errors?.required && (zipCode.dirty || zipCode.touched)"> Kérem adja meg az irányítószámot! </mat-error>
+                <mat-error *ngIf="zipCode.errors?.pattern && (zipCode.dirty || zipCode.touched)"> Helytelen formátum! (pl. 2660) </mat-error>
             </mat-form-field>
         </div>
         <div class="city">
             <h3>Város</h3>
             <mat-form-field appearance="standard">
-                <input matInput placeholder="eg. Budapest" name="city" formControlName="city">
+                <input matInput placeholder="eg. Budapest" name="city" formControlName="city" [(ngModel)]="detailedWarehouse.city">
+                <mat-error *ngIf="city.errors?.required && (city.dirty || city.touched)"> Kérem adja meg a várost! </mat-error>
+                <mat-error *ngIf="city.errors?.pattern && (city.dirty || city.touched)"> Helytelen formátum! (pl. Budapest) </mat-error>
             </mat-form-field>
         </div>
         <div class="stree">
             <h3>Út / Utca</h3>
             <mat-form-field appearance="standard">
-                <input matInput placeholder="eg. Móricz Zsigmond utca" name="street" formControlName="street">
+                <input matInput placeholder="eg. Móricz Zsigmond utca" name="street" formControlName="street" [(ngModel)]="detailedWarehouse.street">
+                <mat-error *ngIf="street.errors?.required && (street.dirty || street.touched)"> Kérem adja meg az utcát! </mat-error>
+                <mat-error *ngIf="street.errors?.pattern && (street.dirty || street.touched)"> Helytelen formátum! (pl. Móricz Zsigmond utca) </mat-error>
             </mat-form-field>
         </div>
         <div class="streetNumber">
             <h3>Házszám</h3>
             <mat-form-field appearance="standard">
-                <input matInput placeholder="eg. 12" name="streetNumber" formControlName="streetNumber">
+                <input matInput placeholder="eg. 12" name="streetNumber" formControlName="streetNumber" [(ngModel)]="detailedWarehouse.streetNumber">
+                <mat-error *ngIf="streetNumber.errors?.required && (streetNumber.dirty || streetNumber.touched)"> Kérem adja meg az utcaszámot! </mat-error>
+                <mat-error *ngIf="streetNumber.errors?.pattern && (streetNumber.dirty || streetNumber.touched)"> Helytelen formátum! (pl. 12) </mat-error>
             </mat-form-field>
         </div>
     </div>
 </form>
+
+<div class="empAndVehicleTable">
+    <div class="empTable" style="display: inline-block;">
+        <h1 class="tableHeader"> Dolgozók </h1>
+
+        <button mat-flat-button 
+                class="tableButton" 
+                color="accent" 
+                (click)="openEmployeeDialog()"
+                [disabled]="detailedWarehouse.id == null"><mat-icon>add</mat-icon> Dolgozó hozzáadása </button>
+
+        <table mat-table [dataSource]="employeeSource" matSort  class="mat-elevation-z8">
+  
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Dolgozó </th>
+                <td mat-cell *matCellDef="let employee"> <a >{{ employee.lastName }}  {{ employee.firstName }}</a> </td>
+            </ng-container>
+  
+            <tr mat-header-row *matHeaderRowDef="employeeColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: employeeColumns;"></tr>
+        </table>
+
+    </div>
+
+    <div class="vehicleTable" style="display: inline-block;">
+        <h1 class="tableHeader"> Járművek </h1>
+        <button mat-flat-button 
+                class="tableButton" 
+                color="accent" 
+                (click)="openVehicleDialog()" 
+                [disabled]="detailedWarehouse.id == null"><mat-icon>add</mat-icon> Jármű hozzáadása </button>
+
+        <table mat-table [dataSource]="vehicleSource" matSort class="mat-elevation-z8">
+  
+            <ng-container matColumnDef="manufacturer">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Gyártó </th>
+                <td mat-cell *matCellDef="let vehicle"> <a >{{ vehicle.manufacturer }} </a> </td>
+            </ng-container>
+
+            <ng-container matColumnDef="licensePlate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Rendszám </th>
+                <td mat-cell *matCellDef="let vehicle"> <a >{{ vehicle.licensePlateNumber }} </a> </td>
+            </ng-container>
+  
+            <tr mat-header-row *matHeaderRowDef="vehicleColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: vehicleColumns;"></tr>
+        </table>
+    </div>
+</div>
+
+<h1 class="header">Raktárkészlet</h1>
+
+<button mat-flat-button 
+        (click)="openDialog()" 
+        class="newButton" 
+        color="primary" 
+        [disabled]="detailedWarehouse.id == null"><mat-icon>add</mat-icon> Új készlet felvétele </button>
+
+<table mat-table class="stockTable" [dataSource]="dataSource" matSort class="mat-elevation-z8">
+  
+    <ng-container matColumnDef="productName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Termék </th>
+      <td mat-cell *matCellDef="let stock"> <a (click)="openDialog(stock)" style="cursor: pointer;">{{ stock.product }} C: {{ stock.product.code }}</a> </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="quantity">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Mennyiség </th>
+      <td mat-cell *matCellDef="let stock"> <a (click)="openDialog(stock)" style="cursor: pointer;">{{stock.quantity}}</a> </td>
+    </ng-container>
+
+    <ng-container matColumnDef="unit">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Egység </th>
+        <td mat-cell *matCellDef="let stock"> <a (click)="openDialog(stock)" style="cursor: pointer;">{{stock.unit}}</a> </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

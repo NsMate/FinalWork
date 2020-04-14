@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { AppUser } from '../models/AppUser/app-user';
+import { Employee } from '../models/Employee/employee';
 
 export const httpOptions = {
   headers: new HttpHeaders({
@@ -41,14 +42,25 @@ export class AuthorizationService {
       return Promise.reject();
     }
   }
+
+  registerUser(employee: Employee, appUser: AppUser): Promise<AppUser>{
+    return this.http.post<AppUser>(`${this.authUrl}/${employee.id}/register`, appUser, httpOptions).toPromise();
+  }
+
+  updateUser(appUser: AppUser): Promise<AppUser>{
+    return this.http.put<AppUser>(`${this.authUrl}/${appUser.id}`, appUser, httpOptions).toPromise();
+  }
   
+  deleteUser(id:number): Promise<AppUser>{
+    return this.http.delete<AppUser>(`${this.authUrl}/${id}`, httpOptions).toPromise();
+  }
+
   logout() {
     httpOptions.headers = httpOptions.headers.set('Authorization', ``);
     this.isLoggedIn = false;
     this.appUser = null;
+    sessionStorage.clear();
+    localStorage.clear();
     window.location.reload();
-    localStorage.removeItem("loggedIn");
-    localStorage.removeItem("name");
-    localStorage.removeItem("password");
   }
 }

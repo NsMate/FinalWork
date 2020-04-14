@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Route } from 'src/app/models/Warehousing/Route/route';
+import { Observable } from 'rxjs';
 
 const httpOptions = {
   headers: new HttpHeaders({ 
@@ -20,24 +21,28 @@ export class RouteService {
     private http: HttpClient
   ) { }
 
-  getRoutes(): Promise<Route[]> {
-    return this.http.get<Route[]>(`${this.routeURL}`, httpOptions).toPromise();
+  getRoutes(): Observable<Route[]> {
+    return this.http.get<Route[]>(`${this.routeURL}`, httpOptions);
   }
 
   getRoute(id: number): Promise<Route> {
     return this.http.get<Route>(`${this.routeURL}/${id}`, httpOptions).toPromise();
   }
   
-  createRoute(route: Route): Promise<Route> {
-    return this.http.post<Route>(`${this.routeURL}`, route, httpOptions).toPromise();
+  createRoute(whId: number,vehicleId: number, route: Route): Promise<Route> {
+    return this.http.post<Route>(`${this.routeURL}/${whId}/${vehicleId}`, route, httpOptions).toPromise();
   }
   
   updateRoute(route: Route): Promise<Route> {
     return this.http.put<Route>(`${this.routeURL}/${route.id}`, route, httpOptions).toPromise();
   }
   
-  deleteRoute(id): Promise<Route> {
+  deleteRoute(id: number): Promise<Route> {
     return this.http.delete<Route>(`${this.routeURL}/${id}`, httpOptions).toPromise();
+  }
+
+  getRoutesBetweenDates(startDate: string, endDate: string): Observable<Route[]> {
+    return this.http.get<Route[]>(`${this.routeURL}/between/${startDate}/${endDate}`, httpOptions);
   }
 
 }

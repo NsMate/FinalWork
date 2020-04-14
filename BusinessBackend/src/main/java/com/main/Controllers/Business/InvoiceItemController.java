@@ -21,7 +21,7 @@ public class InvoiceItemController {
         return ResponseEntity.ok(invoiceItemRepository.findAll());
     }
 
-    /*
+
     @GetMapping("/{id}")
     public ResponseEntity<InvoiceItem> findInvoiceItemById(@PathVariable Long id){
         Optional<InvoiceItem> invoiceItem = invoiceItemRepository.findById(id);
@@ -43,6 +43,7 @@ public class InvoiceItemController {
         Optional<InvoiceItem> oldInvoiceItem = invoiceItemRepository.findById(id);
         if(oldInvoiceItem.isPresent()){
             invoiceItem.setId(id);
+            invoiceItem.setInvoice(oldInvoiceItem.get().getInvoice());
             return ResponseEntity.ok(invoiceItemRepository.save(invoiceItem));
         }else{
             return ResponseEntity.notFound().build();
@@ -59,5 +60,5 @@ public class InvoiceItemController {
             return ResponseEntity.notFound().build();
         }
     }
-     */
+
 }

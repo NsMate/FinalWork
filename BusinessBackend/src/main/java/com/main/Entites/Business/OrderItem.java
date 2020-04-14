@@ -29,9 +29,16 @@ public class OrderItem implements Serializable {
     @Column(name = "discount")
     private BigDecimal discount;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    private Product product;
+    @Column(name = "product")
+    @NotNull
+    private String product;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "unit")
+    @NotNull
+    private String unit;
 
     @ManyToOne
     @JoinColumn(name = "bus_order_id", referencedColumnName = "id")

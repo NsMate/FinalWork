@@ -1,0 +1,43 @@
+table {
+    width: 80%;
+    margin: 0 auto 18px auto;
+}
+
+th{
+    height: 50px;
+    font-size: medium;
+    color: black;
+}
+
+th,td{
+    width: 30%;
+}
+
+h1{
+    margin-left: 40px;
+    margin-bottom: 18px;
+    text-align: center;
+    text-shadow: 7px 7px 15px #292525;
+}
+
+th.mat-sort-header-sorted {
+    color: black;
+}
+
+.newButton{
+    margin-left: 10%;
+    margin-bottom: 18px;
+}
+
+a:hover{
+    cursor: pointer;
+}
+
+.backGround{
+    opacity: 5%;
+    position: absolute;
+    transform: scale(33);
+    z-index: -1;
+    top: 60%;
+    left: 25%;
+}

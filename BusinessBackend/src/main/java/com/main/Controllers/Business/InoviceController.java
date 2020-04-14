@@ -79,10 +79,8 @@ public class InoviceController {
         Optional<Invoice> oldInvoice = invoiceRepository.findById(id);
         if (oldInvoice.isPresent()) {
             Invoice invoice = oldInvoice.get();
-            InvoiceItem newInvoiceItem = invoiceItemRepository.save(invoiceItem);
-            invoice.getInvoiceItems().add(newInvoiceItem);
-            invoiceItemRepository.save(invoiceItem);  // have to trigger from the @JoinTable side
-            return ResponseEntity.ok(newInvoiceItem);
+            invoiceItem.setInvoice(invoice); // have to trigger from the @JoinTable side
+            return ResponseEntity.ok(invoiceItemRepository.save(invoiceItem));
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -96,6 +94,7 @@ public class InoviceController {
 
             for (InvoiceItem invoiceItem : invoiceItems) {
                 if (invoiceItem.getId() == null) {
+                    invoiceItem.setInvoice(invoice);
                     invoiceItemRepository.save(invoiceItem);
                 }
             }

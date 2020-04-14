@@ -2,7 +2,7 @@ import { Product } from '../Product/product';
 
 export class OrderItem {
     id: number;
-    quantity: number;
-    discount: number;
-    product: Product;
+    quantity: number = null;
+    discount: number = null;
+    product: string = "";
 }

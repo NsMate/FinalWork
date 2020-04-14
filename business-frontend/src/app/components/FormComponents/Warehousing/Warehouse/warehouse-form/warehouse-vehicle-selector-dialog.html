@@ -1,0 +1,10 @@
+<h1 style="text-align: center;margin-bottom: 18px;"> Válassza ki a hozzáadni kívánt gépjárműveket! </h1>
+
+<mat-selection-list #vehicles [(ngModel)]="selectedOptions">
+    <mat-list-option *ngFor="let vehicle of freeVehicles" [value]="vehicle">
+      {{vehicle.manufacturer}} | {{ vehicle.licensePlateNumber }}
+    </mat-list-option>
+</mat-selection-list>
+
+<button mat-raised-button color="primary" (click)="saveVehicles()" style="text-align: center;" 
+        [disabled]="selectedOptions.length == 0"> Hozzáadás </button>

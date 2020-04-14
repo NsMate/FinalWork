@@ -1,0 +1,98 @@
+<mat-icon class="backGround">device_hub</mat-icon>
+
+<h1 *ngIf="detailedPartner.id != null" class="header">{{ detailedPartner.partnerName }} részletei</h1>
+<h1 *ngIf="detailedPartner.id == null" class="header"> Új partner létrehozása</h1>
+
+<hr>
+
+<button mat-raised-button class="saveButton" type="submit" (click)="savePartner()" color="primary" class="saveButton">Változtatások mentése</button>
+
+<form [formGroup]="partnerForm">
+
+        <div class="partnerName">
+            <h2 style="text-decoration: underline;"> Név </h2>
+            <mat-form-field appearance="standard">
+                <input matInput placeholder="eg. Példa kft" name="partnerName" formControlName="partnerName" [(ngModel)]="detailedPartner.partnerName">
+            </mat-form-field>
+        </div>
+
+        <div class="location">
+            <h2 style="text-decoration: underline;"> Üzleti cím: </h2>
+            <div class="zipCode">
+                <h3>Irányítószám</h3>
+                <mat-form-field appearance="standard">
+                    <input matInput placeholder="eg. 2660" name="zipCode" formControlName="zipCode" [(ngModel)]="detailedPartner.zipCode">
+                </mat-form-field>
+            </div>
+    
+            <div class="city">
+                <h3>Város</h3>
+                <mat-form-field appearance="standard">
+                    <input matInput placeholder="eg. Budapest" name="city" formControlName="city" [(ngModel)]="detailedPartner.city">
+                </mat-form-field>
+            </div>
+            <div class="street">
+                <h3>Utca</h3>
+                <mat-form-field appearance="standard">
+                    <input matInput placeholder="eg. Kossuth út" name="street" formControlName="street" [(ngModel)]="detailedPartner.street">
+                </mat-form-field>
+            </div>
+    
+            <div class="streetNumber">
+                <h3>Házszám</h3>
+                <mat-form-field appearance="standard">
+                    <input matInput placeholder="eg. 12" name="streetNumber" formControlName="streetNumber" [(ngModel)]="detailedPartner.streetNumber">
+                </mat-form-field>
+            </div>
+        </div>
+        
+        <div class="contact">
+            <h2 style="text-decoration: underline;"> Elérhetőségek: </h2>
+            <div class="name">
+                <div class="contactLastName">
+                    <h3>Vezetéknév</h3>
+                    <mat-form-field appearance="standard">
+                        <input matInput placeholder="eg. Nagy" name="contactLastName" formControlName="contactLastName" [(ngModel)]="detailedPartner.contactLastName">
+                    </mat-form-field>
+                </div>
+        
+                <div class="contactFirstName">
+                    <h3>Keresztnév</h3>
+                    <mat-form-field appearance="standard">
+                        <input matInput placeholder="eg. András" name="contactFirstName" formControlName="contactFirstName" [(ngModel)]="detailedPartner.contactFirstName">
+                    </mat-form-field>
+                </div>
+            </div>
+            
+            <div class="contactEmail">
+                <h3>Email cím</h3>
+                <mat-form-field appearance="standard">
+                    <input matInput placeholder="eg. example@example.com" name="contactEmail" formControlName="contactEmail" [(ngModel)]="detailedPartner.contactEmail">
+                </mat-form-field>
+            </div>
+    
+            <div class="contactPhoneNumber">
+                <h3>Telefonszám</h3>
+                <mat-form-field appearance="standard">
+                    <input matInput placeholder="eg. +36 20 1234567" name="contactPhoneNumber" formControlName="contactPhoneNumber" [(ngModel)]="detailedPartner.contactPhoneNumber">
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="otherInfo">
+            <h2 style="text-decoration: underline;"> További információ: </h2>
+            <div class="currencyType">
+                <h3>Adószám</h3>
+                <mat-form-field appearance="standard">
+                    <input matInput placeholder="eg. xxxxxxxx-y-zz" name="vatNumber" formControlName="vatNumber" [(ngModel)]="detailedPartner.vatNumber">
+                </mat-form-field>
+            </div>
+    
+            <div class="partnershipType" *ngIf="detailedPartner.own != 1">
+                <h3>Együttműködési viszony</h3>
+                <mat-form-field appearance="standard">
+                    <input matInput placeholder="eg. Beszállító" name="partnershipType" formControlName="partnershipType" [(ngModel)]="detailedPartner.partnershipType">
+                </mat-form-field>
+            </div>
+        </div>
+</form>

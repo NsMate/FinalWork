@@ -1,5 +1,6 @@
 package com.main.Entites.Business;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -46,7 +47,7 @@ public class Partner implements Serializable {
 
     @Column(name = "contact_first_name")
     @NotNull
-    private String contactFirtName;
+    private String contactFirstName;
 
     @Column(name = "contact_last_name")
     @NotNull
@@ -60,17 +61,22 @@ public class Partner implements Serializable {
     @NotNull
     private String contactPhoneNumber;
 
-    @Column(name = "currency_type")
+    @Column(name = "vat_number")
     @NotNull
-    private String currencyType;
+    private String vatNumber;
 
     @Column(name = "partnership_type")
     @NotNull
     private String partnershipType;
 
-    @OneToMany(mappedBy = "partner")
+    @Column(name = "own")
+    private int own;
+
+    @OneToMany(mappedBy = "partner", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private List<Invoice> invoices;
 
     @OneToMany(mappedBy = "partner")
+    @JsonIgnore
     private List<BusinessOrder> businessOrders;
 }

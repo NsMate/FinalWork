@@ -1,0 +1,29 @@
+<div mat-dialog-title>
+    <h1 style="text-align: center;" *ngIf="data.isNew"> Termékcsoport létrehozása </h1>
+    <h1 style="text-align: center;" *ngIf="!data.isNew"> Termékcsoport módosítása </h1>
+</div>
+  
+<div mat-dialog-content>
+    <form #addForm="ngForm" [formGroup]="productGroupForm">
+      <div>
+        <h2>Termékcsoport neve</h2>
+        <mat-form-field appearance="standard">
+          <input matInput placeholder="eg. Zöldségek" [(ngModel)]="data.productGroup.groupName" name="groupName" formControlName="groupName">
+          <mat-error *ngIf="groupName.errors?.required && (groupName.dirty || groupName.touched)"> Kérem adja meg a csoport nevét! </mat-error>
+          <mat-error *ngIf="groupName.errors?.pattern && (groupName.dirty || groupName.touched)"> Helytelen formátum (pl. Gyümölcsök) </mat-error>
+        </mat-form-field>
+      </div>
+      <div>
+        <h2>Termékcsoport leírása</h2>
+        <mat-form-field appearance="standard"> 
+          <textarea matInput placeholder="Leírás" [(ngModel)]="data.productGroup.description" name="groupDescription" formControlName="groupDescription"></textarea>
+        </mat-form-field>
+      </div>
+    </form>
+</div>
+  
+<div mat-dialog-action style="display: flex; justify-content: space-evenly;">
+    <button mat-raised-button (click)="saveProductGroup()" [disabled]="productGroupForm.invalid" color="primary">Mentés</button>
+  
+    <button mat-raised-button *ngIf="!data.isNew" (click)="openConfDialog()" color="primary" >Törlés</button>
+</div>

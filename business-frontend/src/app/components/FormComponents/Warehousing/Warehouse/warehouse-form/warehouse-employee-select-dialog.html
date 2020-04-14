@@ -1,0 +1,10 @@
+<h1 style="text-align: center;margin-bottom: 18px;"> Válassza ki a hozzáadni kívánt dolgozókat! </h1>
+
+<mat-selection-list #employees [(ngModel)]="selectedOptions">
+    <mat-list-option *ngFor="let employee of freeWorkers" [value]="employee">
+      {{employee.lastName}}  {{ employee.firstName }}
+    </mat-list-option>
+</mat-selection-list>
+
+<button mat-raised-button color="primary" (click)="saveWorkers()" style="text-align: center;" 
+        [disabled]="selectedOptions.length == 0"> Hozzáadás </button>

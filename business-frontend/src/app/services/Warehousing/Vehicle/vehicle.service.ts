@@ -39,4 +39,8 @@ export class VehicleService {
   deleteVehicle(id): Promise<Vehicle> {
     return this.http.delete<Vehicle>(`${this.vehicleURL}/${id}`, httpOptions).toPromise();
   }
+
+  getFreeVehicles(): Promise<Vehicle[]> {
+    return this.http.get<Vehicle[]>(`${this.vehicleURL}/freeVehicles`, httpOptions).toPromise();
+  }
 }

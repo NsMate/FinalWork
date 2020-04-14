@@ -1,10 +1,14 @@
 package com.main.Controllers.Warehouse;
 
+import com.main.Entites.User.Employee;
 import com.main.Entites.Warehouse.Route;
 import com.main.Entites.Warehouse.Stock;
+import com.main.Entites.Warehouse.Vehicle;
 import com.main.Entites.Warehouse.Warehouse;
+import com.main.Repositories.User.EmployeeRepository;
 import com.main.Repositories.Warehouse.RouteRepository;
 import com.main.Repositories.Warehouse.StockRepository;
+import com.main.Repositories.Warehouse.VehicleRepository;
 import com.main.Repositories.Warehouse.WarehouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +30,12 @@ public class WarehouseController {
 
     @Autowired
     private RouteRepository routeRepository;
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private VehicleRepository vehicleRepository;
 
     @GetMapping("")
     public ResponseEntity<Iterable<Warehouse>> getAll(){
@@ -129,10 +139,8 @@ public class WarehouseController {
         Optional<Warehouse> oldWarehouse = warehouseRepository.findById(id);
         if (oldWarehouse.isPresent()) {
             Warehouse warehouse = oldWarehouse.get();
-            Stock newStock = stockRepository.save(stock);
-            warehouse.getStockList().add(newStock);
-            stockRepository.save(stock);  // have to trigger from the @JoinTable side
-            return ResponseEntity.ok(newStock);
+            stock.setWarehouse(warehouse);
+            return ResponseEntity.ok(stockRepository.save(stock));
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -146,6 +154,7 @@ public class WarehouseController {
 
             for (Stock stock : stocks) {
                 if (stock.getId() == null) {
+                    stock.setWarehouse(warehouse);
                     stockRepository.save(stock);
                 }
             }
@@ -153,6 +162,92 @@ public class WarehouseController {
             warehouse.setStockList(stocks);
             warehouseRepository.save(warehouse);
             return ResponseEntity.ok(stocks);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/{id}/vehicles")
+    public ResponseEntity<Iterable<Vehicle>> getAllVehicleByIdInWarehouse(@PathVariable Long id) {
+        Optional<Warehouse> warehouse = warehouseRepository.findById(id);
+        if (warehouse.isPresent()) {
+            return ResponseEntity.ok(warehouse.get().getVehicleList());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/{id}/vehicles")
+    public ResponseEntity<Vehicle> insertVehicleIntoWarehouseById(@PathVariable Long id, @RequestBody Vehicle vehicle) {
+        Optional<Warehouse> oldWarehouse = warehouseRepository.findById(id);
+        if (oldWarehouse.isPresent()) {
+            Warehouse warehouse = oldWarehouse.get();
+            vehicle.setWarehouse(warehouse);
+            return ResponseEntity.ok(vehicleRepository.save(vehicle));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/{id}/vehicles")
+    public ResponseEntity<Iterable<Vehicle>> modifyVehicleInWarehouseById(@PathVariable Long id, @RequestBody List<Vehicle> vehicles) {
+        Optional<Warehouse> oldWarehouse = warehouseRepository.findById(id);
+        if (oldWarehouse.isPresent()) {
+            Warehouse warehouse = oldWarehouse.get();
+
+            for (Vehicle vehicle : vehicles) {
+                if (vehicle.getId() == null) {
+                    vehicle.setWarehouse(warehouse);
+                    vehicleRepository.save(vehicle);
+                }
+            }
+
+            warehouse.setVehicleList(vehicles);
+            warehouseRepository.save(warehouse);
+            return ResponseEntity.ok(vehicles);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/{id}/employees")
+    public ResponseEntity<Iterable<Employee>> getAllEmployeeByWarehouse(@PathVariable Long id) {
+        Optional<Warehouse> warehouse = warehouseRepository.findById(id);
+        if (warehouse.isPresent()) {
+            return ResponseEntity.ok(warehouse.get().getEmployeeList());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/{id}/employees")
+    public ResponseEntity<Employee> insertVehicleIntoWarehouseById(@PathVariable Long id, @RequestBody Employee employee) {
+        Optional<Warehouse> oldWarehouse = warehouseRepository.findById(id);
+        if (oldWarehouse.isPresent()) {
+            Warehouse warehouse = oldWarehouse.get();
+            employee.setWarehouse(warehouse);
+            return ResponseEntity.ok(employeeRepository.save(employee));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/{id}/employees")
+    public ResponseEntity<Iterable<Employee>> putEmployeesIntoWarehouse(@PathVariable Long id, @RequestBody List<Employee> employees) {
+        Optional<Warehouse> oldWarehouse = warehouseRepository.findById(id);
+        if (oldWarehouse.isPresent()) {
+            Warehouse warehouse = oldWarehouse.get();
+
+            for (Employee employee : employees) {
+                if (employee.getId() == null) {
+                    employee.setWarehouse(warehouse);
+                    employeeRepository.save(employee);
+                }
+            }
+
+            warehouse.setEmployeeList(employees);
+            warehouseRepository.save(warehouse);
+            return ResponseEntity.ok(employees);
         } else {
             return ResponseEntity.notFound().build();
         }

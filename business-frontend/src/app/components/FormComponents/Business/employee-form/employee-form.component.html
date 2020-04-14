@@ -1,0 +1,69 @@
+<h1>Dolgozó részletei</h1>
+
+<div class="buttonRow">
+    <button mat-raised-button class="saveButton" 
+        (click)="saveEmployee()" 
+        color="primary" 
+        class="saveButton"><mat-icon>save</mat-icon>Változtatások mentése</button>
+
+    <button mat-raised-button 
+        class="saveButton" 
+        (click)="deleteEmployee()" 
+        color="warn"
+        *ngIf="!isNew"><mat-icon>delete</mat-icon>Dolgozó törlése</button>
+</div>
+
+<form [formGroup]="employeeForm">
+
+    <div class="nameRow">
+        <div class="lastName">
+            <h3>Vezetéknév</h3>
+            <mat-form-field appearance="standard">
+                <input matInput placeholder="eg. Nagy" name="lastName" formControlName="lastName" [(ngModel)]="detailedEmployee.lastName">                
+                <mat-error *ngIf="lastName.errors?.required && (lastName.dirty || lastName.touched)"> Adja meg a vezetéknevet! </mat-error>
+                <mat-error *ngIf="lastName.errors?.pattern && (lastName.dirty || lastName.touched)"> Helytelen formátum </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="firstName">
+            <h3>Keresztnév</h3>
+            <mat-form-field appearance="standard">
+                <input matInput placeholder="eg. Máté" name="firstName" formControlName="firstName" [(ngModel)]="detailedEmployee.firstName">                
+                <mat-error *ngIf="firstName.errors?.required && (firstName.dirty || firstName.touched)"> Adja meg a keresztnevet! </mat-error>
+                <mat-error *ngIf="firstName.errors?.pattern && (firstName.dirty || firstName.touched)"> Helytelen formátum </mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div class="contactRow">
+        <div class="phoneNumber">
+            <h3>Telefonszám</h3>
+            <mat-form-field appearance="standard">
+                <input matInput placeholder="eg. +36205050088" name="phoneNumber" formControlName="phoneNumber" [(ngModel)]="detailedEmployee.phoneNumber">                
+                <mat-error *ngIf="phoneNumber.errors?.required && (phoneNumber.dirty || phoneNumber.touched)"> Adja meg a telefonszámot! </mat-error>
+                <mat-error *ngIf="phoneNumber.errors?.pattern && (phoneNumber.dirty || phoneNumber.touched)"> Helytelen formátum </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="email">
+            <h3>Email cím</h3>
+            <mat-form-field appearance="standard">
+                <input matInput placeholder="eg. example@example.com" name="email" formControlName="email" [(ngModel)]="detailedEmployee.email">                
+                <mat-error *ngIf="email.errors?.required && (email.dirty || email.touched)"> Adja meg az email címet! </mat-error>
+                <mat-error *ngIf="email.errors?.pattern && (email.dirty || email.touched)"> Helytelen formátum </mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div>
+        <h2>Munkakör</h2>
+        <mat-form-field appearance="standard">
+          <mat-select [(ngModel)]="detailedEmployee.department" formControlName="department">
+            <mat-option value="Vezető">Vezető</mat-option>
+            <mat-option value="Pénzügy">Pénzügy</mat-option>
+            <mat-option value="Logisztika">Logisztika</mat-option>
+            <mat-option value="Munkás">Munkás</mat-option>
+          </mat-select> 
+          <mat-error *ngIf="department.errors?.required && (department.dirty || department.touched)"> Adja meg az email címet! </mat-error>
+        </mat-form-field>
+      </div>
+
+</form>

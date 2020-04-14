@@ -59,4 +59,14 @@ public class ProductController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/byCode/{code}")
+    public ResponseEntity<Product> findProductByCode(@PathVariable Integer code){
+        Optional<Product> product = productRepository.findByCode(code);
+        if(product.isPresent()){
+            return ResponseEntity.ok(product.get());
+        }else{
+            return null;
+        }
+    }
 }

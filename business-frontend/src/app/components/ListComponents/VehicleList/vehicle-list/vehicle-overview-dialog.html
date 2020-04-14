@@ -4,18 +4,25 @@
 
 <div mat-dialog-content>
   <form #addForm="ngForm" [formGroup]="vehicleForm">
+
     <div>
       <h2>Gyártó</h2>
       <mat-form-field appearance="standard">
         <input matInput placeholder="eg. Opel" [(ngModel)]="data.vehicle.manufacturer" name="manufacturer" formControlName="manufacturer">
+        <mat-error *ngIf="manufacturer.errors?.required && (manufacturer.dirty || manufacturer.touched)"> Kérem adja meg a gyártót! </mat-error>
+        <mat-error *ngIf="manufacturer.errors?.pattern && (manufacturer.dirty || manufacturer.touched)"> Helytelen formátum </mat-error>
       </mat-form-field>
     </div>
+
     <div>
       <h2>Rendszám</h2>
-      <mat-form-field appearance="standard">
+      <mat-form-field appearance="standard"> 
         <input matInput placeholder="ABC-123" [(ngModel)]="data.vehicle.licensePlateNumber" name="licensePlate" formControlName="licensePlate">
+        <mat-error *ngIf="licensePlate.errors?.required && (licensePlate.dirty || licensePlate.touched)"> Kérem adja meg a rendszámot! </mat-error>
+        <mat-error *ngIf="licensePlate.errors?.pattern && (licensePlate.dirty || licensePlate.touched)"> Helytelen formátum (pl. QWE-123) </mat-error>
       </mat-form-field>
     </div>
+
     <div>
       <h2>Rendeltetés</h2>
       <mat-form-field appearance="standard">
@@ -25,13 +32,15 @@
           <mat-option value="Transport">Szállítás</mat-option>
           <mat-option value="Combi">Combi</mat-option>
         </mat-select>
+        <mat-error *ngIf="type.errors?.required && (type.dirty || type.touched)"> Kérem adja meg a típust! </mat-error>
       </mat-form-field>
     </div>
+
   </form>
 </div>
 
 <div mat-dialog-action style="display: flex; justify-content: space-evenly;">
-  <button mat-flat-button (click)="savingVehicle()" [disabled]="vehicleForm.invalid" color="primary">Mentés</button>
+  <button mat-flat-button (click)="savingVehicle()" [disabled]="vehicleForm.invalid" color="primary"><mat-icon>save</mat-icon> Mentés</button>
 
-  <button mat-flat-button (click)="openConfDialog()" *ngIf="!data.isNew" color="primary" >Törlés</button>
+  <button mat-flat-button (click)="openConfDialog()" *ngIf="!data.isNew" color="warn" ><mat-icon>delete</mat-icon> Törlés </button>
 </div>

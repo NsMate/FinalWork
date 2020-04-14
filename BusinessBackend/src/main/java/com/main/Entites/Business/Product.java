@@ -23,6 +23,7 @@ public class Product implements Serializable {
 
     @Id
     @GeneratedValue
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "product_name")
@@ -40,15 +41,12 @@ public class Product implements Serializable {
     @NotNull
     private int code;
 
-    @OneToMany(mappedBy = "product")
-    @JsonIgnore
-    private List<InvoiceItem> invoiceItems;
+    @Column(name = "currency")
+    @NotNull
+    private String currency;
 
-    @OneToMany(mappedBy = "product")
+    @ManyToOne
+    @JoinColumn(name = "product_group_id", referencedColumnName = "id")
     @JsonIgnore
-    private List<Stock> stockList;
-
-    @OneToMany(mappedBy = "product")
-    @JsonIgnore
-    private List<OrderItem> orderItemList;
+    private ProductGroup productGroup;
 }

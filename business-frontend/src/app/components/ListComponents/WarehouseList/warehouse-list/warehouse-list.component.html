@@ -1,29 +1,31 @@
+<mat-icon class="backGround">widgets</mat-icon>
+
 <h1>Raktáraink</h1>
 
-<button mat-flat-button  class="newButton" color="primary">Új raktár felvétele</button>
+<button mat-flat-button  class="newButton" color="primary" (click)="newWarehouse()">Új raktár felvétele</button>
 
-<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+<table mat-table [dataSource]="dataSource" matSort matSortActive="id" matSortDirection="asc" class="mat-elevation-z8">
   
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
-      <td mat-cell *matCellDef="let warehouse"> {{warehouse.id}} </td>
+      <td mat-cell *matCellDef="let warehouse"> <a (click)="selectWarehouse(warehouse)"> {{warehouse.id}} </a> </td>
     </ng-container>
   
     <ng-container matColumnDef="zip">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Irányítószám </th>
-      <td mat-cell *matCellDef="let warehouse"> {{warehouse.zipCode}} </td>
+      <td mat-cell *matCellDef="let warehouse"> <a (click)="selectWarehouse(warehouse)"> {{warehouse.zipCode}} </a> </td>
     </ng-container>
   
     <ng-container matColumnDef="city">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Város </th>
-      <td mat-cell *matCellDef="let warehouse">{{warehouse.city}} </td>
+      <td mat-cell *matCellDef="let warehouse"><a (click)="selectWarehouse(warehouse)"> {{warehouse.city}} </a></td>
     </ng-container>
 
     <ng-container matColumnDef="address">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Cím </th>
-      <td mat-cell *matCellDef="let warehouse"> {{warehouse.street }} {{ warehouse.streetNumber }} </td>
+      <td mat-cell *matCellDef="let warehouse"> <a (click)="selectWarehouse(warehouse)"> {{warehouse.street }} {{ warehouse.streetNumber }} </a> </td>
     </ng-container>
   
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
+</table>

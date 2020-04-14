@@ -1,0 +1,58 @@
+<div mat-dialog-title>
+    <h1 style="text-align: center;"> Adja meg az út részleteit! </h1>
+</div>
+  
+<div mat-dialog-content>
+    <form [formGroup]="routeForm">
+        <div>
+            <h2>Szállítmány típusa</h2>
+            <mat-form-field appearance="standard">
+              <mat-select [(ngModel)]="detailedRoute.routeType" formControlName="routeType">
+                <mat-option value="Bejövő"> Bejövő </mat-option>
+                <mat-option value="Kimenő"> Kimenő </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        <div class="deliveryDate">
+            <h2>Szállítás dátuma</h2>
+            <mat-form-field>
+                <input matInput [matDatepicker]="dp1" disabled [(ngModel)]="detailedRoute.deliveryDate" name="deliveryDate" formControlName="deliveryDate">
+                <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
+                <mat-datepicker #dp1></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div *ngIf="this.detailedRoute.routeType != ''">
+            <h2 *ngIf="this.detailedRoute.routeType == 'Kimenő'">Kiinduló raktár</h2>
+            <h2 *ngIf="this.detailedRoute.routeType == 'Bejövő'">Fogadó raktár</h2>
+            <mat-form-field appearance="standard">
+              <mat-select [(ngModel)]="detailedRoute.warehouse" formControlName="warehouse" [compareWith]="warehouseComparisonFunction">
+                <mat-option *ngFor="let warehouse of selectableWarehouse" [value]="warehouse">
+                    {{ warehouse.city }} {{ warehouse.street }} {{ warehouse.streetNumber }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="destination" *ngIf="this.detailedRoute.routeType == 'Kimenő'">
+          <h2>Úticél</h2>
+          <mat-form-field appearance="standard">
+              <input matInput name="destination" formControlName="destination" [(ngModel)]="detailedRoute.destination">
+          </mat-form-field>
+        </div>
+        <div *ngIf="this.detailedRoute.routeType == 'Bejövő' || this.detailedRoute.routeType == 'Kimenő'" >
+            <h2>Gépjármű</h2>
+            <mat-form-field appearance="standard">
+              <mat-select [(ngModel)]="detailedRoute.vehicle" formControlName="vehicle" [compareWith]="vehicleComparisonFunction">
+                <mat-option *ngFor="let vehicle of selectableVehicle" [value]="vehicle">
+                    {{ vehicle.manufacturer }} {{ vehicle.licensePlateNumber }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+        </div>
+    </form>
+</div>
+  
+<div mat-dialog-action style="display: flex; justify-content: space-evenly;">
+    <button mat-raised-button  [disabled]="routeForm.invalid" color="primary" (click)="saveRoute()"><mat-icon>save</mat-icon> Mentés</button>
+  
+    <button mat-raised-button [disabled]="detailedRoute.id == null" (click)="deleteRoute()" color="warn" ><mat-icon>delete</mat-icon> Törlés</button>
+</div>

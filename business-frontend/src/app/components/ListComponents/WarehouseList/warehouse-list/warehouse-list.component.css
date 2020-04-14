@@ -27,3 +27,15 @@ th.mat-sort-header-sorted {
     margin-left: 10%;
     margin-bottom: 18px;
 }
+a{
+    cursor: pointer;
+}
+
+.backGround{
+    opacity: 5%;
+    position: absolute;
+    transform: scale(33);
+    z-index: -1;
+    top: 50%;
+    left: 20%;
+}

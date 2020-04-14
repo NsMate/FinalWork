@@ -1,11 +1,20 @@
 package com.main.Controllers.Warehouse;
 
 import com.main.Entites.Warehouse.Route;
+import com.main.Entites.Warehouse.Vehicle;
+import com.main.Entites.Warehouse.Warehouse;
 import com.main.Repositories.Warehouse.RouteRepository;
+import com.main.Repositories.Warehouse.VehicleRepository;
+import com.main.Repositories.Warehouse.WarehouseRepository;
+import com.sun.deploy.panel.ITreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin
@@ -15,6 +24,12 @@ public class RouteController {
 
     @Autowired
     private RouteRepository routeRepository;
+
+    @Autowired
+    private WarehouseRepository warehouseRepository;
+
+    @Autowired
+    private VehicleRepository vehicleRepository;
 
     @GetMapping("")
     public ResponseEntity<Iterable<Route>> getAll(){
@@ -31,8 +46,13 @@ public class RouteController {
         }
     }
 
-    @PostMapping("")
-    public ResponseEntity<Route> newRoute(@RequestBody Route route){
+    @PostMapping("/{warehouseId}/{vehicleId}")
+    public ResponseEntity<Route> newRoute(@RequestBody Route route,
+                                          @PathVariable Long warehouseId, @PathVariable Long vehicleId){
+        Optional<Warehouse> wh = warehouseRepository.findById(warehouseId);
+        Optional<Vehicle> vh = vehicleRepository.findById(vehicleId);
+        route.setWarehouse(wh.get());
+        route.setVehicle(vh.get());
         Route savedRoute = routeRepository.save(route);
         return ResponseEntity.ok(savedRoute);
     }
@@ -57,5 +77,13 @@ public class RouteController {
         }else{
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/between/{date1}/{date2}")
+    public ResponseEntity<Iterable<Route>> getRouteBetweenDate(@PathVariable String date1, @PathVariable String date2) throws ParseException {
+        Date start = new SimpleDateFormat("yyyy-MM-dd").parse(date1);
+        Date end = new SimpleDateFormat("yyyy-MM-dd").parse(date2);
+        List<Route> routes = routeRepository.getRoutesBetweenDates(start,end);
+        return ResponseEntity.ok(routes);
     }
 }

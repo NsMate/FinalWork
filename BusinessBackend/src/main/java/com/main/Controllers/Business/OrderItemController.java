@@ -21,7 +21,7 @@ public class OrderItemController {
         return ResponseEntity.ok(orderItemRepository.findAll());
     }
 
-    /*
+
     @GetMapping("/{id}")
     public ResponseEntity<OrderItem> findOrderItemById(@PathVariable Long id){
         Optional<OrderItem> orderItem = orderItemRepository.findById(id);
@@ -59,5 +59,5 @@ public class OrderItemController {
             return ResponseEntity.notFound().build();
         }
     }
-     */
+
 }

@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -32,7 +33,10 @@ public class Stock implements Serializable {
     @JsonIgnore
     private Warehouse warehouse;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    private Product product;
+    @Column(name = "product")
+    private String product;
+
+    @Column(name = "unit")
+    @NotNull
+    private String unit;
 }

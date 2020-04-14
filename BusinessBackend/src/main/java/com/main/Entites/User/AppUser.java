@@ -1,5 +1,7 @@
 package com.main.Entites.User;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,6 +17,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Table(name = "app_user")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class AppUser implements Serializable {
 
     @Id
@@ -40,6 +45,6 @@ public class AppUser implements Serializable {
     private Employee employee;
 
     public enum Role {
-        ROLE_LOGISTICS, ROLE_FINANCE, ROLE_ADMIN
+        ROLE_LOGISTICS, ROLE_FINANCE, ROLE_ADMIN, ROLE_WORKER
     }
 }

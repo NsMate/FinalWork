@@ -2,6 +2,7 @@ import { Product } from '../../BusinessModels/Product/product';
 
 export class Stock {
     id: number;
-    quantity: number;
-    product: Product;
+    quantity: number = 0;
+    product: string = "";
+    unit: string = "";
 }

@@ -1,0 +1,39 @@
+h1, .newGroupButton{
+    margin-left: 20%;
+}
+
+.newProductButton{
+    margin-left: 10px;
+}
+
+mat-tree{
+    margin-left: 25%;
+}
+
+mat-tree-node{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+a{
+    cursor: pointer;
+}
+
+.backGround{
+    opacity: 5%;
+    position: absolute;
+    transform: scale(33);
+    z-index: -0.5;
+    top: 50%;
+    left: 70%;
+}
+
+::ng-deep .success {
+    background: green;
+    color: white;
+}
+
+::ng-deep .error {
+    background: red;
+    color: white;
+}

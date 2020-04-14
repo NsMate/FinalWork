@@ -1,27 +1,26 @@
-<mat-toolbar color="primary" *ngIf="getAuthService().isLoggedIn">
+<mat-toolbar color="primary" *ngIf="getAuthService().isLoggedIn" >
   <mat-toolbar-row>
-    <h2 style="color: rgb(58, 202, 135); font-size: 24px;"> Rapid </h2>
+    <h2 style="color: black; font-size: 28px; font-style: italic;"> Core </h2>
     <span class="menu-spacer"></span>
     <div>
-      <button mat-button [matMenuTriggerFor]="vallalat"> Vállalat </button>
+      <button mat-button [matMenuTriggerFor]="vallalat"><mat-icon>account_box</mat-icon> Vállalat </button>
       <mat-menu #vallalat="matMenu">
-        <a mat-menu-item [routerLink]="'/main'"> Saját vállalat </a>
-        <a mat-menu-item [routerLink]="'/main'"> Dolgozók </a>
-        <a mat-menu-item [routerLink]="'/main'"> Termékek </a>
+        <a mat-menu-item [routerLink]="'/partnerForm'" [queryParams]="{own: 'own'}"> Saját vállalat </a>
+        <a mat-menu-item [routerLink]="'/employeeList'"> Dolgozók </a>
+        <a mat-menu-item [routerLink]="'/productTree'"> Termékek </a>
       </mat-menu>
-      <button mat-button [matMenuTriggerFor]="penz"> Pénzügy </button>
+      <button mat-button [matMenuTriggerFor]="penz"><mat-icon>local_atm</mat-icon> Pénzügy </button>
       <mat-menu #penz="matMenu">
-        <a mat-menu-item [routerLink]="'/main'"> Számlák </a>
-        <a mat-menu-item [routerLink]="'/main'"> Ajánlatok </a>
-        <a mat-menu-item [routerLink]="'/main'"> Partnerek </a>
-        <a mat-menu-item [routerLink]="'/main'"> Kiadások </a>
+        <a mat-menu-item [routerLink]="'/invoiceList'"> Számlák </a>
+        <a mat-menu-item [routerLink]="'/offerList'"> Rendelések </a>
+        <a mat-menu-item [routerLink]="'/partnerList'"> Partnerek </a>
       </mat-menu>
-      <button mat-button [matMenuTriggerFor]="raktar"> Raktárkezelés </button>
+      <button mat-button [matMenuTriggerFor]="raktar"><mat-icon>widgets</mat-icon> Raktárkezelés </button>
       <mat-menu #raktar="matMenu">
-        <a mat-menu-item [routerLink]="'/main'"> Gépjárművek </a>
+        <a mat-menu-item [routerLink]="'/vehicleList'"> Gépjárművek </a>
         <a mat-menu-item [routerLink]="'/warehouses'"> Raktárak </a>
       </mat-menu>
-      <button mat-button [routerLink]="'/schedule'"> Forgalomkezelés </button>
+      <button mat-button [routerLink]="'/schedule'"><mat-icon>local_shipping</mat-icon> Forgalomkezelés </button>
     </div>
     <span class="example-spacer"></span>
     <mat-icon style="margin-right: 10px;">person_pin</mat-icon>

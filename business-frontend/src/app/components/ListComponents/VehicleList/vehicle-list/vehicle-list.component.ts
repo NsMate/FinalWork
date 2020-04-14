@@ -7,6 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ConfdialogComponent } from 'src/app/components/ConfirmationDialog/confdialog/confdialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export interface DialogData{
   vehicle: Vehicle,
@@ -22,12 +23,11 @@ export class VehicleListComponent implements OnInit {
 
   public vehicles: Vehicle[] = [];
   public dataSource;
-  public chosenVehicle: Vehicle;
-  public newVehicle: boolean;
 
   constructor(
     private vehicleService: VehicleService,
-    public vehicleDialog: MatDialog
+    public vehicleDialog: MatDialog,
+    private _snackBar: MatSnackBar
   ) { }
 
 
@@ -43,28 +43,39 @@ export class VehicleListComponent implements OnInit {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   displayedColumns: string[] = ['id', 'manufacturer', 'licensePlateNumber', 'type'];
 
-  //Function for opening the dialog for new and exsiting vehicle
+  /**
+   * This function open a dialog for editing and creating a vehicle.
+   * 
+   */
 
   openDialog(vehicle?: Vehicle): void {
+
+    let dialogData: DialogData = {isNew: null, vehicle: null};
+    
     if(vehicle == null){
-      this.chosenVehicle = new Vehicle();
-      this.newVehicle = true;
+      dialogData.vehicle = new Vehicle();
+      dialogData.isNew = true;
     }else{
-      this.chosenVehicle = vehicle;
-      this.newVehicle = false;
+      dialogData.vehicle = vehicle;
+      dialogData.isNew = false;
     }
+
     const dialogRef = this.vehicleDialog.open(VehicleOverviewDialog, {
       width: '500px',
-      data: { isNew: this.newVehicle, vehicle: this.chosenVehicle}
+      data: dialogData,
+    }).afterClosed().subscribe(res => {
+
+      this.ngOnInit();
+
     });
   }
 
 }
 
 
-//Component for the dialog window for editing and new vehicles
-//
-//
+/**
+ * Dialog component for editing and creating new vehicle.
+ */
 
 @Component({
   selector: 'vehicle-overview-dialog',
@@ -77,8 +88,13 @@ export class VehicleOverviewDialog{
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private vehicleService: VehicleService,
     private formBuilder: FormBuilder,
-    public confDialog: MatDialog
+    public confDialog: MatDialog,
+    private _snackBar: MatSnackBar
   ){}
+
+  /**
+   * Opens confirmation dialog before deleting a vehicle.
+   */
 
   openConfDialog(){
     const dialogRef = this.confDialog.open(ConfdialogComponent,{
@@ -87,27 +103,66 @@ export class VehicleOverviewDialog{
 
     dialogRef.afterClosed().subscribe(async result => {
       if(result){
+
        await  this.vehicleService.deleteVehicle(this.data.vehicle.id).then(() => {
-          window.location.reload();
-        });
+          this.dialogRef.close();
+          this._snackBar.open('Sikeresen törölte a járművet!','', {
+            duration: 2000,
+            panelClass: 'success', 
+          })
+        }).catch(e => {
+          this._snackBar.open('Probléma merült fel :( ' + e.error,'', {
+            duration: 5000,
+            panelClass: 'error', 
+          })
+        });;
       }
     })
+
   }
 
   
-  //Function for saving or editing a vehicle
+  /**
+   * This function is used to save the vehicle,
+   * it determines if it is new or just updating is needed.
+   */
 
   async savingVehicle(): Promise<void>{
     if(this.data.isNew){
-      await this.vehicleService.createVehicle(this.data.vehicle);
+
+      await this.vehicleService.createVehicle(this.data.vehicle).then(res => {
+        this._snackBar.open('Sikeresen létrehozta a járművet!','', {
+          duration: 2000,
+          panelClass: 'success', 
+        })
+      }).catch(e => {
+        this._snackBar.open('Probléma merült fel :( ' + e.error,'', {
+          duration: 5000,
+          panelClass: 'error', 
+        })
+      });
+
     }else{
-      await this.vehicleService.updateVehicle(this.data.vehicle);
+
+      await this.vehicleService.updateVehicle(this.data.vehicle).then(res => {
+        this._snackBar.open('Sikeresen módosította a járművet!','', {
+          duration: 2000,
+          panelClass: 'success', 
+        })
+      }).catch(e => {
+        this._snackBar.open('Probléma merült fel :( ' + e.error,'', {
+          duration: 5000,
+          panelClass: 'error', 
+        })
+      });;
     }
-    window.location.reload();
+    
+    this.dialogRef.close();
   }
 
-  //Validation for the vehicle form
-  //
+  /**
+   * Form control and validators for the form on the dialog.
+   */
 
   vehicleForm = this.formBuilder.group({
     'type': new FormControl (this.data.vehicle.vehicleType, Validators.required),
