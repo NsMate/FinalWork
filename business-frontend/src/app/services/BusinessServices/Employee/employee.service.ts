@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Employee } from 'src/app/models/Employee/employee';
+import { AppUser } from 'src/app/models/AppUser/app-user';
 
 const httpOptions = {
   headers: new HttpHeaders({ 
@@ -42,4 +43,9 @@ export class EmployeeService {
   getFreeWorkers(): Promise<Employee[]>{
     return this.http.get<Employee[]>(`${this.employeeUrl}/freeWorkers`,httpOptions).toPromise();
   }
+
+  getEmployeesUser(employee: Employee): Promise<AppUser>{
+    return this.http.get<AppUser>(`${this.employeeUrl}/${employee.id}/user`,httpOptions).toPromise();
+  }
+  
 }

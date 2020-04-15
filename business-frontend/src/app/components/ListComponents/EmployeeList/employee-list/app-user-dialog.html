@@ -5,30 +5,63 @@
 <div mat-dialog-content>
   <form [formGroup]="userForm">
       <div>
-        <h2> Felhasználónév </h2>
+        <h2> Felhasználónév* </h2>
         <mat-form-field appearance="standard">
-          <input matInput placeholder="eg. nagyAdam" [(ngModel)]="data.employee.appUser.appUserName" name="userName" formControlName="userName">
-        </mat-form-field>
-      </div>
-
-      <div>
-        <h2> Jelszó </h2>
-        <mat-form-field appearance="standard"> 
-          <input matInput [(ngModel)]="data.employee.appUser.appUserPassword" name="userPassword" formControlName="userPassword">
+          <input matInput placeholder="eg. nagyAdam" 
+                  [(ngModel)]="data.employee.appUser.appUserName" 
+                  name="userName" 
+                  formControlName="userName" 
+                  [autocomplete]="autoComplete"
+                  required>
+          <mat-error *ngIf="userName.errors?.required && (userName.dirty || userName.touched)"> Kérem adjon meg felhasználónevet! </mat-error>
+          <mat-error *ngIf="userName.errors?.pattern && (userName.dirty || userName.touched)"> Használhat betűket, számokat, illetve: ". _ " speciális karaktereket! </mat-error>
         </mat-form-field>
       </div>
 
       <div *ngIf="data.employee.appUser.id == null">
-        <h2> Jelszó mégegyszer</h2>
+        <h2> Jelszó* </h2>
         <mat-form-field appearance="standard"> 
-          <input matInput [(ngModel)]="passwordAgain" name="userPasswordAgain" formControlName="userPasswordAgain">
+          <input matInput [(ngModel)]="data.employee.appUser.appUserPassword" 
+                name="userPassword" 
+                formControlName="userPassword" 
+                [type]="hidePassword ? 'password' : 'text'"
+                [autocomplete]="autoComplete"
+                required>
+                <mat-error *ngIf="userPassword.errors?.required && (userPassword.dirty || userPassword.touched)"> Kérem adja meg jelszavát! </mat-error>
+                <mat-error *ngIf="userPassword.errors?.pattern && (userPassword.dirty || userPassword.touched)"> Használhat betűket, számokat, illetve: ". _ " speciális karaktereket! </mat-error>
+                <mat-error *ngIf="userPassword.errors?.minlength"> Legalább 5 karakter hosszúnak kell lennie! </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="data.employee.appUser.id == null">
+        <h2> Jelszó mégegyszer* </h2>
+        <mat-form-field appearance="standard"> 
+          <input matInput [(ngModel)]="passwordAgain" 
+                  name="userPasswordAgain" 
+                  formControlName="userPasswordAgain" 
+                  [type]="hidePassword ? 'password' : 'text'" 
+                  [autocomplete]="autoComplete"
+                  [errorStateMatcher]="errorMatcher"
+                  required>
+                  <mat-error *ngIf="userForm.hasError('wrongPassword')"> A jelszavak nem egyeznek! </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="data.employee.appUser.id != null">
+        <h2> Új jelszó </h2>
+        <mat-form-field appearance="standard"> 
+          <input matInput [(ngModel)]="newPassword"
+                  name="newPassword" 
+                  formControlName="newPassword" 
+                  [type]="hidePassword ? 'password' : 'text'" 
+                  [autocomplete]="autoComplete">
         </mat-form-field>
       </div>
       
       <div>
-        <h2> Jogkör </h2>
+        <h2> Jogkör* </h2>
         <mat-form-field appearance="standard">
-          <mat-select [(ngModel)]="data.employee.appUser.appUserGroup" formControlName="userRole">
+          <mat-select [(ngModel)]="data.employee.appUser.appUserGroup" formControlName="userRole" required>
             <mat-option value="ROLE_ADMIN"> Admin </mat-option>
             <mat-option value="ROLE_LOGISTICS"> Logisztika </mat-option>
             <mat-option value="ROLE_FINANCE"> Pénzügyi </mat-option>
@@ -42,7 +75,9 @@
   </div>
   
   <div mat-dialog-action style="display: flex; justify-content: space-evenly;">
-    <button mat-raised-button  [disabled]="userForm.invalid" (click)="saveUser()" color="primary"><mat-icon>save</mat-icon>Mentés</button>
+    <button mat-raised-button *ngIf="data.employee.appUser.id == null" [disabled]="userForm.invalid" (click)="saveUser()" color="primary"><mat-icon>save</mat-icon>Mentés</button>
+
+    <button mat-raised-button *ngIf="data.employee.appUser.id != null" (click)="saveUser()" color="primary"><mat-icon>save</mat-icon>Mentés</button>
   
     <button mat-raised-button color="warn" *ngIf="data.employee.appUser.id != null" (click)="openConfDialog()"><mat-icon>delete</mat-icon>Törlés</button>
   </div>

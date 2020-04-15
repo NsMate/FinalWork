@@ -48,6 +48,7 @@ public class Employee implements Serializable {
     private String department;
 
     @OneToOne(mappedBy = "employee", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private AppUser appUser;
 
     @ManyToOne

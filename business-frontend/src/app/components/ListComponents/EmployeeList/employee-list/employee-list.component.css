@@ -43,3 +43,13 @@ a{
     top: 50%;
     left: 20%;
 }
+
+::ng-deep .success {
+    background: green;
+    color: white;
+}
+
+::ng-deep .error {
+    background: red;
+    color: white;
+}

@@ -1,9 +1,12 @@
 package com.main.Controllers.User;
 
+import com.main.Entites.User.AppUser;
 import com.main.Entites.User.Employee;
 import com.main.Repositories.User.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -67,6 +70,16 @@ public class EmployeeController {
             return null;
         }else{
             return ResponseEntity.ok(workers);
+        }
+    }
+
+    @GetMapping("/{id}/user")
+    public ResponseEntity<AppUser> findEmployeesUserById(@PathVariable Long id){
+        Optional<Employee> employee = employeeRepository.findById(id);
+        if(employee.isPresent()){
+            return ResponseEntity.ok(employee.get().getAppUser());
+        }else{
+            return ResponseEntity.notFound().build();
         }
     }
 }

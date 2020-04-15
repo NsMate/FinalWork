@@ -45,7 +45,7 @@ public class AppUserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AppUser> modifyById(@PathVariable Long id, @RequestBody AppUser appUser){
+    public ResponseEntity<AppUser> modifyAppUserById(@PathVariable Long id, @RequestBody AppUser appUser){
         Optional<AppUser> oldUser = appUserRepository.findById(id);
         if(oldUser.isPresent()){
             appUser.setId(id);

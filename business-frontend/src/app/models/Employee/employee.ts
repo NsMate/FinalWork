@@ -7,5 +7,5 @@ export class Employee {
     phoneNumber: string = "";
     email: string = "";
     department: string = "";
-    appUser: AppUser;
+    appUser: AppUser = null;
 }
