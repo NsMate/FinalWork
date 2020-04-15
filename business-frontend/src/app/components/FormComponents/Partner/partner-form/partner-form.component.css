@@ -23,12 +23,12 @@ h2{
 .location{
     position: absolute;
     left: 20%;
-    top: 42%;
+    top: 45%;
 }
 .contact{
     position: absolute;
     left: 40%;
-    top: 42%;
+    top: 45%;
 }
 .contactLastName{
     margin-right: 15px;
@@ -40,7 +40,7 @@ h2{
 
 .otherInfo{
     position: absolute;
-    top: 42%;
+    top: 45%;
     left: 60%;
 }
 
@@ -54,4 +54,14 @@ h3{
 
 hr{
     width: 80%;
+}
+
+::ng-deep .success {
+    background: green;
+    color: white;
+}
+
+::ng-deep .error {
+    background: red;
+    color: white;
 }

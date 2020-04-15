@@ -31,12 +31,16 @@ export class PartnerListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'partnerName', 'location', 'contact', 'contactEmail', 'partnershipType'];
 
   openDetailedPartnerPage(id?: number): void{
+    
     if(id != null){
-      sessionStorage.setItem("detailedPartnerId",id.toString());
+
+      this.routing.navigate(["/partnerForm"],{queryParams: {new: 'no', id: id}});
+
     }else{
-      sessionStorage.removeItem("detailedPartnerId");
+
+      this.routing.navigate(["/partnerForm"],{queryParams: {new: 'yes'}});
+
     }
-    this.routing.navigate(["/partnerForm"]);
   }
 
 }

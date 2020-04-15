@@ -17,6 +17,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { PdfGenerator } from 'src/app/PDFGenerator/pdf-generator';
+import { es } from 'date-fns/locale';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 /**
@@ -238,7 +239,7 @@ export class InvoiceFormComponent implements OnInit {
 
         }).catch(e => {
 
-          this._snackBar.open('Művelet sikertelen!' + e.error,'', {
+          this._snackBar.open('Művelet sikertelen!' + e.status,'', {
             duration: 2000,
             panelClass: ['error'],
           })
@@ -376,7 +377,7 @@ export class InvoiceItemDialog{
 
       }).catch((e) => {
 
-        this._snackBar.open('Művelet nem sikerült :(' + e, '',{
+        this._snackBar.open('Művelet nem sikerült :(' + e.status, '',{
           duration: 2500,
           panelClass: ['error'],
         })
@@ -395,7 +396,7 @@ export class InvoiceItemDialog{
 
       }).catch((e) =>{
 
-        this._snackBar.open('Művelet nem sikerült :(' + e, '',{
+        this._snackBar.open('Művelet nem sikerült :(' + e.status, '',{
           duration: 2500,
           panelClass: ['error'],
         })
@@ -428,7 +429,7 @@ export class InvoiceItemDialog{
         }).catch(e => {
 
           this.dialogRef.close();
-          this._snackBar.open('Művelet nem sikerült! ' + e,'',{
+          this._snackBar.open('Művelet nem sikerült! ' + e.status,'',{
             duration: 2000,
             panelClass: ['error'],
           });

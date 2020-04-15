@@ -1,11 +1,11 @@
 <mat-icon class="backGround">device_hub</mat-icon>
 
-<h1 *ngIf="detailedPartner.id != null" class="header">{{ detailedPartner.partnerName }} részletei</h1>
+<h1 *ngIf="detailedPartner.id != null" class="header">{{ companyName }} részletei</h1>
 <h1 *ngIf="detailedPartner.id == null" class="header"> Új partner létrehozása</h1>
 
 <hr>
 
-<button mat-raised-button class="saveButton" type="submit" (click)="savePartner()" color="primary" class="saveButton">Változtatások mentése</button>
+<button mat-raised-button style="margin-top: 10px;" class="saveButton" type="submit" (click)="savePartner()" color="primary" class="saveButton">Változtatások mentése</button>
 
 <form [formGroup]="partnerForm">
 
@@ -13,6 +13,8 @@
             <h2 style="text-decoration: underline;"> Név </h2>
             <mat-form-field appearance="standard">
                 <input matInput placeholder="eg. Példa kft" name="partnerName" formControlName="partnerName" [(ngModel)]="detailedPartner.partnerName">
+                <mat-error *ngIf="partnerName.errors?.required && (partnerName.dirty || partnerName.touched)"> Adja meg a partner nevét! </mat-error>
+                <mat-error *ngIf="partnerName.errors?.pattern && (partnerName.dirty || partnerName.touched)"> Nagybetűvel kezdődjön, tartalmazhat szóközt, pontot, kötőjelet és számokat</mat-error>
             </mat-form-field>
         </div>
 
@@ -22,6 +24,8 @@
                 <h3>Irányítószám</h3>
                 <mat-form-field appearance="standard">
                     <input matInput placeholder="eg. 2660" name="zipCode" formControlName="zipCode" [(ngModel)]="detailedPartner.zipCode">
+                    <mat-error *ngIf="zipCode.errors?.required && (zipCode.dirty || zipCode.touched)"> Adja meg az irányítószámot! </mat-error>
+                    <mat-error *ngIf="zipCode.errors?.pattern && (zipCode.dirty || zipCode.touched)"> Formátum: pl. 2660</mat-error>
                 </mat-form-field>
             </div>
     
@@ -29,12 +33,16 @@
                 <h3>Város</h3>
                 <mat-form-field appearance="standard">
                     <input matInput placeholder="eg. Budapest" name="city" formControlName="city" [(ngModel)]="detailedPartner.city">
+                    <mat-error *ngIf="city.errors?.required && (city.dirty || city.touched)"> Adja meg a várost! </mat-error>
+                    <mat-error *ngIf="city.errors?.pattern && (city.dirty || city.touched)"> Formátum: pl. Budapest</mat-error>
                 </mat-form-field>
             </div>
             <div class="street">
                 <h3>Utca</h3>
                 <mat-form-field appearance="standard">
                     <input matInput placeholder="eg. Kossuth út" name="street" formControlName="street" [(ngModel)]="detailedPartner.street">
+                    <mat-error *ngIf="street.errors?.required && (street.dirty || street.touched)"> Adja meg az utcát! </mat-error>
+                    <mat-error *ngIf="street.errors?.pattern && (street.dirty || street.touched)"> Formátum: pl. Rákóczi út</mat-error>
                 </mat-form-field>
             </div>
     
@@ -42,6 +50,8 @@
                 <h3>Házszám</h3>
                 <mat-form-field appearance="standard">
                     <input matInput placeholder="eg. 12" name="streetNumber" formControlName="streetNumber" [(ngModel)]="detailedPartner.streetNumber">
+                    <mat-error *ngIf="streetNumber.errors?.required && (streetNumber.dirty || streetNumber.touched)"> Adja meg az utcaszámot! </mat-error>
+                    <mat-error *ngIf="streetNumber.errors?.pattern && (streetNumber.dirty || streetNumber.touched)"> Csak számot tartalmazhat, nem kezdődhet 0-val</mat-error>
                 </mat-form-field>
             </div>
         </div>
@@ -53,6 +63,8 @@
                     <h3>Vezetéknév</h3>
                     <mat-form-field appearance="standard">
                         <input matInput placeholder="eg. Nagy" name="contactLastName" formControlName="contactLastName" [(ngModel)]="detailedPartner.contactLastName">
+                        <mat-error *ngIf="contactLastName.errors?.required && (contactLastName.dirty || contactLastName.touched)"> Adja meg a kapcsolattartó vezetéknevét! </mat-error>
+                        <mat-error *ngIf="contactLastName.errors?.pattern && (contactLastName.dirty || contactLastName.touched)"> Nagybetűvel kell kezdődnie, csak betűt tartalmazhat </mat-error>
                     </mat-form-field>
                 </div>
         
@@ -60,6 +72,8 @@
                     <h3>Keresztnév</h3>
                     <mat-form-field appearance="standard">
                         <input matInput placeholder="eg. András" name="contactFirstName" formControlName="contactFirstName" [(ngModel)]="detailedPartner.contactFirstName">
+                        <mat-error *ngIf="contactFirstName.errors?.required && (contactFirstName.dirty || contactFirstName.touched)"> Adja meg a kapcsolattartó keresztnevét! </mat-error>
+                        <mat-error *ngIf="contactFirstName.errors?.pattern && (contactFirstName.dirty || contactFirstName.touched)"> Nagybetűvel kell kezdődnie, csak betűt tartalmazhat </mat-error>
                     </mat-form-field>
                 </div>
             </div>
@@ -68,6 +82,8 @@
                 <h3>Email cím</h3>
                 <mat-form-field appearance="standard">
                     <input matInput placeholder="eg. example@example.com" name="contactEmail" formControlName="contactEmail" [(ngModel)]="detailedPartner.contactEmail">
+                    <mat-error *ngIf="contactEmail.errors?.required && (contactEmail.dirty || contactEmail.touched)"> Adja meg a kapcsolattartó email címét! </mat-error>
+                    <mat-error *ngIf="contactEmail.errors?.pattern && (contactEmail.dirty || contactEmail.touched)"> pl. example@gmail.com </mat-error>
                 </mat-form-field>
             </div>
     
@@ -75,6 +91,8 @@
                 <h3>Telefonszám</h3>
                 <mat-form-field appearance="standard">
                     <input matInput placeholder="eg. +36 20 1234567" name="contactPhoneNumber" formControlName="contactPhoneNumber" [(ngModel)]="detailedPartner.contactPhoneNumber">
+                    <mat-error *ngIf="contactPhoneNumber.errors?.required && (contactPhoneNumber.dirty || contactPhoneNumber.touched)"> Adja meg a kapcsolattartó telefonszámát! </mat-error>
+                    <mat-error *ngIf="contactPhoneNumber.errors?.pattern && (contactPhoneNumber.dirty || contactPhoneNumber.touched)"> pl. +36201234567 egyben</mat-error>
                 </mat-form-field>
             </div>
         </div>
@@ -85,6 +103,8 @@
                 <h3>Adószám</h3>
                 <mat-form-field appearance="standard">
                     <input matInput placeholder="eg. xxxxxxxx-y-zz" name="vatNumber" formControlName="vatNumber" [(ngModel)]="detailedPartner.vatNumber">
+                    <mat-error *ngIf="vatNumber.errors?.required && (vatNumber.dirty || vatNumber.touched)"> Adja meg az adószámot! </mat-error>
+                    <mat-error *ngIf="vatNumber.errors?.pattern && (vatNumber.dirty || vatNumber.touched)"> Formátum: xxxxxxxx-y-zz </mat-error>
                 </mat-form-field>
             </div>
     
@@ -92,6 +112,8 @@
                 <h3>Együttműködési viszony</h3>
                 <mat-form-field appearance="standard">
                     <input matInput placeholder="eg. Beszállító" name="partnershipType" formControlName="partnershipType" [(ngModel)]="detailedPartner.partnershipType">
+                    <mat-error *ngIf="partnershipType.errors?.required && (partnershipType.dirty || partnershipType.touched)"> Írja le az együttműködás lényegét röviden! </mat-error>
+                    <mat-error *ngIf="partnershipType.errors?.pattern && (partnershipType.dirty || partnershipType.touched)"> pl. Vevő </mat-error>
                 </mat-form-field>
             </div>
         </div>
