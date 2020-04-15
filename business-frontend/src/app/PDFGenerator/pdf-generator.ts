@@ -15,7 +15,7 @@ export class PdfGenerator implements OnInit{
 
     public totalPrice: number;
     public plusVat: number;
-    public totalPriceWithVat: number;
+    public netWorth: number;
 
     constructor(
         detailedInvoice: Invoice,
@@ -34,13 +34,12 @@ export class PdfGenerator implements OnInit{
     calculateInvoicePrices(){
         this.plusVat = 0;
         this.totalPrice = 0;
-        this.totalPriceWithVat = 0;
+        this.netWorth = 0;
         this.invoiceItems.forEach(invoiceItem => {
           this.totalPrice += (invoiceItem.price * invoiceItem.quantity);
+          this.netWorth += (invoiceItem.price * (1 - (this.detailedInvoice.vat / 100))) * invoiceItem.quantity;
         })
-        this.plusVat = this.totalPrice * (this.detailedInvoice.vat / 100);
-        this.totalPriceWithVat = this.totalPrice + this.plusVat;
-        this.plusVat = Math.round(this.plusVat);
+        this.plusVat = this.totalPrice - (this.totalPrice * (1 - (this.detailedInvoice.vat / 100)));
     }
 
     openInvoicePdf(){
@@ -73,33 +72,48 @@ export class PdfGenerator implements OnInit{
                 [{
                   text: 'Kibocsátó',
                   margin: [0,0,0,10],
-                  fontSize: 16,
+                  fontSize: 14,
                   bold: true,
                   decoration: 'underline',
                   alignment: 'right',
                 },{
                   text: this.ownCompany.partnerName,
-                  margin: [0,0,0,8],
-                  alignment: 'right'
+                  margin: [0,0,0,4],
+                  alignment: 'right',
+                  fontSize: 10,                  
+                  bold: true,
                 },
                 {
-                  text: this.ownCompany.city,
-                  margin: [0,0,0,8],
-                  alignment: 'right'
-                },
-                {
-                  text: this.ownCompany.zipCode.toString(),
-                  margin: [0,0,0,8],
-                  alignment: 'right'
+                  text: this.ownCompany.zipCode.toString() + " " + this.ownCompany.city,
+                  margin: [0,0,0,4],
+                  alignment: 'right',
+                  fontSize: 10,
                 },
                 {
                   text: this.ownCompany.street + " " + this.ownCompany.streetNumber,
-                  margin: [0,0,0,8],
-                  alignment: 'right'
+                  margin: [0,0,0,4],
+                  alignment: 'right',
+                  fontSize: 10,
                 },
                 {
                   text: 'Adószám: ' + this.ownCompany.vatNumber,
-                  alignment: 'right'
+                  margin: [0,0,0,4],
+                  alignment: 'right',
+                  bold: true,
+                  fontSize: 10,
+                },
+                {
+                  text: 'EU Adószám: HU' + this.ownCompany.vatNumber.substr(0,8),
+                  alignment: 'right',
+                  fontSize: 10,
+                  bold: true,
+                  margin: [0,0,0,4],
+                },
+                {
+                  text: 'Tel.: ' + this.ownCompany.contactPhoneNumber,
+                  alignment: 'right',
+                  bold: true,
+                  fontSize: 10,
                 }]
               ]
             },
@@ -120,58 +134,62 @@ export class PdfGenerator implements OnInit{
                 [{
                   text: 'Vevő',
                   margin: [0,10,0,10],
-                  fontSize: 16,
+                  fontSize: 14,
                   bold: true,
                   decoration: 'underline',
                   alignment: 'left',
                 },{
                   text: this.detailedInvoice.partner.partnerName,
-                  margin: [0,0,0,8],
-                  alignment: 'left'
+                  margin: [0,0,0,4],
+                  alignment: 'left',
+                  bold: true,
+                  fontSize: 10,
                 },
                 {
-                  text: this.detailedInvoice.partner.city,
-                  margin: [0,0,0,8],
-                  alignment: 'left'
-                },
-                {
-                  text: this.detailedInvoice.partner.zipCode.toString(),
-                  margin: [0,0,0,8],
-                  alignment: 'left'
+                  text: this.detailedInvoice.partner.zipCode.toString() + " " + this.detailedInvoice.partner.city,
+                  margin: [0,0,0,4],
+                  alignment: 'left',
+                  fontSize: 10,
                 },
                 {
                   text: this.detailedInvoice.partner.street + " " + this.detailedInvoice.partner.streetNumber,
-                  margin: [0,0,0,8],
-                  alignment: 'left'
+                  margin: [0,0,0,4],
+                  alignment: 'left',
+                  fontSize: 10,
                 },
                 {
                   text: 'Adószám: ' + this.detailedInvoice.partner.vatNumber,
-                  alignment: 'left'
+                  alignment: 'left',
+                  fontSize: 10,
                 }],
                 [
                   {
                     text: 'Azonosító: No. ' + this.detailedInvoice.id,
                     alignment: 'right',
                     bold: true,
-                    margin: [0,18,0,18]
+                    margin: [0,18,0,12],
+                    fontSize: 10,
                   },
                   {
                     text: 'Létrehozva: ' + this.detailedInvoice.issueDate.toLocaleString(),
                     alignment: 'right',
-                    margin: [0,0,0,18],
-                    decoration: 'underline'
+                    margin: [0,0,0,12],
+                    decoration: 'underline',
+                    fontSize: 10,
                   },
                   {
-                    text: 'Teljesítés: ' + this.detailedInvoice.dueDate.toLocaleString(),
+                    text: 'Fizetési határidő: ' + this.detailedInvoice.dueDate.toLocaleString(),
                     alignment: 'right',
-                    margin: [0,0,0,18],
+                    margin: [0,0,0,12],
                     decoration: 'underline',
-                    color: 'red'
+                    color: 'red',
+                    fontSize: 10,
                   },
                   {
                     text: 'Fizetés módja: ' + this.detailedInvoice.paymentType,
                     alignment: 'right',
                     margin: [0,0,0,0],
+                    fontSize: 10,
                   }
                 ]
               ]
@@ -200,15 +218,15 @@ export class PdfGenerator implements OnInit{
               columns:[
                 [
                   {
-                    text: 'Részösszeg: ' + this.totalPrice.toFixed(2) + ' Ft',
-                    fontSize: 16,
+                    text: 'Részösszeg: ' + this.netWorth.toFixed(2) + ' HUF',
+                    fontSize: 14,
                     margin: [0,32,0,8],
                     alignment: 'right',
                     bold: true
                   },
                   {
-                    text: 'Adó(' + this.detailedInvoice.vat + ' %): ' + this.plusVat.toFixed(2) + ' Ft',
-                    fontSize: 16,
+                    text: 'Adó(' + this.detailedInvoice.vat + ' %): ' + this.plusVat.toFixed(2) + ' HUF',
+                    fontSize: 14,
                     margin: [0,0,0,0],
                     alignment: 'right',
                     color: 'red',
@@ -225,8 +243,8 @@ export class PdfGenerator implements OnInit{
                     ]
                   },
                   {
-                    text: 'Teljes összeg: ' + this.totalPriceWithVat.toFixed(2) + ' Ft',
-                    fontSize: 16,
+                    text: 'Teljes összeg: ' + this.totalPrice.toFixed(2) + ' HUF',
+                    fontSize: 14,
                     margin: [0,16,0,8],
                     alignment: 'right',
                     decoration: 'underline',
@@ -245,35 +263,57 @@ export class PdfGenerator implements OnInit{
        getItemsTable(invoiceItems: InvoiceItem[]){
         return{
           table: {
-            widths: [100,70,170,70,70],
+            widths: [50,50,85,50,50,50,75],
             body: [
               [
                 {
                   text: 'Tétel',
-                  bold: true
+                  bold: true,
+                  fontSize: 10,
                 },
                 {
                   text: 'Mennyiség',
-                  bold: true
+                  bold: true,
+                  fontSize: 10,
                 },
                 {
                   text: 'Részletek',
-                  bold: true
+                  bold: true,
+                  fontSize: 10,
                 },
                 {
-                  text: 'Rész ár',
-                  bold: true
+                  text: 'Egységár',
+                  bold: true,
+                  fontSize: 10,
+                },
+                {
+                  text: 'Nettó érték',
+                  bold: true,
+                  fontSize: 10,
+                },
+                {
+                  text: 'ÁFA',
+                  bold: true,
+                  fontSize: 10,
                 },
                 {
                   text: 'Teljes ár',
-                  bold: true
+                  bold: true,
+                  fontSize: 10,
                 },
               ],
               ...invoiceItems.map(item => {
-                return [item.product, item.quantity + " " + item.unit, item.description, item.price + '.00' + ' Ft', (item.price * item.quantity).toFixed(2) + ' Ft'];
+                return [item.product,
+                          item.quantity + " " + item.unit, 
+                          item.description,
+                          (item.price * (1 - (this.detailedInvoice.vat /100))).toFixed(2),
+                          (((item.price * (1 - (this.detailedInvoice.vat /100)))) * item.quantity).toFixed(2),
+                          ((item.price * item.quantity) 
+                            - (( (item.price * (1 - (this.detailedInvoice.vat /100)))) * item.quantity)).toFixed(2),
+                          (item.price * item.quantity).toFixed(2) + ' HUF'];
               })
             ],
-          }
+          },layout: 'lightHorizontalLines', fontSize: 10
         }
       }
 }

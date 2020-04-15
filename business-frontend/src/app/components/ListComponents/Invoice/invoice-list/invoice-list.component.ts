@@ -34,11 +34,11 @@ export class InvoiceListComponent implements OnInit {
 
     if(id != null){
 
-      this.routing.navigate(["/employeeForm"],{queryParams: {new: 'yes'}})
+      this.routing.navigate(["/invoiceForm"],{queryParams: {new: 'no', id: id}})
 
     }else{
 
-      this.routing.navigate(["/invoiceForm"],{queryParams: {new: 'no', id: id}})
+      this.routing.navigate(["/invoiceForm"],{queryParams: {new: 'yes'}})      
 
     }
   }

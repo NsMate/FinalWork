@@ -31,7 +31,8 @@
               <mat-option *ngFor="let partner of filteredPartners | async" [value]="partner" >
                 {{partner.partnerName}}
               </mat-option>
-            </mat-autocomplete>
+            </mat-autocomplete>       
+            <mat-error *ngIf="partner.errors?.required && (partner.dirty || partner.touched)"> Adja meg a partnert! </mat-error>
         </mat-form-field>
     </div>
     <div class="dates">
@@ -49,20 +50,24 @@
             <input matInput [matDatepicker]="dp2" [min]="minDate" [(ngModel)]="detailedInvoice.dueDate" name="dueDate" formControlName="dueDate">
             <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
             <mat-datepicker #dp2></mat-datepicker>
+            <mat-error *ngIf="(detailedInvoice.dueDate < minDate) && (partner.dirty || partner.touched)"> A teljesítés dátuma nem lehet a kiállítás előtt! </mat-error>
         </mat-form-field>
       </div>
     </div>
     <div class="information">
       <div class="invoiceDescription">
-        <h3>Leírás</h3>
+        <h3>Megjegyzés</h3>
         <mat-form-field appearance="standard"> 
-          <textarea matInput placeholder="Leírás" [(ngModel)]="detailedInvoice.invoiceDescription" name="invoiceDescription" formControlName="invoiceDescription"></textarea>
+          <textarea matInput placeholder="Megjegyzés" [(ngModel)]="detailedInvoice.invoiceDescription" name="invoiceDescription" formControlName="invoiceDescription"></textarea>
         </mat-form-field>
       </div>
       <div class="vat">
         <h3>Adó</h3>
         <mat-form-field appearance="standard">
             <input matInput placeholder="eg. 12" name="vat" formControlName="vat" [(ngModel)]="detailedInvoice.vat">
+            <mat-error *ngIf="vat.errors?.required && (vat.dirty || vat.touched)"> Adja meg az adó mértékét! </mat-error>
+            <mat-error *ngIf="vat.errors?.pattern && (vat.dirty || vat.touched)"> Nem kezdődhet 0-val! </mat-error>
+            <mat-error *ngIf="vat.errors?.maxlength && (vat.dirty || vat.touched)"> Maximum 2 hosszú lehet! </mat-error>
         </mat-form-field>
       </div>
       <div>
@@ -72,6 +77,7 @@
             <mat-option value="Készpénz">Készpénz</mat-option>
             <mat-option value="Átutalás">Átutalás</mat-option>
           </mat-select>
+          <mat-error *ngIf="paymentType.errors?.required && (paymentType.dirty || paymentType.touched)"> Adja meg a teljesítés típusát! </mat-error>
         </mat-form-field>
       </div>
     </div>
@@ -80,19 +86,19 @@
 <div class="prices">
   <div class="totalPrice">
     <h2>
-      Teljes ár: {{ totalPrice }} Ft
+      Részösszeg(Nettó): {{ netWorth.toFixed(2) }} Ft
     </h2>
   </div>
 
   <div class="plusVat">
-    <h2>
-      Adókból következő ár: {{ plusVat }} Ft
+    <h2 style="color: red;">
+      Áfa: {{ plusVat.toFixed(2) }} Ft
     </h2>
   </div>
 
   <div class="totalPriceWithVat">
-    <h2 style="color: red; text-decoration: underline;">
-      Teljes ár (+adó): {{ totalPriceWithVat }} Ft
+    <h2 style="color: green; text-decoration: underline;">
+      Végösszeg(Bruttó): {{ totalPrice.toFixed(2) }} Ft
     </h2>
   </div>
 

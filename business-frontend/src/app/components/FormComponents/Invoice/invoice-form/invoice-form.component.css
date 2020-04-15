@@ -58,3 +58,7 @@ h1{
     background: red;
     color: white;
 }
+
+::ng-deep .itemForm{
+    text-align: center;
+}

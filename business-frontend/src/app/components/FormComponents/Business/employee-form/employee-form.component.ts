@@ -123,6 +123,12 @@ export class EmployeeFormComponent implements OnInit {
     }
   }
 
+  /**
+   * This function is used for deleting an employee. 
+   * The user is presented a confirmation dialog and if the user 
+   *    decides to go on, then the record is deleted.
+   * The user is informed of the succes or error by a snackbar .
+   */
   deleteEmployee(): void{
     const dialogRef = this.confDialog.open(ConfdialogComponent, {
       
