@@ -76,7 +76,7 @@ public class Partner implements Serializable {
     @JsonIgnore
     private List<Invoice> invoices;
 
-    @OneToMany(mappedBy = "partner")
+    @OneToMany(mappedBy = "partner", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<BusinessOrder> businessOrders;
 }

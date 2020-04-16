@@ -1,11 +1,13 @@
 package com.main.Controllers.Business;
 
+import com.main.Entites.Business.Partner;
 import com.main.Entites.Business.Product;
 import com.main.Repositories.Business.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin
@@ -67,6 +69,16 @@ public class ProductController {
             return ResponseEntity.ok(product.get());
         }else{
             return null;
+        }
+    }
+
+    @GetMapping("/input/{input}")
+    public ResponseEntity<Iterable<Product>> findProductsByInput(@PathVariable String input){
+        List<Product> foundProducts = productRepository.findProductThatMatchesInput(input);
+        if(foundProducts.isEmpty()){
+            return null;
+        }else{
+            return ResponseEntity.ok(foundProducts);
         }
     }
 }

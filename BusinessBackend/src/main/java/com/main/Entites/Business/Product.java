@@ -45,6 +45,10 @@ public class Product implements Serializable {
     @NotNull
     private String currency;
 
+    @OneToMany(mappedBy = "product")
+    @JsonIgnore
+    private List<Stock> stockList;
+
     @ManyToOne
     @JoinColumn(name = "product_group_id", referencedColumnName = "id")
     @JsonIgnore

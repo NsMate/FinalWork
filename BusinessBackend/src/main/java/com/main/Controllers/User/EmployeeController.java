@@ -5,8 +5,6 @@ import com.main.Entites.User.Employee;
 import com.main.Repositories.User.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -78,6 +76,17 @@ public class EmployeeController {
         Optional<Employee> employee = employeeRepository.findById(id);
         if(employee.isPresent()){
             return ResponseEntity.ok(employee.get().getAppUser());
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/{id}/unbind")
+    public ResponseEntity<Employee> unbindEmployeeFromWarehouse(@PathVariable Long id){
+        Optional<Employee> emp = employeeRepository.findById(id);
+        if(emp.isPresent()){
+            emp.get().setWarehouse(null);
+            return ResponseEntity.ok(employeeRepository.save(emp.get()));
         }else{
             return ResponseEntity.notFound().build();
         }

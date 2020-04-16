@@ -73,7 +73,18 @@ public class WarehouseController {
     public ResponseEntity deleteById(@PathVariable Long id){
         Optional<Warehouse> oldWarehouse = warehouseRepository.findById(id);
         if(oldWarehouse.isPresent()){
+            Warehouse wh = oldWarehouse.get();
+            for(Vehicle vehicle : wh.getVehicleList()){
+                vehicle.setWarehouse(null);
+                vehicleRepository.save(vehicle);
+            }
+            for(Employee emp : wh.getEmployeeList()){
+                emp.setWarehouse(null);
+                employeeRepository.save(emp);
+            }
+
             warehouseRepository.deleteById(id);
+
             return ResponseEntity.ok().build();
         }else{
             return ResponseEntity.notFound().build();
@@ -237,7 +248,7 @@ public class WarehouseController {
         Optional<Warehouse> oldWarehouse = warehouseRepository.findById(id);
         if (oldWarehouse.isPresent()) {
             Warehouse warehouse = oldWarehouse.get();
-
+            
             for (Employee employee : employees) {
                 if (employee.getId() == null) {
                     employee.setWarehouse(warehouse);

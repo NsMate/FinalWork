@@ -33,8 +33,9 @@ public class Stock implements Serializable {
     @JsonIgnore
     private Warehouse warehouse;
 
-    @Column(name = "product")
-    private String product;
+    @ManyToOne
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    private Product product;
 
     @Column(name = "unit")
     @NotNull

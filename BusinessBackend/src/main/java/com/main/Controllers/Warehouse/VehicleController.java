@@ -1,5 +1,6 @@
 package com.main.Controllers.Warehouse;
 
+import com.main.Entites.User.Employee;
 import com.main.Entites.Warehouse.Vehicle;
 import com.main.Repositories.Warehouse.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +68,17 @@ public class VehicleController {
             return null;
         }else{
             return ResponseEntity.ok(vehicles);
+        }
+    }
+
+    @PutMapping("/{id}/unbind")
+    public ResponseEntity<Vehicle> unbindVehicleFromWarehouse(@PathVariable Long id){
+        Optional<Vehicle> vehicle = vehicleRepository.findById(id);
+        if(vehicle.isPresent()){
+            vehicle.get().setWarehouse(null);
+            return ResponseEntity.ok(vehicleRepository.save(vehicle.get()));
+        }else{
+            return ResponseEntity.notFound().build();
         }
     }
 }
