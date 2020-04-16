@@ -43,4 +43,8 @@ export class VehicleService {
   getFreeVehicles(): Promise<Vehicle[]> {
     return this.http.get<Vehicle[]>(`${this.vehicleURL}/freeVehicles`, httpOptions).toPromise();
   }
+
+  unbindVehicleFromWarehouse(vehicle: Vehicle): Promise<Vehicle> {
+    return this.http.put<Vehicle>(`${this.vehicleURL}/${vehicle.id}/unbind`, vehicle, httpOptions).toPromise();
+  }
 }

@@ -59,6 +59,14 @@ export class WarehouseService {
     return this.http.put<Warehouse>(`${this.warehouseURL}/${id}/stocks`, stocks, httpOptions).toPromise();
   }
 
+  modifyEmployeeInWarehouse(id: number,employees: Employee[]): Promise<Warehouse> {
+    return this.http.put<Warehouse>(`${this.warehouseURL}/${id}/employees`, employees, httpOptions).toPromise();
+  }
+
+  modifyVehicleInWarehouse(id: number,vehicles: Vehicle[]): Promise<Warehouse> {
+    return this.http.put<Warehouse>(`${this.warehouseURL}/${id}/vehicles`, vehicles, httpOptions).toPromise();
+  }
+
   insertEmployeeIntoWarehouse(id: number,emp: Employee): Promise<Warehouse> {
     return this.http.post<Warehouse>(`${this.warehouseURL}/${id}/employees`, emp, httpOptions).toPromise();
   }

@@ -46,4 +46,8 @@ export class ProudctService {
   getProductByCode(code: number): Promise<Product>{
     return this.http.get<Product>(`${this.productUrl}/byCode/${code}`, httpOptions).toPromise();
   }
+
+  getProductsByInput(input: string): Promise<Product[]>{
+    return this.http.get<Product[]>(`${this.productUrl}/input/${input}`, httpOptions).toPromise();
+  }
 }

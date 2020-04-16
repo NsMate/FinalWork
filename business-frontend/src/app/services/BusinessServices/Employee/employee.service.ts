@@ -47,5 +47,9 @@ export class EmployeeService {
   getEmployeesUser(employee: Employee): Promise<AppUser>{
     return this.http.get<AppUser>(`${this.employeeUrl}/${employee.id}/user`,httpOptions).toPromise();
   }
+
+  unbindEmployee(employee: Employee): Promise<Employee> {
+    return this.http.put<Employee>(`${this.employeeUrl}/${employee.id}/unbind`, employee, httpOptions).toPromise();
+  }
   
 }
