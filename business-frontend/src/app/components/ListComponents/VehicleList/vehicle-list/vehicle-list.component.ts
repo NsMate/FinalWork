@@ -21,24 +21,38 @@ export interface DialogData{
 })
 export class VehicleListComponent implements OnInit {
 
+  /**
+   * vehiclel hold all of the vehicle from the databse
+   * datasource is used to pass the data to the material table
+   */
   public vehicles: Vehicle[] = [];
   public dataSource;
 
+  /**
+   * 
+   * @param vehicleService used to create, edit, delete vehicles, database actions
+   * @param vehicleDialog popup dialog for creation, editing and deletion of vehicles
+   * @param _snackBar used to inform the user of their actions success
+   */
   constructor(
     private vehicleService: VehicleService,
     public vehicleDialog: MatDialog,
     private _snackBar: MatSnackBar
   ) { }
 
-
+    /**
+     * loding in the vehicle from the database
+     * passing the information to the material table, and adding the sort to the table
+     */
   async ngOnInit(): Promise<void> {
     this.vehicles = await this.vehicleService.getVehicles();
     this.dataSource = new MatTableDataSource(this.vehicles);
     this.dataSource.sort = this.sort;
   }
 
-  //Sorting and column displaying for the mat-table
-  //
+  /**
+   * Sort for the material table, and defining the columns to be displayed
+   */
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   displayedColumns: string[] = ['id', 'manufacturer', 'licensePlateNumber', 'type'];
@@ -167,7 +181,7 @@ export class VehicleOverviewDialog{
   vehicleForm = this.formBuilder.group({
     'type': new FormControl (this.data.vehicle.vehicleType, Validators.required),
     'licensePlate': new FormControl (this.data.vehicle.licensePlateNumber, Validators.compose([Validators.pattern("[A-Z][A-Z][A-Z]-[0-9][0-9][0-9]"), Validators.required])),
-    'manufacturer': new FormControl (this.data.vehicle.manufacturer, Validators.compose([Validators.required, Validators.pattern("[A-Za-z]*")]))
+    'manufacturer': new FormControl (this.data.vehicle.manufacturer, Validators.compose([Validators.required, Validators.pattern("[A-Za-zÉÁŰÚŐÓÜÖéáűúőóüö .\-]*")]))
   })
 
   get type() { return this.vehicleForm.get('type'); }

@@ -65,9 +65,9 @@ export class InvoiceFormComponent implements OnInit {
    * plusVat holds the invoices plus money for the government
    * netWorth hold the invoices net total price
    */
-  public totalPrice: number;
-  public plusVat: number;
-  public netWorth: number;
+  public totalPrice: number = 0;
+  public plusVat: number = 0;
+  public netWorth: number = 0;
 
   /**
    * filteredPartners hold the partners which matches the value
@@ -75,6 +75,8 @@ export class InvoiceFormComponent implements OnInit {
    *    autocomplete
    */
   public filteredPartners: Observable<Partner[]> = null;
+
+  public date: boolean = false;
 
   /**
    * 
@@ -115,6 +117,10 @@ export class InvoiceFormComponent implements OnInit {
       this.dataSource.sort = this.sort;
 
       this.calculateInvoicePrices();
+
+      this.date = new Date(this.detailedInvoice.dueDate).getTime() < new Date(this.detailedInvoice.issueDate).getTime();
+
+      this.minDate = new Date(this.detailedInvoice.issueDate);
     });
     
     this.invoiceForm.get('partner').valueChanges.subscribe(

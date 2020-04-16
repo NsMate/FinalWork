@@ -10,12 +10,13 @@ import { Product } from 'src/app/models/BusinessModels/Product/product';
 import { ProudctService } from 'src/app/services/BusinessServices/Product/proudct.service';
 import { ConfdialogComponent } from 'src/app/components/ConfirmationDialog/confdialog/confdialog.component';
 import { StockService } from 'src/app/services/Warehousing/Stock/stock.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Employee } from 'src/app/models/Employee/employee';
 import { Vehicle } from 'src/app/models/Warehousing/Vehicle/vehicle';
 import { EmployeeService } from 'src/app/services/BusinessServices/Employee/employee.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { VehicleService } from 'src/app/services/Warehousing/Vehicle/vehicle.service';
+import { Observable, from } from 'rxjs';
 
 export interface StockDialogData{
   isNew: boolean,
@@ -31,56 +32,66 @@ export interface StockDialogData{
 export class WarehouseFormComponent implements OnInit {
 
   public detailedWarehouse: Warehouse = new Warehouse();
+
   public detailedWarehouseStockList: Stock[] = [];
   public vehicleList: Vehicle[] = [];
   public employeeList: Employee[] = [];
-  public dataSource;
+
   public chosenStock: Stock;
   public isNewStock: boolean;
 
+  public dataSource;
   public employeeSource;
   public vehicleSource;
 
   constructor(
     private warehouseService: WarehouseService,
+    private employeeService: EmployeeService,
+    private vehicleServoce: VehicleService,
     private formBuilder: FormBuilder,
 
     public stockDialog: MatDialog,
     public employeeDialog: MatDialog,
     public vehicleDialog: MatDialog,
+    public confDialog: MatDialog,
 
-    private routing: Router
+    private routing: Router,
+    private route: ActivatedRoute,
+
+    private _snackBar: MatSnackBar
   ) { }
 
   async ngOnInit(): Promise<void> {
-    if(sessionStorage.getItem("selectedWarehouseId") != null){
-      this.detailedWarehouse = await this.warehouseService.getWarehouse(parseInt(sessionStorage.getItem("selectedWarehouseId")));
-      this.detailedWarehouseStockList = this.detailedWarehouse.stockList;
-      this.employeeList = this.detailedWarehouse.employeeList;
-      this.vehicleList = this.detailedWarehouse.vehicleList;
-      console.log(this.vehicleList);
+    this.route.queryParams.subscribe(async params => {
+      if(params.new == 'no'){
+        this.detailedWarehouse = await this.warehouseService.getWarehouse(parseInt(params.id));
+        this.detailedWarehouseStockList = this.detailedWarehouse.stockList;
+        this.employeeList = this.detailedWarehouse.employeeList;
+        this.vehicleList = this.detailedWarehouse.vehicleList;
 
-      this.dataSource = new MatTableDataSource(this.detailedWarehouseStockList);
-      this.employeeSource = new MatTableDataSource(this.employeeList);
-      this.vehicleSource = new MatTableDataSource(this.vehicleList);
+        this.dataSource = new MatTableDataSource(this.detailedWarehouseStockList);
+        this.employeeSource = new MatTableDataSource(this.employeeList);
+        this.vehicleSource = new MatTableDataSource(this.vehicleList);
+      }
+    })
 
       this.dataSource.sort = this.sort;
       this.employeeSource.sort = this.sort;
       this.vehicleSource.sort = this.sort;
-    }
+
   }
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   displayedColumns: string[] = ['productName', 'quantity', 'unit'];
 
-  employeeColumns: string[] = ['name'];
+  employeeColumns: string[] = ['name', 'delete'];
 
-  vehicleColumns: string[] = ['manufacturer', 'licensePlate'];
+  vehicleColumns: string[] = ['manufacturer', 'licensePlate', 'delete'];
 
   warehouseForm = this.formBuilder.group({
     'zipCode': new FormControl(this.detailedWarehouse.zipCode, Validators.compose([Validators.pattern("[0-9][0-9][0-9][0-9]"), Validators.required])),
-    'city': new FormControl(this.detailedWarehouse.city, Validators.compose([Validators.pattern("[A-Z][a-z]*"), Validators.required])),
-    'street': new FormControl(this.detailedWarehouse.street, Validators.compose([Validators.pattern("[A-Z][a-z ]*"),Validators.required])),
+    'city': new FormControl(this.detailedWarehouse.city, Validators.compose([Validators.pattern("[A-Z][A-Za-z éűáúőóüöÉÁŰÚŐÓÜÖ.\-]*"), Validators.required])),
+    'street': new FormControl(this.detailedWarehouse.street, Validators.compose([Validators.pattern("[A-Z][A-Za-z ÉÁŰÚŐÓÜÖéáűúőóüö.\-]*"),Validators.required])),
     'streetNumber': new FormControl(this.detailedWarehouse.streetNumber, Validators.compose([Validators.pattern("[0-9]*"),Validators.required]))
   })
 
@@ -98,6 +109,7 @@ export class WarehouseFormComponent implements OnInit {
       this.chosenStock = stock;
       this.isNewStock = false;
     }
+
     const dialogRef = this.stockDialog.open(WarehouseFormStockDialog, {
       width: '500px',
       data: { isNew: this.isNewStock, stock: this.chosenStock, warehouseId: this.detailedWarehouse.id}
@@ -105,10 +117,13 @@ export class WarehouseFormComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(async result => {
       if(result.newStock != null){
-        this.detailedWarehouseStockList.push(result.newStock);
+
         await this.warehouseService.insertStockIntoWarehouse(this.detailedWarehouse.id,result.newStock);
+
       }
+
       this.ngOnInit();
+
     })
   }
 
@@ -137,16 +152,114 @@ export class WarehouseFormComponent implements OnInit {
     if(this.detailedWarehouse.id == null){
 
       await this.warehouseService.createWarehouse(this.detailedWarehouse).then(result => {
-        this.routing.navigate(['/warehouses']);
+
+        this.routing.navigate(['.'], { relativeTo: this.route, queryParams: { new: 'no', id: result.id }});
+
+        this._snackBar.open('Sikeresen létrehozta a raktárat!','', {
+          duration: 2000,
+          panelClass: ['success']
+        })
+
+      }).catch(e => {
+
+        this._snackBar.open('Valami hiba történt! ' + e.status,'', {
+          duration: 2000,
+          panelClass: ['error']
+        })
+
       });
 
     }else{
 
-      await this.warehouseService.updateWarehouse(this.detailedWarehouse);
+      await this.warehouseService.updateWarehouse(this.detailedWarehouse).then(result => {
+
+        this.detailedWarehouse = result;
+
+        this._snackBar.open('Sikeresen módosította a raktárat!','', {
+          duration: 2000,
+          panelClass: ['success']
+        })
+
+      }).catch(e => {
+
+        this._snackBar.open('Valami hiba történt! ' + e.status,'', {
+          duration: 2000,
+          panelClass: ['error']
+        })
+
+      });
 
     }
 
     this.ngOnInit();
+  }
+
+  async deleteWarehouse(): Promise<void>{
+    const dialogRef = this.confDialog.open(ConfdialogComponent, {
+      width: '300px',
+      data: 'Ezzel törlődnek a készletek és az ehhez a raktárhoz tartozó utak is!'
+    }).afterClosed().subscribe(result => {
+
+      if(result){
+        this.warehouseService.deleteWarehouse(this.detailedWarehouse.id).then(res => {
+
+          this._snackBar.open('Sikeresen törölte a raktárat!','', {
+            duration: 2000,
+            panelClass: ['success']
+          })
+
+        }).catch(e => {
+          
+          this._snackBar.open('Valami hiba történt! ' + e.status,'', {
+            duration: 2000,
+            panelClass: ['error']
+          })
+
+        })
+      }
+
+      this.routing.navigate(['/warehouses']);
+
+    })
+  }
+
+  async unbindEmployee(employee: Employee): Promise<void>{
+    await this.employeeService.unbindEmployee(employee).then(res => {
+
+      this._snackBar.open('Sikerült törölni a raktárból!','',{
+        duration: 2000,
+        panelClass: ['success'],
+      })
+
+      this.ngOnInit();
+
+    }).catch(e => {
+
+      this._snackBar.open('Hiba történt! ' + e.status,'',{
+        duration: 2000,
+        panelClass: ['success'],
+      })
+
+    });
+  }
+  async unbindVehicle(vehicle: Vehicle): Promise<void>{
+    await this.vehicleServoce.unbindVehicleFromWarehouse(vehicle).then(res => {
+
+      this._snackBar.open('Sikerült törölni a raktárból!','',{
+        duration: 2000,
+        panelClass: ['success'],
+      })
+
+      this.ngOnInit();
+
+    }).catch(e => {
+
+      this._snackBar.open('Hiba történt! ' + e.status,'',{
+        duration: 2000,
+        panelClass: ['success'],
+      })
+
+    });
   }
 }
 
@@ -162,7 +275,7 @@ export class WarehouseFormStockDialog implements OnInit{
 
   public temp: number;
 
-  public products: Product[] = [];
+  public products: Observable<Product[]> = null;
 
   constructor(
     public dialogRef: MatDialogRef<WarehouseFormStockDialog>,
@@ -170,34 +283,57 @@ export class WarehouseFormStockDialog implements OnInit{
     private formBuilder: FormBuilder,
     private productService: ProudctService,
     private stockService: StockService,
-    public confDialog: MatDialog
+    public confDialog: MatDialog,
+    private _snackBar: MatSnackBar
   ){}
 
   async ngOnInit(): Promise<void>{
-    this.products = await this.productService.getProducts();
+
+    this.stockForm.get('product').valueChanges.subscribe(
+      async val => {
+        if(val == ' '){
+          this.products = await from(this.productService.getProducts());
+        }else{
+          this.products = await from(this.productService.getProductsByInput(val));
+        }
+      }
+    );
+
+  }
+
+  displayFn(val: Product) {
+    return val ? val.productName + " C: " + val.code : val;
   }
   
   stockForm = this.formBuilder.group({
-    'productName': new FormControl (this.data.stock.product, Validators.required),
+    'product': new FormControl (this.data.stock.product, Validators.required),
     'quantity': new FormControl (this.data.stock.quantity, Validators.compose([Validators.pattern("[0-9]*"),Validators.required])),
     'unit': new FormControl (this.data.stock.unit, Validators.required),
   })
 
-  get productName() { return this.stockForm.get('productName'); }
+  get product() { return this.stockForm.get('product'); }
   get quantity() { return this.stockForm.get('quantity'); }
   get unit() { return this.stockForm.get('unit'); }
 
   openConfDialog(){
+
     const dialogRef = this.confDialog.open(ConfdialogComponent,{
       width: '300px'
     });
 
     dialogRef.afterClosed().subscribe(async result => {
+
       if(result){
        await  this.stockService.deleteStock(this.data.stock.id).then(() => {
-          window.location.reload();
+          
+        this._snackBar.open('Sikeresen törölte a készletet!','',{
+          duration: 2000,
+          panelClass: ['success']
+        })
+
         });
       }
+
     })
   }
 
@@ -209,7 +345,22 @@ export class WarehouseFormStockDialog implements OnInit{
 
     }else{
 
-      await this.stockService.updateStock(this.data.stock);
+      await this.stockService.updateStock(this.data.stock).then(res => {
+
+        this._snackBar.open('Sikeresen módosította a készletet!','', {
+          duration: 2000,
+          panelClass: ['success'],
+        })
+
+      }).catch(e => {
+
+        this._snackBar.open('Valami hiba történt! ' + e.status,'', {
+          duration: 2000,
+          panelClass: ['error'],
+        })
+
+      });
+
       this.dialogRef.close({newStock: null});
 
     }
@@ -218,7 +369,9 @@ export class WarehouseFormStockDialog implements OnInit{
   public productComparisonFunction( product, value ) : boolean {
     return product.id === value.id;
   }
+
 }
+
 
 @Component({
   selector: 'warehouse-employee-select-dialog',
@@ -245,15 +398,21 @@ export class EmployeeSelectorDialog implements OnInit{
   saveWorkers(): void{
     this.selectedOptions.forEach(async opt => {
       await this.warehouseService.insertEmployeeIntoWarehouse(this.data,opt).catch(e => {
+
         this._snackBar.open('Valami nem sikerült :( Status: ' + e.status,'',{
           duration: 5000,
+          panelClass: ['error'],
         })
+
         return;
       });
     })
+
     this._snackBar.open('Sikerült hozzáadni a dolgozókat!','',{
       duration: 2000,
+      panelClass: ['success'],
     })
+
     this.dialogRef.close()
   }
 
@@ -283,16 +442,23 @@ export class VehicleSelectorDialog implements OnInit{
 
   saveVehicles(): void{
     this.selectedOptions.forEach(async opt => {
+
       await this.warehouseService.insertVehicleIntoWarehouse(this.data,opt).catch(e => {
         this._snackBar.open('Valami nem sikerült :( Status: ' + e.status,'',{
           duration: 5000,
+          panelClass: ['error'],
         })
+
         return;
+
       });
     })
+
     this._snackBar.open('Sikerült hozzáadni a járműveket!','',{
       duration: 2000,
+      panelClass: ['success'],
     })
+
     this.dialogRef.close()
   }
 

@@ -6,14 +6,19 @@
     <form #addForm="ngForm" [formGroup]="stockForm">
         <div>
             <h2>Termék</h2>
-            <mat-form-field appearance="standard">
-              <mat-select [(ngModel)]="data.stock.product" formControlName="productName">
-                <mat-option *ngFor="let product of products" [value]="product.productName">
-                    {{ product.productName }} C: {{ product.code }}
+            <mat-form-field >
+              <input type="text"
+                     matInput
+                     [formControl]="product"
+                     [matAutocomplete]="auto"
+                     [(ngModel)]="data.stock.product">
+              <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                <mat-option *ngFor="let product of products | async" [value]="product" >
+                  {{product.productName}} C: {{ product.code }}
                 </mat-option>
-              </mat-select>
-              <mat-error *ngIf="productName.errors?.required && (productName.dirty || productName.touched)"> Kérem adja meg a terméket! </mat-error>
-            </mat-form-field>
+              </mat-autocomplete>       
+              <mat-error *ngIf="product.errors?.required && (product.dirty || product.touched)"> Adja meg a partnert! </mat-error>
+          </mat-form-field>
           </div>
         <div>
         <h2>Mennyiség</h2>

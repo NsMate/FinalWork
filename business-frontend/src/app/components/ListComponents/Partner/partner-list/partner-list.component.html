@@ -2,7 +2,10 @@
 
 <h1>Partnerek</h1>
 
-<button mat-raised-button class="newButton" (click)="openDetailedPartnerPage()" color="primary">Új partner</button>
+<button mat-raised-button 
+        class="newButton" 
+        (click)="openDetailedPartnerPage()" 
+        color="primary"><mat-icon>plus_one</mat-icon> Új partner </button>
 
 <table mat-table [dataSource]="dataSource" matSort matSortActive="id" matSortDirection="asc" class="mat-elevation-z8">
   

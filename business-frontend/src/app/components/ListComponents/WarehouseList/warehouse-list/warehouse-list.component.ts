@@ -30,15 +30,17 @@ export class WarehouseListComponent implements OnInit {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   displayedColumns: string[] = ['id', 'zip', 'city', 'address'];
 
-  selectWarehouse(warehouse: Warehouse): void{
-    this.selectedWarehouse = warehouse;
-    sessionStorage.clear();
-    sessionStorage.setItem("selectedWarehouseId",this.selectedWarehouse.id.toString());
-    this.router.navigate(['/warehouseForm']);
-  }
+  openWarehouseForm(warehouse?: Warehouse): void{
 
-  newWarehouse(): void{
-    sessionStorage.clear();
-    this.router.navigate(['/warehouseForm']);
+    if(warehouse != null){
+      
+      this.router.navigate(["/warehouseForm"],{queryParams: {new: 'no', id: warehouse.id}});
+
+    }else{
+
+      this.router.navigate(["/warehouseForm"],{queryParams: {new: 'yes'}});
+
+    }
+
   }
 }

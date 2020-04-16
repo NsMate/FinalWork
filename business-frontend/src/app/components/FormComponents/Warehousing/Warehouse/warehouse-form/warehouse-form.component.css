@@ -71,3 +71,7 @@ th.mat-sort-header-sorted {
     background: red;
     color: white;
 }
+
+a:hover{
+    cursor: pointer;
+}

@@ -50,8 +50,8 @@
             <input matInput [matDatepicker]="dp2" [min]="minDate" [(ngModel)]="detailedInvoice.dueDate" name="dueDate" formControlName="dueDate">
             <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
             <mat-datepicker #dp2></mat-datepicker>
-            <mat-error *ngIf="(detailedInvoice.dueDate < minDate) && (partner.dirty || partner.touched)"> A teljesítés dátuma nem lehet a kiállítás előtt! </mat-error>
         </mat-form-field>
+        <mat-error style="font-size: small;" *ngIf="date"> A teljesítés dátuma nem lehet a kiállítás előtt! </mat-error>
       </div>
     </div>
     <div class="information">

@@ -42,6 +42,7 @@ import { Vehicle } from 'src/app/models/Warehousing/Vehicle/vehicle';
 import { RouteService } from 'src/app/services/Warehousing/Route/route.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { VehicleService } from 'src/app/services/Warehousing/Vehicle/vehicle.service';
+import { ConfdialogComponent } from '../../ConfirmationDialog/confdialog/confdialog.component';
 
 interface EventData{
   date;
@@ -106,7 +107,7 @@ export class SchedulerComponent implements OnInit{
         return results.map((route: Route) => {
           if(route.routeType == 'Bejövő'){
             return {
-              title: route.routeType + ' út',
+              title: route.routeType + ' út, Fogadó: ' + route.warehouse.city + " " + route.warehouse.street,
               start: new Date(route.deliveryDate),
               allDay: true,
               color: {
@@ -119,7 +120,7 @@ export class SchedulerComponent implements OnInit{
             };
           }else{
             return {
-              title: route.routeType + ' út',
+              title: route.routeType + ' út, Cél: ' + route.destination,
               start: new Date(route.deliveryDate),
               allDay: true,
               color: {
@@ -192,8 +193,10 @@ export class SchedulerComponent implements OnInit{
 
     }).afterClosed().subscribe(res => {
 
-      this.activeDayIsOpen = false;
+      if(res.refresh != null){
+        this.activeDayIsOpen = false;
       this.getEvents();
+      }
 
     })
   }
@@ -216,6 +219,7 @@ export class EventDialog implements OnInit{
   constructor(
     public dialogRef: MatDialogRef<EventDialog>,
     private formBuilder: FormBuilder,
+    public confDialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: EventData,
     private warehouseService: WarehouseService,
     private vehicleService: VehicleService,
@@ -260,11 +264,13 @@ export class EventDialog implements OnInit{
 
         this._snackBar.open('Sikeresen létrehozott út!','',{
           duration: 2000,
+          panelClass: ['success'],
         })
 
       }).catch(e => {
         this._snackBar.open('Sikertelen művelet :( status: ' + e.status,'',{
           duration: 4000,
+          panelClass: ['error'],
         })
 
       });
@@ -275,36 +281,50 @@ export class EventDialog implements OnInit{
 
         this._snackBar.open('Sikeresen módosította!','',{
           duration: 2000,
+          panelClass: ['success'],
         })
 
       }).catch(e => {
 
         this._snackBar.open('Sikertelen művelet :( status: ' + e.status,'',{
           duration: 4000,
+          panelClass: ['error'],
         })
 
-      });;
+      });
     }
 
-    this.dialogRef.close();
+    this.dialogRef.close({refresh: true});
   }
 
-  async deleteRoute(): Promise<void>{
+  deleteRoute(): void{
 
-    await this.routeService.deleteRoute(this.detailedRoute.id).then(res => {
+    const dialogRef = this.confDialog.open(ConfdialogComponent, {
+      width: '300px',
+    })
 
-      this._snackBar.open('Sikeres törölte az utat!','', {
-        duration: 2000,
-      })
+    dialogRef.afterClosed().subscribe(async res => {
+      if(res){
+        await this.routeService.deleteRoute(this.detailedRoute.id).then(res => {
 
-    }).catch(e => {
-      this._snackBar.open('Valami nem sikerült :( status: ' + e.status,'',{
-        duration: 4000,
-      })
-
+          this._snackBar.open('Sikeres törölte az utat!','', {
+            duration: 2000,
+            panelClass: ['success'],
+          })
+    
+        }).catch(e => {
+    
+          this._snackBar.open('Valami nem sikerült :( status: ' + e.status,'',{
+            duration: 4000,
+            panelClass: ['error'],
+          })
+    
+        })
+        
+        this.dialogRef.close({refresh: true});
+      }
     })
     
-    this.dialogRef.close();
   }
 
   public warehouseComparisonFunction( warehouse, value ) : boolean {

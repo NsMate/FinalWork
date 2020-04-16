@@ -5,7 +5,19 @@
 
 <hr>
 
-<button mat-raised-button style="margin-top: 10px;" class="saveButton" type="submit" (click)="savePartner()" color="primary" class="saveButton">Változtatások mentése</button>
+<button mat-raised-button 
+        style="margin-top: 10px;" 
+        class="saveButton"
+        (click)="savePartner()" 
+        color="primary" 
+        class="saveButton"><mat-icon>save</mat-icon> Változtatások mentése </button>
+
+<button mat-raised-button 
+        style="margin-top: 10px;"
+        (click)="deletePartner()" 
+        color="warn" 
+        class="saveButton"
+        *ngIf="!own"><mat-icon>delete</mat-icon> Partner törlése </button>
 
 <form [formGroup]="partnerForm">
 

@@ -108,6 +108,7 @@ export class PartnerFormComponent implements OnInit {
 
     const dialogRef = this.confDialog.open(ConfdialogComponent, {
       width: '250px',
+      data: 'Figyelem! A partnerhez tartozó összes számla is törlődik!'
     }).afterClosed().subscribe(res => {
 
       if(res){
@@ -128,6 +129,8 @@ export class PartnerFormComponent implements OnInit {
   
         })
       }
+
+      this.routing.navigate(['/partnerList']);
     })
   }
 

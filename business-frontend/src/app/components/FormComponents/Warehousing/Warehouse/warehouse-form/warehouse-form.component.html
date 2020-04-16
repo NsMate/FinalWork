@@ -3,10 +3,15 @@
 <form [formGroup]="warehouseForm">
     <h1 class="header">Raktár részletei</h1>
 
-    <button mat-raised-button 
+<button mat-raised-button 
             (click)="saveWarehouse()" 
             class="saveButton" 
             color="primary"><mat-icon>save</mat-icon> Raktár mentése </button>
+
+<button mat-raised-button 
+            (click)="deleteWarehouse()" 
+            class="saveButton" 
+            color="warn"><mat-icon>delete</mat-icon> Raktár törlése </button>
 
     <div class="addressRow">
         <div class="zip">
@@ -60,6 +65,11 @@
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Dolgozó </th>
                 <td mat-cell *matCellDef="let employee"> <a >{{ employee.lastName }}  {{ employee.firstName }}</a> </td>
             </ng-container>
+
+            <ng-container matColumnDef="delete">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Törlés </th>
+                <td mat-cell *matCellDef="let employee"> <a (click)="unbindEmployee(employee)"> <mat-icon> delete </mat-icon>  </a> </td>
+            </ng-container>
   
             <tr mat-header-row *matHeaderRowDef="employeeColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: employeeColumns;"></tr>
@@ -86,6 +96,11 @@
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Rendszám </th>
                 <td mat-cell *matCellDef="let vehicle"> <a >{{ vehicle.licensePlateNumber }} </a> </td>
             </ng-container>
+
+            <ng-container matColumnDef="delete">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Törlés </th>
+                <td mat-cell *matCellDef="let vehicle"> <a (click)="unbindVehicle(vehicle)"><mat-icon> delete </mat-icon> </a> </td>
+            </ng-container>
   
             <tr mat-header-row *matHeaderRowDef="vehicleColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: vehicleColumns;"></tr>
@@ -105,7 +120,7 @@
   
     <ng-container matColumnDef="productName">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Termék </th>
-      <td mat-cell *matCellDef="let stock"> <a (click)="openDialog(stock)" style="cursor: pointer;">{{ stock.product }} C: {{ stock.product.code }}</a> </td>
+      <td mat-cell *matCellDef="let stock"> <a (click)="openDialog(stock)" style="cursor: pointer;">{{ stock.product.productName }} C: {{ stock.product.code }}</a> </td>
     </ng-container>
   
     <ng-container matColumnDef="quantity">

@@ -19,3 +19,13 @@ mwl-calendar-week-view{
     top: 50%;
     transform: scale(3);
 }
+
+.success {
+    background: green;
+    color: white;
+}
+
+.error {
+    background: red;
+    color: white;
+}
