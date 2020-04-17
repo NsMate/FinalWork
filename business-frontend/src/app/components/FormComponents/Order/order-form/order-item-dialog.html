@@ -1,0 +1,52 @@
+<div mat-dialog-title>
+    <h1 style="text-align: center;">Tétel részletei </h1>
+  </div>
+  
+  <div mat-dialog-content>
+    <form #addForm="ngForm" [formGroup]="itemForm" class="itemForm">
+      <div>
+          <h2>Termék / szolgáltatás</h2>
+          <mat-form-field appearance="standard">
+            <input matInput placeholder="eg. Dizájn" [(ngModel)]="data.orderItem.product" name="product" formControlName="product">                
+            <mat-error *ngIf="product.errors?.required && (product.dirty || product.touched)"> Adja meg a terméket vagy szolgáltatást! </mat-error>
+          </mat-form-field>
+      </div>
+      <div class="quantity" style="display: flex; justify-content: space-around;">
+        <div>
+          <h2>Mennyiség</h2>
+          <mat-form-field appearance="standard">
+            <input matInput placeholder="eg. 100" [(ngModel)]="data.orderItem.quantity" name="quantity" formControlName="quantity">                
+            <mat-error *ngIf="quantity.errors?.required && (quantity.dirty || quantity.touched)"> Adja meg a mennyiséget! </mat-error>                
+            <mat-error *ngIf="quantity.errors?.pattern && (quantity.dirty || quantity.touched)"> Nem kezdődhet 0-val! </mat-error>
+          </mat-form-field>
+        </div>
+        <div>
+          <h2>Egység</h2>
+          <mat-form-field appearance="standard">
+            <input matInput placeholder="eg. óra" [(ngModel)]="data.orderItem.unit" name="unit" formControlName="unit">                
+            <mat-error *ngIf="unit.errors?.required && (unit.dirty || unit.touched)"> Adja meg a mértékegységet! </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div>
+        <h2>Ár (Bruttó)</h2>
+        <mat-form-field appearance="standard">
+          <input matInput placeholder="eg. 1000" [(ngModel)]="data.orderItem.price" name="price" formControlName="price">                
+          <mat-error *ngIf="price.errors?.required && (price.dirty || price.touched)"> Adja meg a termék árát! </mat-error>                
+          <mat-error *ngIf="price.errors?.pattern && (price.dirty || price.touched)"> Nem kezdődhet 0-val! </mat-error>
+        </mat-form-field>
+      </div>
+      <div>
+        <h2>Megjegyzés</h2>
+        <mat-form-field appearance="standard">
+          <textarea matInput [(ngModel)]="data.orderItem.description" name="description" formControlName="description"></textarea>
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+  
+  <div mat-dialog-action style="display: flex; justify-content: space-evenly;">
+    <button mat-raised-button (click)="saveItem()" [disabled]="itemForm.invalid" color="primary"><mat-icon>save</mat-icon> Mentés</button>
+  
+    <button mat-raised-button  *ngIf="!data.isNew" (click)="openConfDialog()" color="warn" ><mat-icon>delete</mat-icon> Törlés</button>
+  </div>

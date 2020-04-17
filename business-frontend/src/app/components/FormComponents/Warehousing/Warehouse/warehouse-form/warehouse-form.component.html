@@ -63,12 +63,12 @@
   
             <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Dolgozó </th>
-                <td mat-cell *matCellDef="let employee"> <a >{{ employee.lastName }}  {{ employee.firstName }}</a> </td>
+                <td mat-cell *matCellDef="let employee" style="margin-right: 10px;"> {{ employee.lastName }}  {{ employee.firstName }} </td>
             </ng-container>
 
             <ng-container matColumnDef="delete">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Törlés </th>
-                <td mat-cell *matCellDef="let employee"> <a (click)="unbindEmployee(employee)"> <mat-icon> delete </mat-icon>  </a> </td>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>    </th>
+                <td mat-cell *matCellDef="let employee" style="text-align: center;"> <a (click)="unbindEmployee(employee)"> <mat-icon> delete </mat-icon>  </a> </td>
             </ng-container>
   
             <tr mat-header-row *matHeaderRowDef="employeeColumns"></tr>
@@ -89,17 +89,17 @@
   
             <ng-container matColumnDef="manufacturer">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Gyártó </th>
-                <td mat-cell *matCellDef="let vehicle"> <a >{{ vehicle.manufacturer }} </a> </td>
+                <td mat-cell *matCellDef="let vehicle"> {{ vehicle.manufacturer }} </td>
             </ng-container>
 
             <ng-container matColumnDef="licensePlate">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Rendszám </th>
-                <td mat-cell *matCellDef="let vehicle"> <a >{{ vehicle.licensePlateNumber }} </a> </td>
+                <td mat-cell *matCellDef="let vehicle" style="margin-right: 10px;"> {{ vehicle.licensePlateNumber }} </td>
             </ng-container>
 
             <ng-container matColumnDef="delete">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Törlés </th>
-                <td mat-cell *matCellDef="let vehicle"> <a (click)="unbindVehicle(vehicle)"><mat-icon> delete </mat-icon> </a> </td>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>   </th>
+                <td mat-cell *matCellDef="let vehicle" style="text-align: center;"> <a (click)="unbindVehicle(vehicle)"><mat-icon> delete </mat-icon> </a> </td>
             </ng-container>
   
             <tr mat-header-row *matHeaderRowDef="vehicleColumns"></tr>

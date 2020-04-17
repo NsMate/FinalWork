@@ -28,6 +28,8 @@ import { OfferListComponent } from './components/ListComponents/OfferList/offer-
 import { PartnerFormComponent } from './components/FormComponents/Partner/partner-form/partner-form.component';
 import { InvoiceFormComponent } from './components/FormComponents/Invoice/invoice-form/invoice-form.component';
 import { InvoiceItemDialog } from './components/FormComponents/Invoice/invoice-form/invoice-form.component';
+import { OrderFormComponent } from './components/FormComponents/Order/order-form/order-form.component';
+import { OrderItemDialog } from './components/FormComponents/Order/order-form/order-form.component';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -79,7 +81,9 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
     InvoiceItemDialog,
     EmployeeSelectorDialog,
     VehicleSelectorDialog,
-    EventDialog
+    EventDialog,
+    OrderFormComponent,
+    OrderItemDialog
   ],
   imports: [
     BrowserModule,

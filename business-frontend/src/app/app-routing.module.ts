@@ -15,6 +15,7 @@ import { PartnerListComponent } from './components/ListComponents/Partner/partne
 import { OfferListComponent } from './components/ListComponents/OfferList/offer-list/offer-list.component';
 import { PartnerFormComponent } from './components/FormComponents/Partner/partner-form/partner-form.component';
 import { InvoiceFormComponent } from './components/FormComponents/Invoice/invoice-form/invoice-form.component';
+import { OrderFormComponent } from './components/FormComponents/Order/order-form/order-form.component';
 
 
 const routes: Routes = [
@@ -85,6 +86,11 @@ const routes: Routes = [
   {
     path: 'invoiceForm',
     component: InvoiceFormComponent,
+    canActivate: [ AuthGuard ]
+  },
+  {
+    path: 'orderForm',
+    component: OrderFormComponent,
     canActivate: [ AuthGuard ]
   }
 ];

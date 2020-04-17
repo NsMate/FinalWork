@@ -1,4 +1,3 @@
-import { Product } from '../Product/product';
 
 export class InvoiceItem {
     id: number;

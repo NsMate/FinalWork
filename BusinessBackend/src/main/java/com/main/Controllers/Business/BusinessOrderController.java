@@ -79,12 +79,9 @@ public class BusinessOrderController {
     public ResponseEntity<OrderItem> insertOrderItemIntoBusinessOrderById(@PathVariable Long id, @RequestBody OrderItem orderItem) {
         Optional<BusinessOrder> oldBusinessOrder = businessOrderRepository.findById(id);
         if (oldBusinessOrder.isPresent()) {
-            BusinessOrder businessOrder = oldBusinessOrder.get();
-            OrderItem newOrderItem = orderItemRepository.save(orderItem);
-            businessOrder.getOrderItemList().add(newOrderItem);
-            orderItem.setBusinessOrder(businessOrder);
-            orderItemRepository.save(orderItem);  // have to trigger from the @JoinTable side
-            return ResponseEntity.ok(newOrderItem);
+            BusinessOrder order = oldBusinessOrder.get();
+            orderItem.setBusinessOrder(order); // have to trigger from the @JoinTable side
+            return ResponseEntity.ok(orderItemRepository.save(orderItem));
         } else {
             return ResponseEntity.notFound().build();
         }

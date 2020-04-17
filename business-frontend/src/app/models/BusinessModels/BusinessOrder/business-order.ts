@@ -3,8 +3,12 @@ import { Partner } from '../Partner/partner';
 
 export class BusinessOrder {
     id: number;
+    issueDate: Date = new Date();
     dueDate: Date = new Date();
-    createDate: Date = new Date();
+    orderDescription: string = "";
     orderItems: OrderItem[] = [];
-    partner: Partner = new Partner();
+    partner: Partner = null;
+    vat: number = 27;
+    paymentType: string = "";
+    status: string = "OPEN";
 }

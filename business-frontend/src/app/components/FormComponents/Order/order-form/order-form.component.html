@@ -1,0 +1,183 @@
+<h1> Rendelés részletei </h1>
+
+<button mat-raised-button color="primary" 
+        (click)="saveOrder()"
+        class="saveButton" 
+        [disabled]="orderForm.invalid || detailedOrder.status == 'CLOSED'"><mat-icon>save</mat-icon> Mentés </button>
+
+<button mat-raised-button color="accent" 
+        (click)="preViewOrderPdf()" 
+        class="saveButton" 
+        [disabled]="detailedOrder.id == null"><mat-icon>visibility</mat-icon> Előnézet </button>
+
+<button mat-raised-button color="primary" 
+        (click)="closeOrder()" 
+        class="saveButton" 
+        [disabled]="detailedOrder.id == null || detailedOrder.status == 'CLOSED'"><mat-icon>gavel</mat-icon> Lezárás </button>
+
+<button mat-raised-button color="accent" 
+        (click)="downloadOrderPdf()" 
+        class="saveButton" 
+        [disabled]="detailedOrder.id == null"><mat-icon>get_app</mat-icon> Letöltés </button>
+
+<button mat-raised-button color="warn" 
+        (click)="deleteOrder()" 
+        class="saveButton" 
+        [disabled]="detailedOrder.id == null || detailedOrder.status == 'CLOSED'"><mat-icon>delete</mat-icon> Törlés </button>
+
+<button mat-raised-button color="primary" 
+        (click)="openOrder()" 
+        class="saveButton" 
+        [disabled]="detailedOrder.status == 'OPEN'"
+        *ngIf="getAuthService().appUser.appUserGroup == 'ROLE_ADMIN'"><mat-icon>edit</mat-icon> Megnyitás </button>
+
+<form [formGroup]="orderForm">
+    <div class="partner">
+        <h3>Partner</h3>
+        <mat-form-field >
+            <input type="text"
+                   matInput
+                   [formControl]="partner"
+                   [matAutocomplete]="auto"
+                   [(ngModel)]="detailedOrder.partner">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+              <mat-option *ngFor="let partner of filteredPartners | async" [value]="partner">
+                {{partner.partnerName}}
+              </mat-option>
+            </mat-autocomplete>       
+            <mat-error *ngIf="partner.errors?.required && (partner.dirty || partner.touched)"> Adja meg a partnert! </mat-error>
+        </mat-form-field>
+    </div>
+    <div class="dates">
+      <div class="issueDate">
+        <h3>Kiállítás dátuma</h3>
+        <mat-form-field>
+            <input matInput [matDatepicker]="dp1" 
+                  disabled 
+                  [(ngModel)]="detailedOrder.issueDate" 
+                  name="issueDate"
+                  formControlName="issueDate">
+            <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
+            <mat-datepicker #dp1></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="dueDate">
+        <h3> Teljesítés dátuma </h3>
+        <mat-form-field>
+            <input matInput [matDatepicker]="dp2" 
+                    [min]="minDate" 
+                    [(ngModel)]="detailedOrder.dueDate" 
+                    name="dueDate" 
+                    formControlName="dueDate">
+            <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
+            <mat-datepicker #dp2></mat-datepicker>
+        </mat-form-field>
+        <mat-error style="font-size: small;" *ngIf="date"> A teljesítés dátuma nem lehet a kiállítás előtt! </mat-error>
+      </div>
+    </div>
+    <div class="information">
+      <div class="orderDescription">
+        <h3>Megjegyzés</h3>
+        <mat-form-field appearance="standard"> 
+          <textarea matInput placeholder="Megjegyzés" 
+                    [(ngModel)]="detailedOrder.orderDescription" 
+                    name="orderDescription" 
+                    formControlName="orderDescription"></textarea>
+        </mat-form-field>
+      </div>
+      <div class="vat">
+        <h3>Adó</h3>
+        <mat-form-field appearance="standard">
+            <input matInput placeholder="eg. 12"                    
+                    name="vat" 
+                    formControlName="vat" 
+                    [(ngModel)]="detailedOrder.vat"
+                    [disabled]="detailedOrder.status == 'CLOSED'" >
+            <mat-error *ngIf="vat.errors?.required && (vat.dirty || vat.touched)"> Adja meg az adó mértékét! </mat-error>
+            <mat-error *ngIf="vat.errors?.pattern && (vat.dirty || vat.touched)"> Nem kezdődhet 0-val! </mat-error>
+            <mat-error *ngIf="vat.errors?.maxlength && (vat.dirty || vat.touched)"> Maximum 2 hosszú lehet! </mat-error>
+        </mat-form-field>
+      </div>
+      <div>
+        <h2>Fizetés módja</h2>
+        <mat-form-field appearance="standard">
+          <mat-select [(ngModel)]="detailedOrder.paymentType" formControlName="paymentType">
+            <mat-option value="Készpénz">Készpénz</mat-option>
+            <mat-option value="Átutalás">Átutalás</mat-option>
+          </mat-select>
+          <mat-error *ngIf="paymentType.errors?.required && (paymentType.dirty || paymentType.touched)"> Adja meg a teljesítés típusát! </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+</form>
+
+<div class="prices">
+  <div class="totalPrice">
+    <h2>
+      Részösszeg(Nettó): {{ netWorth.toFixed(2) }} Ft
+    </h2>
+  </div>
+
+  <div class="plusVat">
+    <h2 style="color: red;">
+      Áfa: {{ plusVat.toFixed(2) }} Ft
+    </h2>
+  </div>
+
+  <div class="totalPriceWithVat">
+    <h2 style="color: green; text-decoration: underline;">
+      Végösszeg(Bruttó): {{ totalPrice.toFixed(2) }} Ft
+    </h2>
+  </div>
+
+</div>
+
+<h1 style="text-align: center; margin-top: 120px;"> Rendelés tételei </h1>
+
+<button mat-raised-button 
+        *ngIf="detailedOrder.id != null" 
+        class="newButton" 
+        (click)="openItemDialog()" 
+        [disabled]="detailedOrder.status == 'CLOSED'"
+        color="primary"><mat-icon>add</mat-icon> Új tétel felvétele</button>
+
+<button mat-raised-button 
+        *ngIf="detailedOrder.id == null" 
+        class="newButton" 
+        (click)="openItemDialog()" 
+        color="primary"
+        matTooltip="Előbb hozza létre a rendelést!" 
+        [disabled]="true"><mat-icon>add</mat-icon> Új tétel felvétele</button>
+
+<div id="content" #content>
+  <table mat-table [dataSource]="dataSource" matSort matSortActive="totalPrice" matSortDirection="asc" class="mat-elevation-z8" id="myTable" #myTable>
+  
+    <ng-container matColumnDef="product">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Termék / szolgáltatás</th>
+      <td mat-cell *matCellDef="let orderItem"> <a  style="cursor: pointer;" (click)="openItemDialog(orderItem)">{{orderItem.product}}</a> </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="quantity">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Mennyiség </th>
+      <td mat-cell *matCellDef="let orderItem"> <a  style="cursor: pointer;" (click)="openItemDialog(orderItem)">{{orderItem.quantity}} {{orderItem.unit}}</a> </td>
+    </ng-container>
+
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Egységár </th>
+      <td mat-cell *matCellDef="let orderItem"> <a  style="cursor: pointer;" (click)="openItemDialog(orderItem)">{{orderItem.price}} Ft</a> </td>
+    </ng-container>
+
+    <ng-container matColumnDef="totalPrice">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Teljes Ár </th>
+      <td mat-cell *matCellDef="let orderItem"> <a  style="cursor: pointer;" (click)="openItemDialog(orderItem)"> {{orderItem.quantity * orderItem.price}} Ft</a> </td>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Leírás </th>
+      <td mat-cell *matCellDef="let orderItem"> <a  style="cursor: pointer;" (click)="openItemDialog(orderItem)">{{orderItem.description}}</a> </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

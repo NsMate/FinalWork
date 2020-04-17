@@ -2,28 +2,33 @@
 
 <h1>Rendeléseink</h1>
 
-<button mat-raised-button class="newButton" color="primary">Új rendelés</button>
+<button mat-raised-button class="newButton" color="primary" (click)="openDetailedOrder()"><mat-icon>plus_one</mat-icon>Új rendelés</button>
 
 <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
   
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
-      <td mat-cell *matCellDef="let order"> <a > {{order.id}} </a> </td>
+      <td mat-cell *matCellDef="let order"> <a (click)="openDetailedOrder(order.id)"> {{order.id}} </a> </td>
     </ng-container>
   
     <ng-container matColumnDef="partner">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Partner </th>
-      <td mat-cell *matCellDef="let order"> <a> {{order.partner.partnerName}} </a>  </td>
+      <td mat-cell *matCellDef="let order"> <a (click)="openDetailedOrder(order.id)"> {{order.partner.partnerName}} </a>  </td>
     </ng-container>
   
     <ng-container matColumnDef="creationDate">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Létrehozva </th>
-      <td mat-cell *matCellDef="let order"> <a > {{order.issueDate}} </a> </td>
+      <td mat-cell *matCellDef="let order"> <a (click)="openDetailedOrder(order.id)"> {{order.issueDate}} </a> </td>
     </ng-container>
 
     <ng-container matColumnDef="dueDate">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Határidő </th>
-      <td mat-cell *matCellDef="let order"> <a > {{order.dueDate}} </a> </td>
+      <td mat-cell *matCellDef="let order"> <a (click)="openDetailedOrder(order.id)"> {{order.dueDate}} </a> </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Státusz </th>
+      <td mat-cell *matCellDef="let order"> <a (click)="openDetailedOrder(order.id)"> {{getOrderStatus(order)}} </a> </td>
     </ng-container>
   
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

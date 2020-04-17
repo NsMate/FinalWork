@@ -1,50 +1,42 @@
-import { Component, OnInit, ViewChild, Inject, ElementRef } from '@angular/core';
-import { InvoiceService } from 'src/app/services/BusinessServices/Invoice/invoice.service';
-import { Invoice } from 'src/app/models/BusinessModels/Invoice/invoice';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { InvoiceItem } from 'src/app/models/BusinessModels/InvoiceItem/invoice-item';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { BusinessOrder } from 'src/app/models/BusinessModels/BusinessOrder/business-order';
 import { Partner } from 'src/app/models/BusinessModels/Partner/partner';
-import { PartnerService } from 'src/app/services/BusinessServices/Partner/partner.service';
 import { Observable, from } from 'rxjs';
-import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { InvoiceItemService } from 'src/app/services/BusinessServices/InvoiceItem/invoice-item.service';
-import { ConfdialogComponent } from 'src/app/components/ConfirmationDialog/confdialog/confdialog.component';
-import { Router, ActivatedRoute } from '@angular/router';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { PartnerService } from 'src/app/services/BusinessServices/Partner/partner.service';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
-import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
-import { PdfGenerator } from 'src/app/PDFGenerator/pdf-generator';
-import { es } from 'date-fns/locale';
 import { AuthorizationService } from 'src/app/services/authorization-service.service';
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
-/**
- * This interface carries data to the item dialog for the invoice.
- */
+import { MatTableDataSource } from '@angular/material/table';
+import { OrderService } from 'src/app/services/BusinessServices/Order/order.service';
+import { MatSort } from '@angular/material/sort';
+import { ConfdialogComponent } from 'src/app/components/ConfirmationDialog/confdialog/confdialog.component';
+import { OrderItem } from 'src/app/models/BusinessModels/OrderItem/order-item';
+import { PdfGenerator } from 'src/app/PDFGenerator/pdf-generator';
+import { OrderItemService } from 'src/app/services/BusinessServices/OrderItem/order-item.service';
 
 export interface ItemDialog{
   isNew: boolean,
-  invoiceId: number,
-  invoiceItem: InvoiceItem,
+  orderId: number,
+  orderItem: OrderItem,
 }
 
 @Component({
-  selector: 'app-invoice-form',
-  templateUrl: './invoice-form.component.html',
-  styleUrls: ['./invoice-form.component.css']
+  selector: 'app-order-form',
+  templateUrl: './order-form.component.html',
+  styleUrls: ['./order-form.component.css']
 })
-export class InvoiceFormComponent implements OnInit {
+export class OrderFormComponent implements OnInit {
 
   /**
    * detailedInvoice hold the invoice discussed on the form
    * invoiceItems hold the items of detailedInvoice
    */
 
-  public detailedInvoice: Invoice = new Invoice();
-  private invoiceItems: InvoiceItem[] = [];
+  public detailedOrder: BusinessOrder = new BusinessOrder();
+  private orderItems: InvoiceItem[] = [];
 
   /**
    * ownComapny hold the information of our own company, used for pdf generation
@@ -81,18 +73,18 @@ export class InvoiceFormComponent implements OnInit {
 
   /**
    * 
-   * @param invoiceService used for invoice db operations
-   * @param formBuilder used to build up the invoice form
+   * @param orderService used for order db operations
+   * @param formBuilder used to build up the order form
    * @param partnerService used to get the partners from the database
-   * @param itemDialog dialog for adding items to the invoice
-   * @param confDialog dialog for the confirmation of deleting the invoice
+   * @param itemDialog dialog for adding items to the order
+   * @param confDialog dialog for the confirmation of deleting the order
    * @param route used for getting the query string paramters
    * @param routing used for navigating to another page
    * @param _snackBar used to give feedback to the user about his/her actions
    * @param authService used for checking the role of the user
    */
   constructor(
-    private invoiceService: InvoiceService,
+    private orderService: OrderService,
     private formBuilder: FormBuilder,
     private partnerService: PartnerService,
     private itemDialog: MatDialog,
@@ -104,33 +96,33 @@ export class InvoiceFormComponent implements OnInit {
   ) {}
   
   /**
-   * detailed invoice is loaded in by query parameters
-   * invoice items loaded in by query parameters
+   * detailed order is loaded in by query parameters
+   * order items loaded in by query parameters
    * sort added to table, calculating prices
    * and watching the partner field for changes =>
-   *    if change get partners from db by value
+   *    if change get partners from db by the value of field
    */
   async ngOnInit(): Promise<void> {
     this.route.queryParams.subscribe(async params => {
       if(params.new == 'no'){
-        this.detailedInvoice = await this.invoiceService.getInvoice(parseInt(params.id));
-        this.invoiceItems = await this.invoiceService.getInvoiceItems(parseInt(params.id));
+        this.detailedOrder = await this.orderService.getBusinessOrder(parseInt(params.id));
+        this.orderItems = await this.orderService.getBusinessOrdersItems(parseInt(params.id));
       }
-      this.dataSource = new MatTableDataSource(this.invoiceItems);
+      this.dataSource = new MatTableDataSource(this.orderItems);
       this.dataSource.sort = this.sort;
 
-      this.calculateInvoicePrices();
+      this.calculateOrderPrices();
 
-      this.date = new Date(this.detailedInvoice.dueDate).getTime() < new Date(this.detailedInvoice.issueDate).getTime();
+      this.date = new Date(this.detailedOrder.dueDate).getTime() < new Date(this.detailedOrder.issueDate).getTime();
 
-      this.minDate = new Date(this.detailedInvoice.issueDate);
+      this.minDate = new Date(this.detailedOrder.issueDate);
 
-      if(this.detailedInvoice.status == 'CLOSED'){
+      if(this.detailedOrder.status == 'CLOSED'){
         this.disableForm();
       }
     });
     
-    this.invoiceForm.get('partner').valueChanges.subscribe(
+    this.orderForm.get('partner').valueChanges.subscribe(
       async val => {
         if(val == ' '){
           this.filteredPartners = await from(this.partnerService.getOutsidePartners());
@@ -153,24 +145,24 @@ export class InvoiceFormComponent implements OnInit {
    * form control for the form on the page, here are the getters for the fields
    *    and the validators
    */
-  invoiceForm = this.formBuilder.group({
-    'partner': new FormControl(this.detailedInvoice.partner, Validators.required),
-    'issueDate': new FormControl(this.detailedInvoice.issueDate, Validators.compose([Validators.required])),
-    'dueDate': new FormControl(this.detailedInvoice.dueDate, Validators.compose([Validators.required])),
-    'invoiceDescription': new FormControl(this.detailedInvoice.invoiceDescription),
-    'vat': new FormControl(this.detailedInvoice.vat, Validators.compose([Validators.required,Validators.pattern("[1-9][0-9]*"),Validators.maxLength(2)])),
-    'paymentType': new FormControl(this.detailedInvoice.paymentType, Validators.required),
+  orderForm = this.formBuilder.group({
+    'partner': new FormControl(this.detailedOrder.partner, Validators.required),
+    'issueDate': new FormControl(this.detailedOrder.issueDate, Validators.compose([Validators.required])),
+    'dueDate': new FormControl(this.detailedOrder.dueDate, Validators.compose([Validators.required])),
+    'orderDescription': new FormControl(this.detailedOrder.orderDescription),
+    'vat': new FormControl(this.detailedOrder.vat, Validators.compose([Validators.required,Validators.pattern("[1-9][0-9]*"),Validators.maxLength(2)])),
+    'paymentType': new FormControl(this.detailedOrder.paymentType, Validators.required),
   })
 
-  get partner() { return this.invoiceForm.get('partner'); }
-  get issueDate() { return this.invoiceForm.get('issueDate'); }
-  get dueDate() { return this.invoiceForm.get('dueDate'); }
-  get invoiceDescription() { return this.invoiceForm.get('invoiceDescription'); }
-  get vat() { return this.invoiceForm.get('vat'); }
-  get paymentType() { return this.invoiceForm.get('paymentType'); }
+  get partner() { return this.orderForm.get('partner'); }
+  get issueDate() { return this.orderForm.get('issueDate'); }
+  get dueDate() { return this.orderForm.get('dueDate'); }
+  get orderDescription() { return this.orderForm.get('orderDescription'); }
+  get vat() { return this.orderForm.get('vat'); }
+  get paymentType() { return this.orderForm.get('paymentType'); }
 
   /**
-   * This function is used for comparing the partners when loading in an invoice
+   * This function is used for comparing the partners when loading in an order
    *    so the autocomplete can display the correct value from the database
    */
   displayFn(val: Partner) {
@@ -178,20 +170,20 @@ export class InvoiceFormComponent implements OnInit {
   }
 
   /**
-   * This function is used to create or update the detailed invoice
-   * based on if the invoice is null.
+   * This function is used to create or update the detailed order
+   * based on if the order's id is null.
    * 
    * After the creation or update the user is informed on the success or
    * failure of the action by a snackbar.
    */
-  saveInvoice(){
-    if(this.detailedInvoice.id == null){
-      this.invoiceService.createInvoice(this.detailedInvoice).then(result => {
+  saveOrder(){
+    if(this.detailedOrder.id == null){
+      this.orderService.createBusinessOrder(this.detailedOrder).then(result => {
 
-        this.detailedInvoice = result;
+        this.detailedOrder = result;
         this.routing.navigate(['.'], { relativeTo: this.route, queryParams: { new: 'no', id: result.id }});
 
-        this._snackBar.open('Sikeresen létrehozta a számlát!','', {
+        this._snackBar.open('Sikeresen létrehozta a rendelést!','', {
           duration: 2000,
           panelClass: ['success'],
         })
@@ -207,8 +199,8 @@ export class InvoiceFormComponent implements OnInit {
 
     }else{
 
-      this.invoiceService.updateInvoice(this.detailedInvoice).then(result => {
-        this.detailedInvoice = result;
+      this.orderService.updateBusinessOrder(this.detailedOrder).then(result => {
+        this.detailedOrder = result;
 
         this._snackBar.open('Sikeres mentés!', '', {
           duration: 2000,
@@ -229,26 +221,30 @@ export class InvoiceFormComponent implements OnInit {
   }
 
    /**
-   * This function is used for deleting the detailed invoice. 
+   * This function is used for deleting the detailed order. 
    * The user is presented a confirmation dialog and if the user 
    *    decides to go on, then the record is deleted.
    * The user is informed of the succes or error by a snackbar .
    */
-  deleteInvoice(){
+  deleteOrder(){
 
     const dialogRef = this.confDialog.open(ConfdialogComponent, {
+
       width: '300px',
+
     }).afterClosed().subscribe(async result => {
 
       if(result){
 
-        await this.invoiceService.deleteInvoice(this.detailedInvoice.id).then(result => {
-          this._snackBar.open('Számla sikeresen törölve!','', {
+        await this.orderService.deleteBusinessOrder(this.detailedOrder.id).then(result => {
+
+          this._snackBar.open('Rendelés sikeresen törölve!','', {
             duration: 2000,
             panelClass: ['success'],
+
           })
 
-          this.routing.navigate(['/invoiceList']);
+          this.routing.navigate(['/orderList']);
 
         }).catch(e => {
 
@@ -263,13 +259,13 @@ export class InvoiceFormComponent implements OnInit {
   }
 
 
-  async closeInvoice(): Promise<void>{
-    this.detailedInvoice.status = "CLOSED";
-    await this.invoiceService.updateInvoice(this.detailedInvoice).then(res => {
+  async closeOrder(): Promise<void>{
+    this.detailedOrder.status = "CLOSED";
+    await this.orderService.updateBusinessOrder(this.detailedOrder).then(res => {
 
-      this.detailedInvoice = res;
+      this.detailedOrder = res;
 
-      this._snackBar.open('Sikeresen lezárta a számlát!','',{
+      this._snackBar.open('Sikeresen lezárta a rendelést!','',{
         duration: 2000,
         panelClass: ['success'],
       })
@@ -289,18 +285,18 @@ export class InvoiceFormComponent implements OnInit {
     this.partner.disable();
     this.issueDate.disable();
     this.dueDate.disable();
-    this.invoiceDescription.disable();
+    this.orderDescription.disable();
     this.vat.disable();
     this.paymentType.disable();
   }
 
-  async openInvoice(): Promise<void>{
-    this.detailedInvoice.status = "OPEN";
-    await this.invoiceService.updateInvoice(this.detailedInvoice).then(res => {
+  async openOrder(): Promise<void>{
+    this.detailedOrder.status = "OPEN";
+    await this.orderService.updateBusinessOrder(this.detailedOrder).then(res => {
 
-      this.detailedInvoice = res;
+      this.detailedOrder = res;
 
-      this._snackBar.open('Sikeresen újranyitotta a számlát!','',{
+      this._snackBar.open('Sikeresen újranyitotta a rendelést!','',{
         duration: 2000,
         panelClass: ['success'],
       })
@@ -313,14 +309,15 @@ export class InvoiceFormComponent implements OnInit {
         duration: 2000,
         panelClass: ['error'],
       })
+
     });
   }
 
   enableForm(): void{
     this.partner.enable();
-    this.detailedInvoice.issueDate = new Date();
+    this.detailedOrder.issueDate = new Date();
     this.dueDate.enable();
-    this.invoiceDescription.enable();
+    this.orderDescription.enable();
     this.vat.enable();
     this.paymentType.enable();
   }
@@ -335,20 +332,21 @@ export class InvoiceFormComponent implements OnInit {
    *    the item item is not new. If nothing is passed then a newly created item is passed.
    * After dialog termination the component is initiated newly. 
    */
-  openItemDialog(invoiceItem?: InvoiceItem){
+  openItemDialog(orderItem?: OrderItem){
 
-    let dialogData: ItemDialog = {isNew: null, invoiceId: null, invoiceItem: null};
-    dialogData.invoiceId = this.detailedInvoice.id;
+    let dialogData: ItemDialog = {isNew: null, orderId: null, orderItem: null};
 
-    if(invoiceItem == null){
+    dialogData.orderId = this.detailedOrder.id;
+
+    if(orderItem == null){
       dialogData.isNew = true;
-      dialogData.invoiceItem = new InvoiceItem();
+      dialogData.orderItem = new OrderItem();
     }else{
       dialogData.isNew = false;
-      dialogData.invoiceItem = invoiceItem;
+      dialogData.orderItem = orderItem;
     }
 
-    const dialogRef = this.itemDialog.open(InvoiceItemDialog, {
+    const dialogRef = this.itemDialog.open(OrderItemDialog, {
       width: '500px',
       data: dialogData
     }).afterClosed().subscribe(result => {
@@ -359,62 +357,65 @@ export class InvoiceFormComponent implements OnInit {
   }
 
   /**
-   * This function calculates the invoice prices on every 
+   * This function calculates the order prices on every 
    *    init.
    */
-  calculateInvoicePrices(){
+  calculateOrderPrices(){
     this.plusVat = 0;
     this.totalPrice = 0;
     this.netWorth = 0;
-    this.invoiceItems.forEach(invoiceItem => {
+    this.orderItems.forEach(invoiceItem => {
       this.totalPrice += (invoiceItem.price * invoiceItem.quantity);
-      this.netWorth += (invoiceItem.price * (1 - (this.detailedInvoice.vat / 100))) * invoiceItem.quantity;
+      this.netWorth += (invoiceItem.price * (1 - (this.detailedOrder.vat / 100))) * invoiceItem.quantity;
     })
-    this.plusVat = this.totalPrice - (this.totalPrice * (1 - (this.detailedInvoice.vat / 100)));
+    this.plusVat = this.totalPrice - (this.totalPrice * (1 - (this.detailedOrder.vat / 100)));
   }
 
   /**
    * This two function used for generating pdf and previewing or downloading it.
    */
-  preViewInvoicePdf(){
+  preViewOrderPdf(){
     let pdfMaker = new PdfGenerator();
-    pdfMaker.openInvoicePdf(this.detailedInvoice,this.invoiceItems,this.ownCompany);
+
+    pdfMaker.openOrderPdf(this.detailedOrder,this.orderItems,this.ownCompany);
   }
 
-  downloadInvoicePdf(){
+  downloadOrderPdf(){
     let pdfMaker = new PdfGenerator();
-    pdfMaker.downloadInvoicePdf(this.detailedInvoice,this.invoiceItems,this.ownCompany);
+
+    pdfMaker.downloadOrderPdf(this.detailedOrder,this.orderItems,this.ownCompany);
   }
 
 }
 
+
 /**
- * Item dialog component for handling the information of the invoice items.
- * Used for creating, editing and deleting invoice items.
+ * Item dialog component for handling the information of the order items.
+ * Used for creating, editing and deleting order items.
  */
 
 @Component({
-  selector: 'invoice-item-dialog',
-  templateUrl: './invoice-item-dialog.html',
+  selector: 'order-item-dialog',
+  templateUrl: './order-item-dialog.html',
 })
-export class InvoiceItemDialog{
+export class OrderItemDialog{
 
   /**
    * 
    * @param dialogRef used for closing the dialog when finished with transaction
    * @param data the data passed on by the parent component
    * @param formBuilder used for building the form up
-   * @param invoiceService used for inserting an item to the invoice
-   * @param invoiceItemService used when updating an invoice item
+   * @param orderService used for inserting an item to the order
+   * @param orderItemService used when updating an order item
    * @param confDialog used when deleting an item, confirmation
    * @param _snackBar used for informing the user of the success or error of transaction
    */
   constructor(
-    public dialogRef: MatDialogRef<InvoiceItemDialog>,
+    public dialogRef: MatDialogRef<OrderItemDialog>,
     @Inject(MAT_DIALOG_DATA) public data: ItemDialog,
     private formBuilder: FormBuilder,
-    private invoiceService: InvoiceService,
-    private invoiceItemService: InvoiceItemService,
+    private orderService: OrderService,
+    private orderItemService: OrderItemService,
     public confDialog: MatDialog,
     private _snackBar: MatSnackBar
   ){}
@@ -423,11 +424,11 @@ export class InvoiceItemDialog{
    * Form control for the item form, validators added here for fields.
    */
   itemForm = this.formBuilder.group({
-    'product': new FormControl(this.data.invoiceItem.product,Validators.required),
-    'quantity': new FormControl(this.data.invoiceItem.quantity, Validators.compose([Validators.required, Validators.pattern("[1-9][0-9]*")])),
-    'unit': new FormControl(this.data.invoiceItem.unit, Validators.required),
-    'price': new FormControl(this.data.invoiceItem.price, Validators.compose([Validators.required,Validators.pattern("[1-9][0-9]*")])),
-    'description': new FormControl(this.data.invoiceItem.description),
+    'product': new FormControl(this.data.orderItem.product,Validators.required),
+    'quantity': new FormControl(this.data.orderItem.quantity, Validators.compose([Validators.required, Validators.pattern("[1-9][0-9]*")])),
+    'unit': new FormControl(this.data.orderItem.unit, Validators.required),
+    'price': new FormControl(this.data.orderItem.price, Validators.compose([Validators.required,Validators.pattern("[1-9][0-9]*")])),
+    'description': new FormControl(this.data.orderItem.description),
   })
 
   get product() { return this.itemForm.get('product'); }
@@ -447,9 +448,10 @@ export class InvoiceItemDialog{
 
     if(this.data.isNew){
 
-      await this.invoiceService.insertItemToInvoice(this.data.invoiceId,this.data.invoiceItem).then(res => {
+      await this.orderService.insertItemToBusinessOrder(this.data.orderId,this.data.orderItem).then(res => {
 
         this.dialogRef.close();
+
         this._snackBar.open('Tétel felvéve!', '',{
           duration: 2500,
           panelClass: ['success'],
@@ -466,9 +468,10 @@ export class InvoiceItemDialog{
 
     }else{
 
-      await this.invoiceItemService.updateInvoiceItem(this.data.invoiceItem).then(res => {
+      await this.orderItemService.updateOrderItem(this.data.orderItem).then(res => {
 
         this.dialogRef.close();
+
         this._snackBar.open('Tétel módosítva!', '',{
           duration: 2500,
           panelClass: ['success'],
@@ -498,9 +501,10 @@ export class InvoiceItemDialog{
     }).afterClosed().subscribe(result => {
 
       if(result){
-        this.invoiceItemService.deleteInvoiceItem(this.data.invoiceItem.id).then(result =>{
+        this.orderItemService.deleteOrderItem(this.data.orderItem.id).then(result =>{
 
           this.dialogRef.close();
+
           this._snackBar.open('Tétel sikeresen törölve!','',{
             duration: 2000,
             panelClass: ['success'],

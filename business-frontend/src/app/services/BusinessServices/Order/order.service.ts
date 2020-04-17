@@ -41,14 +41,14 @@ export class OrderService {
   }
 
   getBusinessOrdersItems(id: number): Promise<OrderItem[]> {
-    return this.http.get<OrderItem[]>(`${this.orderUrl}/${id}/invoice_items`, httpOptions).toPromise();
+    return this.http.get<OrderItem[]>(`${this.orderUrl}/${id}/order_items`, httpOptions).toPromise();
   }
 
   insertItemToBusinessOrder(id: number,orderItem: OrderItem): Promise<BusinessOrder> {
-    return this.http.post<BusinessOrder>(`${this.orderUrl}/${id}/invoice_items`, orderItem, httpOptions).toPromise();
+    return this.http.post<BusinessOrder>(`${this.orderUrl}/${id}/order_items`, orderItem, httpOptions).toPromise();
   }
 
   modifyOrderOnBusinessOrder(id: number,orderItems: OrderItem[]): Promise<BusinessOrder> {
-    return this.http.put<BusinessOrder>(`${this.orderUrl}/${id}/invoice_items`, orderItems, httpOptions).toPromise();
+    return this.http.put<BusinessOrder>(`${this.orderUrl}/${id}/order_items`, orderItems, httpOptions).toPromise();
   }
 }

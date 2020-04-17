@@ -4,5 +4,5 @@ export class Product {
     price: number = 0;
     productDescription: string = "";
     code: number = 0;
-    currency: string = "";
+    currency: string = "HUF";
 }

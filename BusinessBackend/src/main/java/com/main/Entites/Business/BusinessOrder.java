@@ -1,6 +1,5 @@
 package com.main.Entites.Business;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +15,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "bus_order")
+@Table(name = "business_order")
 public class BusinessOrder implements Serializable {
 
     @Id
@@ -24,19 +23,32 @@ public class BusinessOrder implements Serializable {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "issue_date")
+    @CreationTimestamp
+    private Date issueDate;
+
     @Column(name = "due_date")
-    @NotNull
     private Date dueDate;
 
-    @Column(name = "create_date")
-    @CreationTimestamp
-    private Date createDate;
+    @Column(name = "order_description")
+    private String orderDescription;
+
+    @Column(name = "vat")
+    @NotNull
+    private String vat;
+
+    @Column(name = "status")
+    @NotNull
+    private String status;
+
+    @Column(name = "payment_type")
+    @NotNull
+    private String paymentType;
+
+    @OneToMany(mappedBy = "businessOrder", cascade = CascadeType.REMOVE)
+    private List<OrderItem> orderItemList;
 
     @ManyToOne
-    @JoinColumn(name = "partner_id", referencedColumnName = "id")
-
+    @JoinColumn(name = "partner_id",referencedColumnName = "id")
     private Partner partner;
-
-    @OneToMany(mappedBy = "businessOrder")
-    private List<OrderItem> orderItemList;
 }
