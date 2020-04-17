@@ -29,7 +29,7 @@ import {
   format,
 } from 'date-fns';
 import localeHu from '@angular/common/locales/hu'
-import { registerLocaleData } from '@angular/common';
+import { registerLocaleData, formatDate } from '@angular/common';
 import { CalendarEventService } from 'src/app/services/Warehousing/CalendarEvent/calendar-event.service';
 import { Route } from 'src/app/models/Warehousing/Route/route';
 import { InvoiceService } from 'src/app/services/BusinessServices/Invoice/invoice.service';
@@ -73,6 +73,8 @@ export class SchedulerComponent implements OnInit{
   activeDayIsOpen: boolean = false;
 
   refresh: Subject<any> = new Subject();
+
+  public today: Date = new Date();
 
   constructor(
     private routeService: RouteService,
@@ -166,13 +168,18 @@ export class SchedulerComponent implements OnInit{
 
     }).afterClosed().subscribe(result => {
 
-      this.getEvents();
+      if(result != null){
+        this.getEvents();
+      }
 
     })
   }
 
   sameMonth(day): boolean{
     return isSameMonth(day.date,this.viewDate);
+  }
+  isToday(day): boolean{
+    return (formatDate(day.date,'dd/MM/yyyy','hu') == formatDate(this.today,'dd/MM/yyyy','hu'));
   }
 
   changeToDay(){
@@ -193,9 +200,9 @@ export class SchedulerComponent implements OnInit{
 
     }).afterClosed().subscribe(res => {
 
-      if(res.refresh != null){
+      if(res != undefined){
         this.activeDayIsOpen = false;
-      this.getEvents();
+        this.getEvents();
       }
 
     })

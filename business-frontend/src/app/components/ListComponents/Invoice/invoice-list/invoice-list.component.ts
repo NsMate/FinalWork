@@ -28,7 +28,7 @@ export class InvoiceListComponent implements OnInit {
   }
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
-  displayedColumns: string[] = ['id', 'partner', 'creationDate', 'dueDate'];
+  displayedColumns: string[] = ['id', 'partner', 'creationDate', 'dueDate', 'status'];
 
   openDetailedInvoice(id?: number): void{
 
@@ -40,6 +40,16 @@ export class InvoiceListComponent implements OnInit {
 
       this.routing.navigate(["/invoiceForm"],{queryParams: {new: 'yes'}});
 
+    }
+  }
+
+  getInvoiceStatus(invoice: Invoice): string{
+    if(invoice.status == 'CLOSED'){
+      return 'Lezárva';
+    }else if(invoice.status == 'OPEN'){
+      return 'Nyitott';
+    }else{
+      return 'Rendezve';
     }
   }
 

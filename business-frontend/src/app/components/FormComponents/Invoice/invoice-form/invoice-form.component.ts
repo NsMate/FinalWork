@@ -18,6 +18,7 @@ import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { PdfGenerator } from 'src/app/PDFGenerator/pdf-generator';
 import { es } from 'date-fns/locale';
+import { AuthorizationService } from 'src/app/services/authorization-service.service';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 /**
@@ -88,6 +89,7 @@ export class InvoiceFormComponent implements OnInit {
    * @param route used for getting the query string paramters
    * @param routing used for navigating to another page
    * @param _snackBar used to give feedback to the user about his/her actions
+   * @param authService used for checking the role of the user
    */
   constructor(
     private invoiceService: InvoiceService,
@@ -97,7 +99,8 @@ export class InvoiceFormComponent implements OnInit {
     public confDialog: MatDialog,
     private route: ActivatedRoute,
     private routing: Router,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private authService: AuthorizationService
   ) {}
   
   /**
@@ -121,6 +124,10 @@ export class InvoiceFormComponent implements OnInit {
       this.date = new Date(this.detailedInvoice.dueDate).getTime() < new Date(this.detailedInvoice.issueDate).getTime();
 
       this.minDate = new Date(this.detailedInvoice.issueDate);
+
+      if(this.detailedInvoice.status == 'CLOSED'){
+        this.disableForm();
+      }
     });
     
     this.invoiceForm.get('partner').valueChanges.subscribe(
@@ -253,6 +260,73 @@ export class InvoiceFormComponent implements OnInit {
         });
       }
     })
+  }
+
+
+  async closeInvoice(): Promise<void>{
+    this.detailedInvoice.status = "CLOSED";
+    await this.invoiceService.updateInvoice(this.detailedInvoice).then(res => {
+
+      this.detailedInvoice = res;
+
+      this._snackBar.open('Sikeresen lezárta a számlát!','',{
+        duration: 2000,
+        panelClass: ['success'],
+      })
+
+      this.disableForm();
+
+    }).catch(e => {
+
+      this._snackBar.open('Hiba történt! status: ' + e.status,'',{
+        duration: 2000,
+        panelClass: ['error'],
+      })
+    });
+  }
+
+  disableForm(): void{
+    this.partner.disable();
+    this.issueDate.disable();
+    this.dueDate.disable();
+    this.invoiceDescription.disable();
+    this.vat.disable();
+    this.paymentType.disable();
+  }
+
+  async openInvoice(): Promise<void>{
+    this.detailedInvoice.status = "OPEN";
+    await this.invoiceService.updateInvoice(this.detailedInvoice).then(res => {
+
+      this.detailedInvoice = res;
+
+      this._snackBar.open('Sikeresen újranyitotta a számlát!','',{
+        duration: 2000,
+        panelClass: ['success'],
+      })
+
+      this.enableForm();
+
+    }).catch(e => {
+
+      this._snackBar.open('Hiba történt! status: ' + e.status,'',{
+        duration: 2000,
+        panelClass: ['error'],
+      })
+    });
+  }
+
+  enableForm(): void{
+    this.partner.enable();
+    this.detailedInvoice.issueDate = new Date();
+    this.dueDate.enable();
+    this.invoiceDescription.enable();
+    this.vat.enable();
+    this.paymentType.enable();
+  }
+
+  getAuthService(): AuthorizationService{
+    return this.authService;
   }
 
   /**

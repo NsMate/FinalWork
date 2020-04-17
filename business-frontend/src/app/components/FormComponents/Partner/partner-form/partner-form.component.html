@@ -17,7 +17,7 @@
         (click)="deletePartner()" 
         color="warn" 
         class="saveButton"
-        *ngIf="!own"><mat-icon>delete</mat-icon> Partner törlése </button>
+        *ngIf="!own && detailedPartner.id != null"><mat-icon>delete</mat-icon> Partner törlése </button>
 
 <form [formGroup]="partnerForm">
 

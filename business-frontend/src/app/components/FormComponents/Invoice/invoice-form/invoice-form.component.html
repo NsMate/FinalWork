@@ -1,12 +1,17 @@
 <h1> Számla részletei </h1>
 
 <button mat-raised-button color="primary" 
-        (click)="saveInvoice()" class="saveButton" [disabled]="invoiceForm.invalid"><mat-icon>save</mat-icon> Mentés </button>
+        (click)="saveInvoice()" class="saveButton" [disabled]="invoiceForm.invalid || detailedInvoice.status == 'CLOSED'"><mat-icon>save</mat-icon> Mentés </button>
 
 <button mat-raised-button color="accent" 
         (click)="preViewInvoicePdf()" 
         class="saveButton" 
         [disabled]="detailedInvoice.id == null"><mat-icon>visibility</mat-icon> Előnézet </button>
+
+<button mat-raised-button color="primary" 
+        (click)="closeInvoice()" 
+        class="saveButton" 
+        [disabled]="detailedInvoice.id == null || detailedInvoice.status == 'CLOSED'"><mat-icon>gavel</mat-icon> Lezárás </button>
 
 <button mat-raised-button color="accent" 
         (click)="downloadInvoicePdf()" 
@@ -16,7 +21,13 @@
 <button mat-raised-button color="warn" 
         (click)="deleteInvoice()" 
         class="saveButton" 
-        [disabled]="detailedInvoice.id == null"><mat-icon>delete</mat-icon> Törlés </button>
+        [disabled]="detailedInvoice.id == null || detailedInvoice.status == 'CLOSED'"><mat-icon>delete</mat-icon> Törlés </button>
+
+<button mat-raised-button color="primary" 
+        (click)="openInvoice()" 
+        class="saveButton" 
+        [disabled]="detailedInvoice.status == 'OPEN'"
+        *ngIf="getAuthService().appUser.appUserGroup == 'ROLE_ADMIN'"><mat-icon>edit</mat-icon> Megnyitás </button>
 
 <form [formGroup]="invoiceForm">
     <div class="partner">
@@ -28,7 +39,7 @@
                    [matAutocomplete]="auto"
                    [(ngModel)]="detailedInvoice.partner">
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-              <mat-option *ngFor="let partner of filteredPartners | async" [value]="partner" >
+              <mat-option *ngFor="let partner of filteredPartners | async" [value]="partner">
                 {{partner.partnerName}}
               </mat-option>
             </mat-autocomplete>       
@@ -39,7 +50,11 @@
       <div class="issueDate">
         <h3>Kiállítás dátuma</h3>
         <mat-form-field>
-            <input matInput [matDatepicker]="dp1" disabled [(ngModel)]="detailedInvoice.issueDate" name="issueDate" formControlName="issueDate">
+            <input matInput [matDatepicker]="dp1" 
+                  disabled 
+                  [(ngModel)]="detailedInvoice.issueDate" 
+                  name="issueDate"
+                  formControlName="issueDate">
             <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
             <mat-datepicker #dp1></mat-datepicker>
         </mat-form-field>
@@ -47,7 +62,11 @@
       <div class="dueDate">
         <h3> Teljesítés dátuma </h3>
         <mat-form-field>
-            <input matInput [matDatepicker]="dp2" [min]="minDate" [(ngModel)]="detailedInvoice.dueDate" name="dueDate" formControlName="dueDate">
+            <input matInput [matDatepicker]="dp2" 
+                    [min]="minDate" 
+                    [(ngModel)]="detailedInvoice.dueDate" 
+                    name="dueDate" 
+                    formControlName="dueDate">
             <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
             <mat-datepicker #dp2></mat-datepicker>
         </mat-form-field>
@@ -58,13 +77,20 @@
       <div class="invoiceDescription">
         <h3>Megjegyzés</h3>
         <mat-form-field appearance="standard"> 
-          <textarea matInput placeholder="Megjegyzés" [(ngModel)]="detailedInvoice.invoiceDescription" name="invoiceDescription" formControlName="invoiceDescription"></textarea>
+          <textarea matInput placeholder="Megjegyzés" 
+                    [(ngModel)]="detailedInvoice.invoiceDescription" 
+                    name="invoiceDescription" 
+                    formControlName="invoiceDescription"></textarea>
         </mat-form-field>
       </div>
       <div class="vat">
         <h3>Adó</h3>
         <mat-form-field appearance="standard">
-            <input matInput placeholder="eg. 12" name="vat" formControlName="vat" [(ngModel)]="detailedInvoice.vat">
+            <input matInput placeholder="eg. 12"                    
+                    name="vat" 
+                    formControlName="vat" 
+                    [(ngModel)]="detailedInvoice.vat"
+                    [disabled]="detailedInvoice.status == 'CLOSED'" >
             <mat-error *ngIf="vat.errors?.required && (vat.dirty || vat.touched)"> Adja meg az adó mértékét! </mat-error>
             <mat-error *ngIf="vat.errors?.pattern && (vat.dirty || vat.touched)"> Nem kezdődhet 0-val! </mat-error>
             <mat-error *ngIf="vat.errors?.maxlength && (vat.dirty || vat.touched)"> Maximum 2 hosszú lehet! </mat-error>
@@ -110,6 +136,7 @@
         *ngIf="detailedInvoice.id != null" 
         class="newButton" 
         (click)="openItemDialog()" 
+        [disabled]="detailedInvoice.status == 'CLOSED'"
         color="primary"><mat-icon>add</mat-icon> Új tétel felvétele</button>
 
 <button mat-raised-button 

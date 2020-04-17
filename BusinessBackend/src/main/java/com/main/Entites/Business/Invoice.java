@@ -39,6 +39,10 @@ public class Invoice implements Serializable {
     @NotNull
     private String vat;
 
+    @Column(name = "status")
+    @NotNull
+    private String status;
+
     @Column(name = "payment_type")
     @NotNull
     private String paymentType;

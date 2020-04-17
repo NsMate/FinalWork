@@ -248,7 +248,7 @@ public class WarehouseController {
         Optional<Warehouse> oldWarehouse = warehouseRepository.findById(id);
         if (oldWarehouse.isPresent()) {
             Warehouse warehouse = oldWarehouse.get();
-            
+
             for (Employee employee : employees) {
                 if (employee.getId() == null) {
                     employee.setWarehouse(warehouse);

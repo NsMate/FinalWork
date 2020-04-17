@@ -10,4 +10,5 @@ export class Invoice {
     partner: Partner = null;
     vat: number = 27;
     paymentType: string = "";
+    status: string = "OPEN";
 }

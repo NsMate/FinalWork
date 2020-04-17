@@ -53,7 +53,7 @@
 </div>
   
 <div mat-dialog-action style="display: flex; justify-content: space-evenly;">
-    <button mat-raised-button (click)="saveProduct()" [disabled]="productForm.invalid" color="primary">Mentés</button>
+    <button mat-raised-button (click)="saveProduct()" [disabled]="productForm.invalid" color="primary"><mat-icon>save</mat-icon>Mentés</button>
   
-    <button mat-raised-button *ngIf="!data.isNew" (click)="openConfDialog()" color="primary" >Törlés</button>
+    <button mat-raised-button *ngIf="!data.isNew" (click)="openConfDialog()" color="warn"><mat-icon>delete</mat-icon>Törlés</button>
 </div>

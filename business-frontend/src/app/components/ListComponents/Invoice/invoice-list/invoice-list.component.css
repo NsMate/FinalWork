@@ -10,14 +10,13 @@ th{
 }
 
 th,td{
-    width: 30%;
+    width: 25%;
 }
 
 h1{
     margin-left: 40px;
     margin-bottom: 18px;
     text-align: center;
-    text-shadow: 7px 7px 15px #292525;
 }
 
 th.mat-sort-header-sorted {

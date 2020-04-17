@@ -25,6 +25,11 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Határidő </th>
       <td mat-cell *matCellDef="let invoice"> <a (click)="openDetailedInvoice(invoice.id)"> {{invoice.dueDate}} </a> </td>
     </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Státusz </th>
+      <td mat-cell *matCellDef="let invoice"> <a (click)="openDetailedInvoice(invoice.id)"> {{ getInvoiceStatus(invoice) }} </a> </td>
+    </ng-container>
   
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

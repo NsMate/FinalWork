@@ -57,10 +57,14 @@
               >{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span
             >
           </div>
-        <button style="width: 100%;" mat-button (click)="openDialog(day)" style="color:white;">
-            <mat-icon *ngIf="day == inDay && sameMonth(day) ">add</mat-icon>.
-        </button>
     </div>
+    <button *ngIf="sameMonth(day) && (day.date > today || isToday(day))" 
+            style="width: 100%;" 
+            mat-button (click)="openDialog(day)" 
+            style="color:white;"
+            (mouseenter)="inDay = day" (mouseleave)="inDay = null">
+      <mat-icon *ngIf="day == inDay" style="color: black;"> add</mat-icon>.
+    </button>
 </ng-template>
 
 <div *ngIf="events$ | async; else loading; let events">
