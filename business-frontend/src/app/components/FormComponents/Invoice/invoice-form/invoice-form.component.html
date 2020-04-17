@@ -1,3 +1,5 @@
+<mat-icon class="backGround">monetization_on</mat-icon>
+
 <h1> Számla részletei </h1>
 
 <button mat-raised-button color="primary" 
@@ -18,16 +20,22 @@
         class="saveButton" 
         [disabled]="detailedInvoice.id == null"><mat-icon>get_app</mat-icon> Letöltés </button>
 
-<button mat-raised-button color="warn" 
-        (click)="deleteInvoice()" 
-        class="saveButton" 
-        [disabled]="detailedInvoice.id == null || detailedInvoice.status == 'CLOSED'"><mat-icon>delete</mat-icon> Törlés </button>
-
 <button mat-raised-button color="primary" 
         (click)="openInvoice()" 
         class="saveButton" 
         [disabled]="detailedInvoice.status == 'OPEN'"
         *ngIf="getAuthService().appUser.appUserGroup == 'ROLE_ADMIN'"><mat-icon>edit</mat-icon> Megnyitás </button>
+
+<button mat-raised-button color="primary" 
+        (click)="openInvoice()" 
+        class="saveButton"
+        [disabled]="detailedInvoice.status == 'OPEN'"
+        *ngIf="getAuthService().appUser.appUserGroup == 'ROLE_ADMIN'"><mat-icon>done</mat-icon> Teljesített </button>
+
+<button mat-raised-button color="warn" 
+        (click)="deleteInvoice()" 
+        class="saveButton" 
+        [disabled]="detailedInvoice.id == null || detailedInvoice.status == 'CLOSED'"><mat-icon>delete</mat-icon> Törlés </button>
 
 <form [formGroup]="invoiceForm">
     <div class="partner">

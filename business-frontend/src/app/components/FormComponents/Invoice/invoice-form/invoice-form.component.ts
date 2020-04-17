@@ -10,7 +10,7 @@ import { PartnerService } from 'src/app/services/BusinessServices/Partner/partne
 import { Observable, from } from 'rxjs';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { InvoiceItemService } from 'src/app/services/BusinessServices/InvoiceItem/invoice-item.service';
-import { ConfdialogComponent } from 'src/app/components/ConfirmationDialog/confdialog/confdialog.component';
+import { ConfdialogComponent, ConfirmationDialogText } from 'src/app/components/ConfirmationDialog/confdialog/confdialog.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -235,9 +235,13 @@ export class InvoiceFormComponent implements OnInit {
    * The user is informed of the succes or error by a snackbar .
    */
   deleteInvoice(){
+    let dialogData: ConfirmationDialogText = {top: 'Biztosan törölné a számlát?', bottom: ''};
 
     const dialogRef = this.confDialog.open(ConfdialogComponent, {
+
       width: '300px',
+      data: dialogData,
+
     }).afterClosed().subscribe(async result => {
 
       if(result){
@@ -492,9 +496,13 @@ export class InvoiceItemDialog{
    *    the actions success or failure by a snackbar.
    */
   openConfDialog(){
+    let dialogData: ConfirmationDialogText = {top: 'Biztosan törli a tételt?', bottom: ''};
 
     const dialogRef = this.confDialog.open(ConfdialogComponent,{
+
       width: '300px',
+      data: dialogData,
+
     }).afterClosed().subscribe(result => {
 
       if(result){

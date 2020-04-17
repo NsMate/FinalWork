@@ -1,5 +1,8 @@
 package com.main.Entites.Business;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.main.Entites.User.AppUser;
+import com.main.Entites.Warehouse.Route;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -53,4 +56,8 @@ public class Invoice implements Serializable {
     @ManyToOne
     @JoinColumn(name = "partner_id",referencedColumnName = "id")
     private Partner partner;
+
+    @OneToOne(mappedBy = "invoice", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private Route route;
 }

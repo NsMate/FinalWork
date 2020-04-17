@@ -1,6 +1,8 @@
 package com.main.Entites.Warehouse;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.main.Entites.Business.BusinessOrder;
+import com.main.Entites.Business.Invoice;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -43,7 +45,11 @@ public class Route implements Serializable{
     @JoinColumn(name = "vehicle_id", referencedColumnName = "id")
     private Vehicle vehicle;
 
-    @OneToOne(mappedBy = "route")
-    @JsonIgnore
-    private CalendarEvent calendarEvent;
+    @OneToOne
+    @JoinColumn(name = "invoice_id", referencedColumnName = "id")
+    private Invoice invoice;
+
+    @OneToOne
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    private BusinessOrder businessOrder;
 }

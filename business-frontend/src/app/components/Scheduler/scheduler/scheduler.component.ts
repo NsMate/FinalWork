@@ -11,7 +11,6 @@ import {
   Inject
 } from '@angular/core';
 
-import { RouteEvent } from '../../../models/Warehousing/RouteEvent/route-event'
 
 import { CalendarEvent, CalendarEventTitleFormatter, CalendarView } from 'angular-calendar';
 import { WeekViewHourSegment } from 'calendar-utils';
@@ -30,7 +29,6 @@ import {
 } from 'date-fns';
 import localeHu from '@angular/common/locales/hu'
 import { registerLocaleData, formatDate } from '@angular/common';
-import { CalendarEventService } from 'src/app/services/Warehousing/CalendarEvent/calendar-event.service';
 import { Route } from 'src/app/models/Warehousing/Route/route';
 import { InvoiceService } from 'src/app/services/BusinessServices/Invoice/invoice.service';
 import { Invoice } from 'src/app/models/BusinessModels/Invoice/invoice';
@@ -42,7 +40,7 @@ import { Vehicle } from 'src/app/models/Warehousing/Vehicle/vehicle';
 import { RouteService } from 'src/app/services/Warehousing/Route/route.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { VehicleService } from 'src/app/services/Warehousing/Vehicle/vehicle.service';
-import { ConfdialogComponent } from '../../ConfirmationDialog/confdialog/confdialog.component';
+import { ConfdialogComponent, ConfirmationDialogText } from '../../ConfirmationDialog/confdialog/confdialog.component';
 
 interface EventData{
   date;
@@ -109,7 +107,7 @@ export class SchedulerComponent implements OnInit{
         return results.map((route: Route) => {
           if(route.routeType == 'Bejövő'){
             return {
-              title: route.routeType + ' út, Fogadó: ' + route.warehouse.city + " " + route.warehouse.street,
+              title: route.routeType + ' út, Fogadó: ' + route.warehouse.city + " " + route.warehouse.street + ' raktár',
               start: new Date(route.deliveryDate),
               allDay: true,
               color: {
@@ -122,7 +120,7 @@ export class SchedulerComponent implements OnInit{
             };
           }else{
             return {
-              title: route.routeType + ' út, Cél: ' + route.destination,
+              title: route.routeType + ' út. ' + 'Innen: ' + route.warehouse.city + " " + route.warehouse.street + ', Cél: ' + route.destination ,
               start: new Date(route.deliveryDate),
               allDay: true,
               color: {
@@ -163,7 +161,7 @@ export class SchedulerComponent implements OnInit{
     
     const dialogRef = this.eventDialog.open(EventDialog, {
 
-      width: '500px',
+      width: '600px',
       data: {date: day, route: null}
 
     }).afterClosed().subscribe(result => {
@@ -195,7 +193,7 @@ export class SchedulerComponent implements OnInit{
   eventClicked({ event }: { event: CalendarEvent }): void {
 
     const dialogRef = this.eventDialog.open(EventDialog, {
-      width: '500px',
+      width: '600px',
       data: {date: null, route: event.meta.route}
 
     }).afterClosed().subscribe(res => {
@@ -306,8 +304,14 @@ export class EventDialog implements OnInit{
 
   deleteRoute(): void{
 
+    let dialogData: ConfirmationDialogText = {top: 'Biztosan törli az utat?', 
+                                              bottom: ''};
+
     const dialogRef = this.confDialog.open(ConfdialogComponent, {
+
       width: '300px',
+      data: dialogData,
+
     })
 
     dialogRef.afterClosed().subscribe(async res => {

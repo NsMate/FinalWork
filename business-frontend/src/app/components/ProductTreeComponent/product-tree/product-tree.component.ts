@@ -7,7 +7,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dial
 import { Product } from 'src/app/models/BusinessModels/Product/product';
 import { FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { ProudctService } from 'src/app/services/BusinessServices/Product/proudct.service';
-import { ConfdialogComponent } from '../../ConfirmationDialog/confdialog/confdialog.component';
+import { ConfdialogComponent, ConfirmationDialogText } from '../../ConfirmationDialog/confdialog/confdialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 /*
@@ -288,10 +288,12 @@ export class ProductGroupDialog{
    */
 
   openConfDialog(){
+    let dialogData: ConfirmationDialogText = {top: 'Biztosan törölni szeretné?',
+                                               bottom: 'Ezzel a csoportban lévő termékek is törlődnek!'};
 
     const dialogRef = this.confDialog.open(ConfdialogComponent,{
       width: '300px',
-      data: 'Ezzel a csoportban lévő termékek is törlődnek!'
+      data: dialogData,
     });
 
     dialogRef.afterClosed().subscribe(async result => {
@@ -418,9 +420,12 @@ export class ProductDialog implements OnInit{
 
   openConfDialog(): void{
 
+    let dialogData: ConfirmationDialogText = {top: 'Biztosan törölni szeretné?',
+                                               bottom: "Ezzel a raktárakból is törlődnek az áruk!"};
+
     const dialogRef = this.confDialog.open(ConfdialogComponent,{
       width: '300px',
-      data: "Ezzel a raktárakból is törlődnek az áruk!"
+      data: dialogData,
     });
 
     dialogRef.afterClosed().subscribe(async result => {

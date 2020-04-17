@@ -8,7 +8,7 @@ import { Warehouse } from 'src/app/models/Warehousing/Warehouse/warehouse';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { Product } from 'src/app/models/BusinessModels/Product/product';
 import { ProudctService } from 'src/app/services/BusinessServices/Product/proudct.service';
-import { ConfdialogComponent } from 'src/app/components/ConfirmationDialog/confdialog/confdialog.component';
+import { ConfdialogComponent, ConfirmationDialogText } from 'src/app/components/ConfirmationDialog/confdialog/confdialog.component';
 import { StockService } from 'src/app/services/Warehousing/Stock/stock.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Employee } from 'src/app/models/Employee/employee';
@@ -195,9 +195,14 @@ export class WarehouseFormComponent implements OnInit {
   }
 
   async deleteWarehouse(): Promise<void>{
+    let dialogData: ConfirmationDialogText = {top: 'Biztosan törli a raktárat?', 
+                                              bottom: 'Figyelem! Ezzel törlődnek a készletek és az ehhez a raktárhoz tartozó utak is!'};
+
     const dialogRef = this.confDialog.open(ConfdialogComponent, {
+
       width: '300px',
-      data: 'Ezzel törlődnek a készletek és az ehhez a raktárhoz tartozó utak is!'
+      data: dialogData,
+
     }).afterClosed().subscribe(result => {
 
       if(result){
@@ -317,8 +322,14 @@ export class WarehouseFormStockDialog implements OnInit{
 
   openConfDialog(){
 
+    let dialogData: ConfirmationDialogText = {top: 'Biztosan törli a készletet?', 
+                                              bottom: ''};
+
     const dialogRef = this.confDialog.open(ConfdialogComponent,{
-      width: '300px'
+
+      width: '300px',
+      data: dialogData,
+
     });
 
     dialogRef.afterClosed().subscribe(async result => {

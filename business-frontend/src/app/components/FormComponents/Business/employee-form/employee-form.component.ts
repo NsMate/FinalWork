@@ -4,7 +4,7 @@ import { Employee } from 'src/app/models/Employee/employee';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ConfdialogComponent } from 'src/app/components/ConfirmationDialog/confdialog/confdialog.component';
+import { ConfdialogComponent, ConfirmationDialogText } from 'src/app/components/ConfirmationDialog/confdialog/confdialog.component';
 import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 
 @Component({
@@ -130,9 +130,12 @@ export class EmployeeFormComponent implements OnInit {
    * The user is informed of the succes or error by a snackbar .
    */
   deleteEmployee(): void{
+    let dialogData: ConfirmationDialogText = {top: 'Biztosan törölni szeretné?', bottom: ''};
+
     const dialogRef = this.confDialog.open(ConfdialogComponent, {
       
       width: '300px',
+      data: dialogData,
 
     }).afterClosed().subscribe(async res => {
 

@@ -40,7 +40,7 @@ h1{
 .prices{
     position: absolute;
     left: 60%;
-    top: 25%;
+    top: 40%;
     padding: 15px;
     box-shadow: 0 0 3pt 2pt rgb(0, 0, 0);
 }

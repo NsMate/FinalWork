@@ -5,7 +5,7 @@ import { Partner } from 'src/app/models/BusinessModels/Partner/partner';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfdialogComponent } from 'src/app/components/ConfirmationDialog/confdialog/confdialog.component';
+import { ConfdialogComponent, ConfirmationDialogText } from 'src/app/components/ConfirmationDialog/confdialog/confdialog.component';
 
 @Component({
   selector: 'app-partner-form',
@@ -106,9 +106,14 @@ export class PartnerFormComponent implements OnInit {
 
   async deletePartner(): Promise<void>{
 
+    let dialogData: ConfirmationDialogText = {top: 'Biztosan törli a partnert?', 
+                                              bottom: 'Figyelem! A partnerhez tartozó összes számla és rendelés is törlődik!'};
+
     const dialogRef = this.confDialog.open(ConfdialogComponent, {
+
       width: '250px',
-      data: 'Figyelem! A partnerhez tartozó összes számla is törlődik!'
+      data: dialogData,
+
     }).afterClosed().subscribe(res => {
 
       if(res){

@@ -1,9 +1,9 @@
 <div mat-dialog-content>
-    Biztosan törölni szeretné?
+    <div style="text-align: center; margin-bottom: 10px;"> {{ data.top }} </div>
     <br>
-    <div style="font-weight: bold;"> {{ data }} </div>
+    <div style="font-weight: bold;text-align: center;"> {{ data.bottom }} </div>
 </div>
 <div mat-dialog-actions style="display: flex; justify-content: space-evenly;">
-    <button mat-button (click)="onNoClick()">No</button>
-    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Yes</button>
+    <button mat-button (click)="onNoClick()"> Nem </button>
+    <button mat-button [mat-dialog-close]="true" color="warn" cdkFocusInitial> Igen </button>
 </div>

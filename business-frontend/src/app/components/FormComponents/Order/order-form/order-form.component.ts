@@ -12,7 +12,7 @@ import { AuthorizationService } from 'src/app/services/authorization-service.ser
 import { MatTableDataSource } from '@angular/material/table';
 import { OrderService } from 'src/app/services/BusinessServices/Order/order.service';
 import { MatSort } from '@angular/material/sort';
-import { ConfdialogComponent } from 'src/app/components/ConfirmationDialog/confdialog/confdialog.component';
+import { ConfdialogComponent, ConfirmationDialogText } from 'src/app/components/ConfirmationDialog/confdialog/confdialog.component';
 import { OrderItem } from 'src/app/models/BusinessModels/OrderItem/order-item';
 import { PdfGenerator } from 'src/app/PDFGenerator/pdf-generator';
 import { OrderItemService } from 'src/app/services/BusinessServices/OrderItem/order-item.service';
@@ -228,9 +228,12 @@ export class OrderFormComponent implements OnInit {
    */
   deleteOrder(){
 
+    let dialogData: ConfirmationDialogText = {top: 'Biztosan törli a rendelést?', bottom: ''};
+
     const dialogRef = this.confDialog.open(ConfdialogComponent, {
 
       width: '300px',
+      data: dialogData,
 
     }).afterClosed().subscribe(async result => {
 
@@ -496,8 +499,13 @@ export class OrderItemDialog{
    */
   openConfDialog(){
 
+    let dialogData: ConfirmationDialogText = {top: 'Biztosan törli a tételt?', bottom: ''};
+
     const dialogRef = this.confDialog.open(ConfdialogComponent,{
+
       width: '300px',
+      data: dialogData,
+
     }).afterClosed().subscribe(result => {
 
       if(result){
