@@ -326,7 +326,6 @@ export class OrderFormComponent implements OnInit {
   }
 
   async orderIsPayed(): Promise<void>{
-    this.detailedOrder.status = "DONE";
 
     let dialogData: ConfirmationDialogText = {top: 'Biztosan teljesítettre állítja?', 
                                               bottom: 'Ezután már nem tud rajta módosítani, csak törölni lehetséges!'}
@@ -338,6 +337,8 @@ export class OrderFormComponent implements OnInit {
     }).afterClosed().subscribe(async result => {
 
       if(result){
+
+        this.detailedOrder.status = "DONE";
         
         await this.orderService.updateBusinessOrder(this.detailedOrder).then(res => {
 

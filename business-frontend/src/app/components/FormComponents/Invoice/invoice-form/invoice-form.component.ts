@@ -332,7 +332,6 @@ export class InvoiceFormComponent implements OnInit {
   }
 
   async invoiceIsPayed(): Promise<void>{
-    this.detailedInvoice.status = "DONE";
 
     let dialogData: ConfirmationDialogText = {top: 'Biztosan teljesítettre állítja?', 
                                               bottom: 'Ezután már nem tud rajta módosítani, csak törölni lehetséges!'}
@@ -344,6 +343,7 @@ export class InvoiceFormComponent implements OnInit {
     }).afterClosed().subscribe(async result => {
 
       if(result){
+        this.detailedInvoice.status = "DONE";
 
         await this.invoiceService.updateInvoice(this.detailedInvoice).then(res => {
 
