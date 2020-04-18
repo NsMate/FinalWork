@@ -125,7 +125,7 @@ export class InvoiceFormComponent implements OnInit {
 
       this.minDate = new Date(this.detailedInvoice.issueDate);
 
-      if(this.detailedInvoice.status == 'CLOSED'){
+      if(this.detailedInvoice.status == 'CLOSED' || this.detailedInvoice.status == 'DONE'){
         this.disableForm();
       }
     });
@@ -318,15 +318,56 @@ export class InvoiceFormComponent implements OnInit {
         panelClass: ['error'],
       })
     });
+
   }
 
   enableForm(): void{
     this.partner.enable();
     this.detailedInvoice.issueDate = new Date();
     this.dueDate.enable();
+    this.detailedInvoice.dueDate = new Date();
     this.invoiceDescription.enable();
     this.vat.enable();
     this.paymentType.enable();
+  }
+
+  async invoiceIsPayed(): Promise<void>{
+    this.detailedInvoice.status = "DONE";
+
+    let dialogData: ConfirmationDialogText = {top: 'Biztosan teljesítettre állítja?', 
+                                              bottom: 'Ezután már nem tud rajta módosítani, csak törölni lehetséges!'}
+    const dialogRef = this.confDialog.open(ConfdialogComponent, {
+
+      width: '300px',
+      data: dialogData,
+
+    }).afterClosed().subscribe(async result => {
+
+      if(result){
+
+        await this.invoiceService.updateInvoice(this.detailedInvoice).then(res => {
+
+          this.detailedInvoice = res;
+    
+          this._snackBar.open('A számla teljesítve!','',{
+            duration: 2000,
+            panelClass: ['success'],
+          })
+    
+          this.disableForm();
+    
+        }).catch(e => {
+    
+          this._snackBar.open('Hiba történt! status: ' + e.status,'',{
+            duration: 2000,
+            panelClass: ['error'],
+          })
+        });
+
+      }
+
+    })
+
   }
 
   getAuthService(): AuthorizationService{

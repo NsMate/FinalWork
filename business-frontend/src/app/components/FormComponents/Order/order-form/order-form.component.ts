@@ -117,7 +117,7 @@ export class OrderFormComponent implements OnInit {
 
       this.minDate = new Date(this.detailedOrder.issueDate);
 
-      if(this.detailedOrder.status == 'CLOSED'){
+      if(this.detailedOrder.status == 'CLOSED' || this.detailedOrder.status == 'DONE'){
         this.disableForm();
       }
     });
@@ -323,6 +323,43 @@ export class OrderFormComponent implements OnInit {
     this.orderDescription.enable();
     this.vat.enable();
     this.paymentType.enable();
+  }
+
+  async orderIsPayed(): Promise<void>{
+    this.detailedOrder.status = "DONE";
+
+    let dialogData: ConfirmationDialogText = {top: 'Biztosan teljesítettre állítja?', 
+                                              bottom: 'Ezután már nem tud rajta módosítani, csak törölni lehetséges!'}
+    const dialogRef = this.confDialog.open(ConfdialogComponent, {
+
+      width: '300px',
+      data: dialogData,
+
+    }).afterClosed().subscribe(async result => {
+
+      if(result){
+        
+        await this.orderService.updateBusinessOrder(this.detailedOrder).then(res => {
+
+          this.detailedOrder = res;
+      
+          this._snackBar.open('A rendelés teljesítve!','',{
+            duration: 2000,
+            panelClass: ['success'],
+          })
+      
+          this.disableForm();
+      
+        }).catch(e => {
+      
+          this._snackBar.open('Hiba történt! status: ' + e.status,'',{
+            duration: 2000,
+            panelClass: ['error'],
+          })
+        });
+      }
+  })
+
   }
 
   getAuthService(): AuthorizationService{

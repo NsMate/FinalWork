@@ -8,8 +8,9 @@ export class Route {
     routeType: string = "";
     warehouse: Warehouse = null;
     destination: string = '';
+    status: string = "TERVBEN";
     deliveryDate: Date = new Date();
     vehicle: Vehicle = new Vehicle();
     invoice: Invoice = null;
-    order: BusinessOrder = null;
+    businessOrder: BusinessOrder = null;
 }

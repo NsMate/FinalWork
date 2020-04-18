@@ -51,4 +51,8 @@ export class OrderService {
   modifyOrderOnBusinessOrder(id: number,orderItems: OrderItem[]): Promise<BusinessOrder> {
     return this.http.put<BusinessOrder>(`${this.orderUrl}/${id}/order_items`, orderItems, httpOptions).toPromise();
   }
+
+  getClosedOrders(): Promise<BusinessOrder[]> {
+    return this.http.get<BusinessOrder[]>(`${this.orderUrl}/closedOrders`, httpOptions).toPromise();
+  }
 }

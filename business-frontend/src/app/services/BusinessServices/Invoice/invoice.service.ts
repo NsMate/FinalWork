@@ -56,4 +56,8 @@ export class InvoiceService {
   modifyItemOnInvoice(id: number,invoiceItems: InvoiceItem[]): Promise<Invoice> {
     return this.http.put<Invoice>(`${this.invoiceUrl}/${id}/invoice_items`, invoiceItems, httpOptions).toPromise();
   }
+
+  getClosedInvoices(): Promise<Invoice[]> {
+    return this.http.get<Invoice[]>(`${this.invoiceUrl}/closedInvoices`, httpOptions).toPromise();
+  }
 }
