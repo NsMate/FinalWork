@@ -1,12 +1,13 @@
 <div mat-dialog-title>
-    <h1 style="text-align: center;"> Adja meg az út részleteit! </h1>
+    <h1 *ngIf="detailedRoute.status != 'TELJESÍTVE'" style="text-align: center;"> Adja meg az út részleteit! </h1>
+    <h1 *ngIf="detailedRoute.status == 'TELJESÍTVE'" style="text-align: center;"> Teljesített út </h1>
 </div>
   
 <div mat-dialog-content>
     <form [formGroup]="routeForm" style="text-align: center;">
         <div>
             <h2>Szállítmány típusa</h2>
-            <mat-form-field appearance="standard">
+            <mat-form-field appearance="standard" style="width: 200px;">
               <mat-select [(ngModel)]="detailedRoute.routeType" formControlName="routeType">
                 <mat-option value="Bejövő"> Bejövő </mat-option>
                 <mat-option value="Kimenő"> Kimenő </mat-option>
@@ -24,7 +25,7 @@
         <div *ngIf="this.detailedRoute.routeType != ''">
             <h2 *ngIf="this.detailedRoute.routeType == 'Kimenő'">Kiinduló raktár</h2>
             <h2 *ngIf="this.detailedRoute.routeType == 'Bejövő'">Fogadó raktár</h2>
-            <mat-form-field appearance="standard">
+            <mat-form-field appearance="standard" style="width: 300px;">
               <mat-select [(ngModel)]="detailedRoute.warehouse" formControlName="warehouse" [compareWith]="warehouseComparisonFunction">
                 <mat-option *ngFor="let warehouse of selectableWarehouse" [value]="warehouse">
                     {{ warehouse.city }} {{ warehouse.street }} {{ warehouse.streetNumber }}
@@ -34,13 +35,13 @@
         </div>
         <div class="destination" *ngIf="this.detailedRoute.routeType == 'Kimenő'">
           <h2>Úticél</h2>
-          <mat-form-field appearance="standard">
+          <mat-form-field appearance="standard" style="width: 200px;">
               <input matInput name="destination" formControlName="destination" [(ngModel)]="detailedRoute.destination">
           </mat-form-field>
         </div>
         <div *ngIf="this.detailedRoute.routeType == 'Bejövő' || this.detailedRoute.routeType == 'Kimenő'" >
             <h2>Gépjármű</h2>
-            <mat-form-field appearance="standard">
+            <mat-form-field appearance="standard" style="width: 200px;">
               <mat-select [(ngModel)]="detailedRoute.vehicle" formControlName="vehicle" [compareWith]="vehicleComparisonFunction">
                 <mat-option *ngFor="let vehicle of selectableVehicle" [value]="vehicle">
                     {{ vehicle.manufacturer }} {{ vehicle.licensePlateNumber }}
@@ -48,11 +49,57 @@
               </mat-select>
             </mat-form-field>
         </div>
+        <div *ngIf="this.detailedRoute.routeType == 'Bejövő'" >
+          <h2>Rendelés csatolása</h2>
+          <mat-form-field appearance="standard" style="width: 250px;">
+            <mat-select [(ngModel)]="detailedRoute.businessOrder" formControlName="order" [compareWith]="orderComparisonFunction">
+              <mat-select-trigger *ngIf="detailedRoute.businessOrder == null"></mat-select-trigger>
+              <mat-select-trigger *ngIf="detailedRoute.businessOrder != null">
+                <mat-icon (click)="openDocument(detailedRoute.businessOrder)" matPrefix>find_in_page</mat-icon>
+                No. {{ detailedRoute.businessOrder.id }}, {{ detailedRoute.businessOrder.partner.partnerName }}
+              </mat-select-trigger>
+              <mat-option ></mat-option>
+              <mat-option *ngFor="let order of selectableOrders" [value]="order">
+                <mat-icon (click)="openDocument(order)" matPrefix>find_in_page</mat-icon>
+                  No. {{ order.id }}, {{ order.partner.partnerName }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+      </div>
+      <div *ngIf="this.detailedRoute.routeType == 'Kimenő'" >
+        <h2>Számla csatolása</h2>
+        <mat-form-field appearance="standard" style="width: 250px;">
+          <mat-select [(ngModel)]="detailedRoute.invoice" formControlName="invoice" [compareWith]="invoiceComparisonFunction">
+            <mat-select-trigger *ngIf="detailedRoute.invoice == null"></mat-select-trigger>
+            <mat-select-trigger *ngIf="detailedRoute.invoice != null">
+              <mat-icon (click)="openDocument(detailedRoute.invoice)" matPrefix>find_in_page</mat-icon>
+              No. {{ detailedRoute.invoice.id }}, {{ detailedRoute.invoice.partner.partnerName }}
+            </mat-select-trigger>
+            <mat-option ></mat-option>
+            <mat-option *ngFor="let invoice of selectableInvoices" [value]="invoice">
+                <mat-icon (click)="openDocument(detailedRoute.invoice)" matPrefix>find_in_page</mat-icon>
+                No. {{ invoice.id }}, {{ invoice.partner.partnerName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+    </div>
     </form>
 </div>
   
 <div mat-dialog-action style="display: flex; justify-content: space-evenly;">
-    <button mat-raised-button  [disabled]="routeForm.invalid" color="primary" (click)="saveRoute()"><mat-icon>save</mat-icon> Mentés</button>
+    <button mat-raised-button  
+            [disabled]="routeForm.invalid || this.detailedRoute.status == 'TELJESÍTVE'" 
+            color="primary" 
+            (click)="saveRoute()"><mat-icon>save</mat-icon> Mentés</button>
+
+    <button mat-raised-button  
+            *ngIf="detailedRoute.id != null" 
+            color="accent" 
+            [disabled]="this.detailedRoute.status == 'TELJESÍTVE'"
+            (click)="routeIsCompleted()"><mat-icon>done</mat-icon> Teljesítve</button>
   
-    <button mat-raised-button [disabled]="detailedRoute.id == null" (click)="deleteRoute()" color="warn" ><mat-icon>delete</mat-icon> Törlés</button>
+    <button mat-raised-button 
+            [disabled]="detailedRoute.id == null" 
+            (click)="deleteRoute()" 
+            color="warn" ><mat-icon>delete</mat-icon> Törlés</button>
 </div>

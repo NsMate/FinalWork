@@ -1,21 +1,17 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
-  Injectable,
   ViewEncapsulation,
   OnInit,
-  Input,
   Output,
   EventEmitter,
   Inject
 } from '@angular/core';
 
 
-import { CalendarEvent, CalendarEventTitleFormatter, CalendarView } from 'angular-calendar';
-import { WeekViewHourSegment } from 'calendar-utils';
-import { fromEvent, Observable, Subject } from 'rxjs';
-import { finalize, takeUntil, map, startWith } from 'rxjs/operators';
+import { CalendarEvent, CalendarView } from 'angular-calendar';
+import {  Observable, Subject } from 'rxjs';
+import {  map } from 'rxjs/operators';
 import {
   isSameMonth,
   isSameDay,
@@ -30,7 +26,6 @@ import {
 import localeHu from '@angular/common/locales/hu'
 import { registerLocaleData, formatDate } from '@angular/common';
 import { Route } from 'src/app/models/Warehousing/Route/route';
-import { InvoiceService } from 'src/app/services/BusinessServices/Invoice/invoice.service';
 import { Invoice } from 'src/app/models/BusinessModels/Invoice/invoice';
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
@@ -41,6 +36,10 @@ import { RouteService } from 'src/app/services/Warehousing/Route/route.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { VehicleService } from 'src/app/services/Warehousing/Vehicle/vehicle.service';
 import { ConfdialogComponent, ConfirmationDialogText } from '../../ConfirmationDialog/confdialog/confdialog.component';
+import { OrderService } from 'src/app/services/BusinessServices/Order/order.service';
+import { InvoiceService } from 'src/app/services/BusinessServices/Invoice/invoice.service';
+import { BusinessOrder } from 'src/app/models/BusinessModels/BusinessOrder/business-order';
+import { Router } from '@angular/router';
 
 interface EventData{
   date;
@@ -58,7 +57,7 @@ export class SchedulerComponent implements OnInit{
 
   locale:string = 'hu';
 
-  inDay;
+  public inDay;
 
   tmp: Observable<Invoice[]> = null;
 
@@ -107,7 +106,7 @@ export class SchedulerComponent implements OnInit{
         return results.map((route: Route) => {
           if(route.routeType == 'Bejövő'){
             return {
-              title: route.routeType + ' út, Fogadó: ' + route.warehouse.city + " " + route.warehouse.street + ' raktár',
+              title: route.routeType + ' út, Fogadó: ' + route.warehouse.city + " " + route.warehouse.street + ' raktár, Státusz: ' + route.status,
               start: new Date(route.deliveryDate),
               allDay: true,
               color: {
@@ -120,7 +119,8 @@ export class SchedulerComponent implements OnInit{
             };
           }else{
             return {
-              title: route.routeType + ' út. ' + 'Innen: ' + route.warehouse.city + " " + route.warehouse.street + ', Cél: ' + route.destination ,
+              title: route.routeType + ' út. ' + 'Innen: ' 
+                      + route.warehouse.city + " " + route.warehouse.street + ', Cél: ' + route.destination + " Státusz: " + route.status ,
               start: new Date(route.deliveryDate),
               allDay: true,
               color: {
@@ -219,6 +219,9 @@ export class EventDialog implements OnInit{
 
   public selectableWarehouse: Warehouse[] = [];
 
+  public selectableInvoices: Invoice[] = [];
+  public selectableOrders: BusinessOrder[] = [];
+
   public selectableVehicle: Vehicle[] = [];
 
   constructor(
@@ -226,10 +229,15 @@ export class EventDialog implements OnInit{
     private formBuilder: FormBuilder,
     public confDialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: EventData,
+
     private warehouseService: WarehouseService,
     private vehicleService: VehicleService,
     private routeService: RouteService,
-    private _snackBar: MatSnackBar
+    private orderService: OrderService,
+    private invoiceService: InvoiceService,
+
+    private _snackBar: MatSnackBar,
+    private routing: Router
   ){}
 
   async ngOnInit(): Promise<void> {
@@ -243,7 +251,39 @@ export class EventDialog implements OnInit{
     this.selectableWarehouse = await this.warehouseService.getWarehouses();
 
     if(this.data.route != null){
+
+      if(this.data.route.status == "TELJESÍTVE"){
+        this.disableRouteForm();
+      }
+
       this.selectableVehicle = await this.vehicleService.getVehicles();
+
+      if( this.detailedRoute.routeType == 'Kimenő'){
+
+        this.selectableInvoices = await this.invoiceService.getClosedInvoices();
+
+        if(this.selectableInvoices == null){
+          this.selectableVehicle = [];
+        }
+
+        if(this.detailedRoute.invoice != null){
+          this.selectableInvoices.push(this.detailedRoute.invoice);
+        }
+
+      }else if( this.detailedRoute.routeType == 'Bejövő'){
+
+        this.selectableOrders = await this.orderService.getClosedOrders();
+
+        if(this.selectableOrders == null){
+          this.selectableOrders = [];
+        }
+
+        if(this.detailedRoute.businessOrder != null){
+          this.selectableOrders.push(this.detailedRoute.businessOrder);
+        }
+
+      }
+      
     }
 
     this.routeForm.get('warehouse').valueChanges.subscribe(async result => {
@@ -251,15 +291,60 @@ export class EventDialog implements OnInit{
         this.selectableVehicle = await this.warehouseService.getWarehousesVehicles(result.id);
       }      
     })
+
+    this.routeForm.get('routeType').valueChanges.subscribe(async result => {
+      if(result == null){
+        this.selectableInvoices = [];
+        this.selectableOrders = [];
+
+      }else if(result == 'Bejövő'){
+
+        this.selectableOrders = await this.orderService.getClosedOrders();
+
+        if(this.selectableOrders == null){
+          this.selectableOrders = [];
+        }
+
+        if(this.detailedRoute.businessOrder != null){
+          this.selectableOrders.push(this.detailedRoute.businessOrder);
+        }
+
+      }else if(result == 'Kimenő'){
+
+        this.selectableInvoices = await this.invoiceService.getClosedInvoices();
+
+        if(this.selectableInvoices == null){
+          this.selectableInvoices = [];
+        }
+
+        if(this.detailedRoute.invoice != null){
+          this.selectableInvoices.push(this.detailedRoute.invoice);
+        }
+
+      }
+    })
+
   }
 
   routeForm = this.formBuilder.group({
     'routeType': new FormControl(this.detailedRoute.routeType, Validators.required),
     'deliveryDate': new FormControl(this.detailedRoute.deliveryDate, Validators.required),
-    'warehouse': new FormControl(this.detailedRoute.warehouse),
+    'warehouse': new FormControl(this.detailedRoute.warehouse, Validators.required),
     'vehicle': new FormControl(this.detailedRoute.vehicle, Validators.required),
     'destination': new FormControl(this.detailedRoute.destination),
+    'invoice': new FormControl(this.detailedRoute.invoice),
+    'order': new FormControl(this.detailedRoute.businessOrder),
   });
+
+  disableRouteForm(): void{
+    this.routeForm.get('routeType').disable();
+    this.routeForm.get('deliveryDate').disable();
+    this.routeForm.get('warehouse').disable();
+    this.routeForm.get('vehicle').disable();
+    this.routeForm.get('destination').disable();
+    this.routeForm.get('invoice').disable();
+    this.routeForm.get('order').disable();
+  }
 
   async saveRoute(): Promise<void>{
 
@@ -322,6 +407,8 @@ export class EventDialog implements OnInit{
             duration: 2000,
             panelClass: ['success'],
           })
+
+          this.dialogRef.close({refresh: true});
     
         }).catch(e => {
     
@@ -332,10 +419,45 @@ export class EventDialog implements OnInit{
     
         })
         
-        this.dialogRef.close({refresh: true});
       }
     })
     
+  }
+
+  async routeIsCompleted(): Promise<void>{
+    
+
+    let dialogData: ConfirmationDialogText = {top: 'Biztosan teljesítetté állítja?', bottom: 'Ezután módosítani nem, csak törölni tudja ezt az utat!'};
+    const dialogRef = this.confDialog.open(ConfdialogComponent, {
+
+      width: '300px',
+      data: dialogData,
+
+    }).afterClosed().subscribe(result => {
+
+      if(result){
+        this.detailedRoute.status = "TELJESÍTVE";
+
+        this.routeService.updateRoute(this.detailedRoute).then(res => {
+
+          this._snackBar.open('Az út mostantól teljesített az adatbázisban!','', {
+            duration: 2000,
+            panelClass: ['success'],
+          })
+
+          this.dialogRef.close({refresh: true});
+
+        }).catch(e => {
+
+          this._snackBar.open('Hiba történt! Status: ' + e.status,'', {
+            duration: 2000,
+            panelClass: ['error'],
+          })
+
+        })
+      }
+
+    })
   }
 
   public warehouseComparisonFunction( warehouse, value ) : boolean {
@@ -343,6 +465,22 @@ export class EventDialog implements OnInit{
   }
   public vehicleComparisonFunction( vehicle, value ) : boolean {
     return vehicle.id === value.id;
+  }
+  public orderComparisonFunction( order, value ) : boolean {
+    return order.id === value.id;
+  }
+  public invoiceComparisonFunction( invoice, value ) : boolean {
+    return invoice.id === value.id;
+  }
+
+  openDocument(document): void{
+    if(this.detailedRoute.routeType == 'Bejövő'){
+      this.routing.navigate(['/orderForm'],{queryParams: {new: 'no', id:document.id}});
+    }else{
+      this.routing.navigate(['/invoiceForm'],{queryParams: {new: 'no', id:document.id}});
+    }
+
+    this.dialogRef.close();
   }
   
 }
