@@ -57,7 +57,8 @@ public class Invoice implements Serializable {
     @JoinColumn(name = "partner_id",referencedColumnName = "id")
     private Partner partner;
 
-    @OneToOne(mappedBy = "invoice", cascade = CascadeType.REMOVE)
+    @OneToOne
+    @JoinColumn(name = "route_id", referencedColumnName = "id")
     @JsonIgnore
     private Route route;
 }

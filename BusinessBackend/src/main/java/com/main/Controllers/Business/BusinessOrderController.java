@@ -1,6 +1,7 @@
 package com.main.Controllers.Business;
 
 import com.main.Entites.Business.BusinessOrder;
+import com.main.Entites.Business.Invoice;
 import com.main.Entites.Business.OrderItem;
 import com.main.Repositories.Business.BusinessOrderRepository;
 import com.main.Repositories.Business.OrderItemRepository;
@@ -47,6 +48,9 @@ public class BusinessOrderController {
     public ResponseEntity<BusinessOrder> modifyBusinessOrderById(@PathVariable Long id, @RequestBody BusinessOrder businessOrder){
         Optional<BusinessOrder> oldBusinessOrder = businessOrderRepository.findById(id);
         if(oldBusinessOrder.isPresent()){
+            if(oldBusinessOrder.get().getRoute() != null){
+                businessOrder.setRoute(oldBusinessOrder.get().getRoute());
+            }
             businessOrder.setId(id);
             return ResponseEntity.ok(businessOrderRepository.save(businessOrder));
         }else{
@@ -106,5 +110,11 @@ public class BusinessOrderController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/closedOrders")
+    public ResponseEntity<Iterable<BusinessOrder>> getAllClosedOrders(){
+        List<BusinessOrder> businessOrders = businessOrderRepository.findAllClosedOrders();
+        return ResponseEntity.ok(businessOrders);
     }
 }

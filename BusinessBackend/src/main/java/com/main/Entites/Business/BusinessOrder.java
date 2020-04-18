@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.main.Entites.Warehouse.Route;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -17,6 +18,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 @Table(name = "business_order")
 public class BusinessOrder implements Serializable {
 
@@ -54,7 +56,8 @@ public class BusinessOrder implements Serializable {
     @JoinColumn(name = "partner_id",referencedColumnName = "id")
     private Partner partner;
 
-    @OneToOne(mappedBy = "businessOrder", cascade = CascadeType.REMOVE)
+    @OneToOne
+    @JoinColumn(name = "route_id", referencedColumnName = "id")
     @JsonIgnore
     private Route route;
 }

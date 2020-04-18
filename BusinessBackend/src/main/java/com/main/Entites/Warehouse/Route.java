@@ -37,6 +37,10 @@ public class Route implements Serializable{
     @NotNull
     private Date deliveryDate;
 
+    @Column(name = "status")
+    @NotNull
+    private String status;
+
     @ManyToOne
     @JoinColumn(name = "warehouse_id", referencedColumnName = "id")
     private Warehouse warehouse;
@@ -45,11 +49,9 @@ public class Route implements Serializable{
     @JoinColumn(name = "vehicle_id", referencedColumnName = "id")
     private Vehicle vehicle;
 
-    @OneToOne
-    @JoinColumn(name = "invoice_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "route")
     private Invoice invoice;
 
-    @OneToOne
-    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "route")
     private BusinessOrder businessOrder;
 }
