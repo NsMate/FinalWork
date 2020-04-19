@@ -6,12 +6,14 @@
 <button mat-raised-button 
             (click)="saveWarehouse()" 
             class="saveButton" 
-            color="primary"><mat-icon>save</mat-icon> Raktár mentése </button>
+            color="primary"
+            [disabled]="warehouseForm.invalid"><mat-icon>save</mat-icon> Raktár mentése </button>
 
 <button mat-raised-button 
             (click)="deleteWarehouse()" 
             class="saveButton" 
-            color="warn"><mat-icon>delete</mat-icon> Raktár törlése </button>
+            color="warn"
+            [disabled]="detailedWarehouse.id == null"><mat-icon>delete</mat-icon> Raktár törlése </button>
 
     <div class="addressRow">
         <div class="zip">

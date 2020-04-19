@@ -10,7 +10,7 @@ export class Route {
     destination: string = '';
     status: string = "TERVBEN";
     deliveryDate: Date = new Date();
-    vehicle: Vehicle = new Vehicle();
+    vehicle: Vehicle = null;
     invoice: Invoice = null;
     businessOrder: BusinessOrder = null;
 }

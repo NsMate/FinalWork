@@ -3,7 +3,7 @@
   </div>
   
   <div mat-dialog-content>
-    <form #addForm="ngForm" [formGroup]="stockForm">
+    <form #addForm="ngForm" [formGroup]="stockForm" style="text-align: center;">
         <div>
             <h2>Termék</h2>
             <mat-form-field>
@@ -39,7 +39,7 @@
   </div>
   
   <div mat-dialog-action style="display: flex; justify-content: space-evenly;">
-    <button mat-flat-button (click)="saveStock()" [disabled]="stockForm.invalid" color="primary">Mentés</button>
+    <button mat-flat-button (click)="saveStock()" [disabled]="stockForm.invalid" color="primary"><mat-icon>save</mat-icon>Mentés</button>
   
-    <button mat-flat-button (click)="openConfDialog()" *ngIf="!data.isNew" color="primary" >Törlés</button>
+    <button mat-flat-button (click)="openConfDialog()" *ngIf="!data.isNew" color="primary" ><mat-icon>delete</mat-icon>Törlés</button>
   </div>

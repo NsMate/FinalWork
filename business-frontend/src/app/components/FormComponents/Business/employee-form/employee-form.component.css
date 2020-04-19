@@ -31,3 +31,12 @@ form{
     background: red;
     color: white;
 }
+
+.backGround{
+    opacity: 5%;
+    position: absolute;
+    transform: scale(33);
+    z-index: -1;
+    top: 60%;
+    left: 30%;
+}
