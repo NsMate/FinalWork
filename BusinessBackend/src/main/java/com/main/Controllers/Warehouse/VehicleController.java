@@ -1,6 +1,5 @@
 package com.main.Controllers.Warehouse;
 
-import com.main.Entites.User.Employee;
 import com.main.Entites.Warehouse.Vehicle;
 import com.main.Repositories.Warehouse.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
