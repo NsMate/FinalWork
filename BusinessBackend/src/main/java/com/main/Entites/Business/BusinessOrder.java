@@ -56,8 +56,7 @@ public class BusinessOrder implements Serializable {
     @JoinColumn(name = "partner_id",referencedColumnName = "id")
     private Partner partner;
 
-    @OneToOne
-    @JoinColumn(name = "route_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "businessOrder")
     @JsonIgnore
     private Route route;
 }

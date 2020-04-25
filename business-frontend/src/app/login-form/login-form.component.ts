@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthorizationService } from '../services/authorization-service.service';
 import { Router } from '@angular/router';
 import { Validators, FormBuilder } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login-form',
@@ -10,7 +11,6 @@ import { Validators, FormBuilder } from '@angular/forms';
 })
 export class LoginFormComponent implements OnInit {
 
-  message: string;
   hidePassword = true;
 
   form = this.formBuilder.group({
@@ -24,7 +24,8 @@ export class LoginFormComponent implements OnInit {
   constructor(
     private authService: AuthorizationService,
     private router: Router,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private _snackbar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -32,15 +33,25 @@ export class LoginFormComponent implements OnInit {
 
   async onSubmit() {
     try {
-      this.message = null;
       await this.authService.login(this.username.value, this.password.value);
       if (this.authService.redirectUrl) {
         this.router.navigate([this.authService.redirectUrl]);
       } else {
         this.router.navigate(['/']);
       }
+
+      this._snackbar.open("Sikeresen bejelentkezett!",'', {
+        duration: 2000,
+        panelClass: ["success"],
+      })
+
     } catch (e) {
-      this.message = 'Cannot log in!';
+
+      this._snackbar.open("Hibás név vagy jelszó!",'', {
+        duration: 2000,
+        panelClass: ["error"],
+      })
+
     }
   }
 

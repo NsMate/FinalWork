@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { WarehouseService } from 'src/app/services/Warehousing/Warehouse/warehouse.service';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { Stock } from 'src/app/models/Warehousing/Stock/stock';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
@@ -72,6 +72,11 @@ export class WarehouseFormComponent implements OnInit {
         this.dataSource = new MatTableDataSource(this.detailedWarehouseStockList);
         this.employeeSource = new MatTableDataSource(this.employeeList);
         this.vehicleSource = new MatTableDataSource(this.vehicleList);
+      }else{
+        this.detailedWarehouse = new Warehouse();
+        this.employeeList = [];
+        this.vehicleList = [];
+        this.detailedWarehouseStockList = [];
       }
     })
 
@@ -89,10 +94,21 @@ export class WarehouseFormComponent implements OnInit {
   vehicleColumns: string[] = ['manufacturer', 'licensePlate', 'delete'];
 
   warehouseForm = this.formBuilder.group({
-    'zipCode': new FormControl(this.detailedWarehouse.zipCode, Validators.compose([Validators.pattern("[0-9][0-9][0-9][0-9]"), Validators.required])),
-    'city': new FormControl(this.detailedWarehouse.city, Validators.compose([Validators.pattern("[A-Z][A-Za-z éűáúőóüöÉÁŰÚŐÓÜÖ.\-]*"), Validators.required])),
-    'street': new FormControl(this.detailedWarehouse.street, Validators.compose([Validators.pattern("[A-Z][A-Za-z ÉÁŰÚŐÓÜÖéáűúőóüö.\-]*"),Validators.required])),
-    'streetNumber': new FormControl(this.detailedWarehouse.streetNumber, Validators.compose([Validators.pattern("[0-9]*"),Validators.required]))
+    'zipCode': new FormControl(this.detailedWarehouse.zipCode, Validators.compose([
+                                Validators.pattern("[0-9][0-9][0-9][0-9]"), 
+                                Validators.required])),
+    'city': new FormControl(this.detailedWarehouse.city, Validators.compose([
+                                Validators.pattern("[A-Z][A-Za-z éűáúőóüöÉÁŰÚŐÓÜÖ.\-]*"), 
+                                Validators.required,
+                                Validators.maxLength(30)])),
+    'street': new FormControl(this.detailedWarehouse.street, Validators.compose([
+                                Validators.pattern("[A-Z][A-Za-z ÉÁŰÚŐÓÜÖéáűúőóüö.\-]*"),
+                                Validators.required,
+                                Validators.maxLength(30)])),
+    'streetNumber': new FormControl(this.detailedWarehouse.streetNumber, Validators.compose([
+                                Validators.pattern("[0-9]*"),
+                                Validators.required,
+                                Validators.maxLength(4)]))
   })
 
   get zipCode() { return this.warehouseForm.get('zipCode'); }
@@ -311,14 +327,29 @@ export class WarehouseFormStockDialog implements OnInit{
   }
   
   stockForm = this.formBuilder.group({
-    'product': new FormControl (this.data.stock.product, Validators.required),
-    'quantity': new FormControl (this.data.stock.quantity, Validators.compose([Validators.pattern("[0-9]*"),Validators.required])),
-    'unit': new FormControl (this.data.stock.unit, Validators.required),
+    'product': new FormControl (this.data.stock.product, Validators.compose([
+                                  Validators.required,
+                                  Validators.maxLength(30)]),
+                                  this.validateProduct.bind(this)),
+    'quantity': new FormControl (this.data.stock.quantity, Validators.compose([
+                                  Validators.pattern("[0-9]*"),
+                                  Validators.required,
+                                  Validators.maxLength(7)])),
+    'unit': new FormControl (this.data.stock.unit, Validators.compose([
+                                  Validators.required,
+                                  Validators.maxLength(10)])),
   })
 
   get product() { return this.stockForm.get('product'); }
   get quantity() { return this.stockForm.get('quantity'); }
   get unit() { return this.stockForm.get('unit'); }
+
+  async validateProduct(control: AbstractControl){
+    const product = control.value;
+    let foundProduct = await this.productService.getProductByName(product);
+    return foundProduct == null ?
+      null : {noProduct: true}
+  }
 
   openConfDialog(){
 

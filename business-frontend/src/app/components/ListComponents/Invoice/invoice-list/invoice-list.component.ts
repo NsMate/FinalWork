@@ -49,7 +49,7 @@ export class InvoiceListComponent implements OnInit {
     }else if(invoice.status == 'OPEN'){
       return 'Nyitott';
     }else{
-      return 'Rendezve';
+      return 'Teljesítve';
     }
   }
 

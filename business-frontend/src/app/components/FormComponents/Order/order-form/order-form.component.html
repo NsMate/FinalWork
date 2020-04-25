@@ -1,3 +1,5 @@
+<mat-icon class="backGround">list_alt</mat-icon>
+
 <h1> Rendelés részletei <mat-icon *ngIf="detailedOrder.status == 'DONE'">done</mat-icon></h1>
 
 <button mat-raised-button color="primary" 
@@ -40,7 +42,7 @@
 
 <form [formGroup]="orderForm">
     <div class="partner">
-        <h3>Partner</h3>
+        <h3>Partner*</h3>
         <mat-form-field >
             <input type="text"
                    matInput
@@ -53,11 +55,12 @@
               </mat-option>
             </mat-autocomplete>       
             <mat-error *ngIf="partner.errors?.required && (partner.dirty || partner.touched)"> Adja meg a partnert! </mat-error>
+            <mat-error *ngIf="partner.errors?.noPartner && (partner.dirty || partner.touched)"> Nincs ilyen partner az adatbázisban! </mat-error>
         </mat-form-field>
     </div>
     <div class="dates">
       <div class="issueDate">
-        <h3>Kiállítás dátuma</h3>
+        <h3>Kiállítás dátuma*</h3>
         <mat-form-field>
             <input matInput [matDatepicker]="dp1" 
                   disabled 
@@ -69,7 +72,7 @@
         </mat-form-field>
       </div>
       <div class="dueDate">
-        <h3> Teljesítés dátuma </h3>
+        <h3> Teljesítés dátuma* </h3>
         <mat-form-field>
             <input matInput [matDatepicker]="dp2" 
                     [min]="minDate" 
@@ -90,10 +93,11 @@
                     [(ngModel)]="detailedOrder.orderDescription" 
                     name="orderDescription" 
                     formControlName="orderDescription"></textarea>
+                    <mat-error *ngIf="orderDescription.errors?.maxlength && (orderDescription.dirty || orderDescription.touched)"> Maximum 100 karakter lehet! </mat-error>
         </mat-form-field>
       </div>
       <div class="vat">
-        <h3>Adó</h3>
+        <h3>Adó*</h3>
         <mat-form-field appearance="standard">
             <input matInput placeholder="eg. 12"                    
                     name="vat" 
@@ -106,7 +110,7 @@
         </mat-form-field>
       </div>
       <div>
-        <h2>Fizetés módja</h2>
+        <h3>Fizetés módja*</h3>
         <mat-form-field appearance="standard">
           <mat-select [(ngModel)]="detailedOrder.paymentType" formControlName="paymentType">
             <mat-option value="Készpénz">Készpénz</mat-option>

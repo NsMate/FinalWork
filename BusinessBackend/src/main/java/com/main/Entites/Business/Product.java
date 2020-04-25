@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -28,17 +29,21 @@ public class Product implements Serializable {
 
     @Column(name = "product_name")
     @NotNull
+    @Size(max = 30)
     private String productName;
 
     @Column(name = "price")
     @NotNull
+    @Size(max = 8)
     private BigDecimal price;
 
     @Column(name = "product_description")
+    @Size(max = 255)
     private String productDescription;
 
     @Column(name = "code")
     @NotNull
+    @Size(max = 4)
     private int code;
 
     @Column(name = "currency")

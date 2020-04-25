@@ -11,6 +11,8 @@ public interface PartnerRepository extends CrudRepository<Partner,Long> {
 
     Optional<Partner> findByOwn(int own);
 
+    Optional<Partner> findByPartnerName(String partnerName);
+
     @Query("select p from Partner p where (lower(p.partnerName) like lower(concat('%', ?1 , '%'))) and p.own != 1")
     List<Partner> findPartnerThatMatchersInput(String input);
 

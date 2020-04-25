@@ -12,6 +12,7 @@
           <input matInput placeholder="eg. Alma" [(ngModel)]="data.product.productName" name="productName" formControlName="productName">
           <mat-error *ngIf="productName.errors?.required && (productName.dirty || productName.touched)"> Kérem adja meg a termék nevét! </mat-error>
           <mat-error *ngIf="productName.errors?.pattern && (productName.dirty || productName.touched)"> Helytelen formátum (pl. Alma) </mat-error>
+          <mat-error *ngIf="productName.errors?.maxlength && (productName.dirty || productName.touched)"> Maximum 30 karakter lehet! </mat-error>
         </mat-form-field>
       </div>
       <div>
@@ -20,13 +21,14 @@
           <input matInput placeholder="eg. 1000" [(ngModel)]="data.product.price" name="productPrice" formControlName="productPrice">
           <mat-error *ngIf="productPrice.errors?.required && (productPrice.dirty || productPrice.touched)"> Kérem adja meg a termék árát! </mat-error>
           <mat-error *ngIf="productPrice.errors?.pattern && (productPrice.dirty || productPrice.touched)"> Helytelen formátum (pl. 10000) </mat-error>
+          <mat-error *ngIf="productPrice.errors?.maxlength && (productPrice.dirty || productPrice.touched)"> Maximum 8 karakter lehet! </mat-error>
         </mat-form-field>
       </div>
       <div>
         <h2>Termék leírása</h2>
         <mat-form-field appearance="standard"> 
           <textarea matInput placeholder="Leírás" [(ngModel)]="data.product.productDescription" name="productDescription" formControlName="productDescription"></textarea>
-          <mat-error *ngIf="productDescription.errors?.pattern && (productDescription.dirty || productDescription.touched)"> Betűvel kell kezdődnie! </mat-error>
+          <mat-error *ngIf="productDescription.errors?.productDescription && (productDescription.dirty || productDescription.touched)"> Maximum 255 karakter lehet! </mat-error>
         </mat-form-field>
       </div>
       <div>
@@ -36,6 +38,7 @@
           <mat-error *ngIf="productCode.errors?.required && (productCode.dirty || productCode.touched)"> Kérem adja meg a termék kódját! </mat-error>
           <mat-error *ngIf="productCode.errors?.pattern && (productCode.dirty || productCode.touched)"> Helytelen formátum (pl. 1002) </mat-error>
           <mat-error *ngIf="productCode.errors?.codeTaken && (productCode.dirty || productCode.touched)"> A kód már használatban van </mat-error>
+          <mat-error *ngIf="productCode.errors?.maxlength && (productCode.dirty || productCode.touched)"> Maximum 4 karakter lehet! </mat-error>
         </mat-form-field>
       </div>
     </form>

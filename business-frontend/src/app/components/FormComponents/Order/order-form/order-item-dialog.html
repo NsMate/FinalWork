@@ -1,45 +1,51 @@
 <div mat-dialog-title>
-    <h1 style="text-align: center;">Tétel részletei </h1>
+    <h1 style="text-align: center; text-decoration: underline;margin-bottom: 12px;">Tétel részletei </h1>
   </div>
   
   <div mat-dialog-content>
     <form #addForm="ngForm" [formGroup]="itemForm" class="itemForm">
       <div>
-          <h2>Termék / szolgáltatás</h2>
+          <h2>Termék / szolgáltatás*</h2>
           <mat-form-field appearance="standard">
             <input matInput placeholder="eg. Dizájn" [(ngModel)]="data.orderItem.product" name="product" formControlName="product">                
             <mat-error *ngIf="product.errors?.required && (product.dirty || product.touched)"> Adja meg a terméket vagy szolgáltatást! </mat-error>
+            <mat-error *ngIf="product.errors?.pattern && (product.dirty || product.touched)"> Betűt, számot, pontot és vesszőt tartalmazhat! </mat-error>
+            <mat-error *ngIf="product.errors?.maxlength && (product.dirty || product.touched)"> Maximum 30 karakter lehet! </mat-error>
           </mat-form-field>
       </div>
       <div class="quantity" style="display: flex; justify-content: space-around;">
         <div>
-          <h2>Mennyiség</h2>
+          <h2>Mennyiség*</h2>
           <mat-form-field appearance="standard">
             <input matInput placeholder="eg. 100" [(ngModel)]="data.orderItem.quantity" name="quantity" formControlName="quantity">                
             <mat-error *ngIf="quantity.errors?.required && (quantity.dirty || quantity.touched)"> Adja meg a mennyiséget! </mat-error>                
             <mat-error *ngIf="quantity.errors?.pattern && (quantity.dirty || quantity.touched)"> Nem kezdődhet 0-val! </mat-error>
+            <mat-error *ngIf="quantity.errors?.maxlength && (quantity.dirty || quantity.touched)"> Maximum 7 karakter lehet! </mat-error>
           </mat-form-field>
         </div>
         <div>
-          <h2>Egység</h2>
+          <h2>Egység*</h2>
           <mat-form-field appearance="standard">
             <input matInput placeholder="eg. óra" [(ngModel)]="data.orderItem.unit" name="unit" formControlName="unit">                
             <mat-error *ngIf="unit.errors?.required && (unit.dirty || unit.touched)"> Adja meg a mértékegységet! </mat-error>
+            <mat-error *ngIf="unit.errors?.maxlength && (unit.dirty || unit.touched)"> Maximum 10 karakter lehet! </mat-error>
           </mat-form-field>
         </div>
       </div>
       <div>
-        <h2>Ár (Bruttó)</h2>
+        <h2> Ár / egység (Bruttó)*</h2>
         <mat-form-field appearance="standard">
           <input matInput placeholder="eg. 1000" [(ngModel)]="data.orderItem.price" name="price" formControlName="price">                
           <mat-error *ngIf="price.errors?.required && (price.dirty || price.touched)"> Adja meg a termék árát! </mat-error>                
           <mat-error *ngIf="price.errors?.pattern && (price.dirty || price.touched)"> Nem kezdődhet 0-val! </mat-error>
+          <mat-error *ngIf="price.errors?.maxlength && (price.dirty || price.touched)"> Maximum 7 karakter lehet! </mat-error>
         </mat-form-field>
       </div>
       <div>
         <h2>Megjegyzés</h2>
         <mat-form-field appearance="standard">
           <textarea matInput [(ngModel)]="data.orderItem.description" name="description" formControlName="description"></textarea>
+          <mat-error *ngIf="description.errors?.maxlength && (description.dirty || description.touched)"> Maximum 50 karakter lehet! </mat-error>
         </mat-form-field>
       </div>
     </form>

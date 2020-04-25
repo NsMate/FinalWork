@@ -46,9 +46,6 @@ public class InoviceController {
     public ResponseEntity<Invoice> modifyInvoiceById(@PathVariable Long id, @RequestBody Invoice invoice){
         Optional<Invoice> oldInvoice = invoiceRepository.findById(id);
         if(oldInvoice.isPresent()){
-            if(oldInvoice.get().getRoute() != null){
-                invoice.setRoute(oldInvoice.get().getRoute());
-            }
             invoice.setId(id);
             return ResponseEntity.ok(invoiceRepository.save(invoice));
         }else{
@@ -112,7 +109,7 @@ public class InoviceController {
 
     @GetMapping("/closedInvoices")
     public ResponseEntity<Iterable<Invoice>> getAllClosedInvoices(){
-        List<Invoice> invoices = invoiceRepository.findAllClosedInvoices();
+        List<Invoice> invoices = invoiceRepository.findClosedInvoices();
         return ResponseEntity.ok(invoices);
     }
 }

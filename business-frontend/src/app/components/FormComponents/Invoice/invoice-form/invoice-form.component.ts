@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, Inject, ElementRef } from '@angular/core'
 import { InvoiceService } from 'src/app/services/BusinessServices/Invoice/invoice.service';
 import { Invoice } from 'src/app/models/BusinessModels/Invoice/invoice';
 import { InvoiceItem } from 'src/app/models/BusinessModels/InvoiceItem/invoice-item';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Partner } from 'src/app/models/BusinessModels/Partner/partner';
@@ -17,7 +17,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { PdfGenerator } from 'src/app/PDFGenerator/pdf-generator';
-import { es } from 'date-fns/locale';
 import { AuthorizationService } from 'src/app/services/authorization-service.service';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -154,12 +153,21 @@ export class InvoiceFormComponent implements OnInit {
    *    and the validators
    */
   invoiceForm = this.formBuilder.group({
-    'partner': new FormControl(this.detailedInvoice.partner, Validators.required),
-    'issueDate': new FormControl(this.detailedInvoice.issueDate, Validators.compose([Validators.required])),
-    'dueDate': new FormControl(this.detailedInvoice.dueDate, Validators.compose([Validators.required])),
-    'invoiceDescription': new FormControl(this.detailedInvoice.invoiceDescription),
-    'vat': new FormControl(this.detailedInvoice.vat, Validators.compose([Validators.required,Validators.pattern("[1-9][0-9]*"),Validators.maxLength(2)])),
-    'paymentType': new FormControl(this.detailedInvoice.paymentType, Validators.required),
+    'partner': new FormControl(this.detailedInvoice.partner, 
+                                Validators.required, 
+                                this.validatePartner.bind(this)),
+    'issueDate': new FormControl(this.detailedInvoice.issueDate, Validators.compose([
+                                Validators.required])),
+    'dueDate': new FormControl(this.detailedInvoice.dueDate, Validators.compose([
+                                Validators.required])),
+    'invoiceDescription': new FormControl(this.detailedInvoice.invoiceDescription,
+                                Validators.maxLength(100)),
+    'vat': new FormControl(this.detailedInvoice.vat, Validators.compose([
+                                Validators.required,
+                                Validators.pattern("[1-9][0-9]*"),
+                                Validators.maxLength(2)])),
+    'paymentType': new FormControl(this.detailedInvoice.paymentType, 
+                                Validators.required),
   })
 
   get partner() { return this.invoiceForm.get('partner'); }
@@ -175,6 +183,13 @@ export class InvoiceFormComponent implements OnInit {
    */
   displayFn(val: Partner) {
     return val ? val.partnerName : val;
+  }
+
+  async validatePartner(control: AbstractControl){
+    const partner = control.value;
+    let foundPartner = await this.partnerService.getPartnerByName(partner);
+    return foundPartner == null ?
+      null : {noPartner: true}
   }
 
   /**
@@ -394,7 +409,7 @@ export class InvoiceFormComponent implements OnInit {
     }
 
     const dialogRef = this.itemDialog.open(InvoiceItemDialog, {
-      width: '500px',
+      width: '650px',
       data: dialogData
     }).afterClosed().subscribe(result => {
 
@@ -468,11 +483,23 @@ export class InvoiceItemDialog{
    * Form control for the item form, validators added here for fields.
    */
   itemForm = this.formBuilder.group({
-    'product': new FormControl(this.data.invoiceItem.product,Validators.required),
-    'quantity': new FormControl(this.data.invoiceItem.quantity, Validators.compose([Validators.required, Validators.pattern("[1-9][0-9]*")])),
-    'unit': new FormControl(this.data.invoiceItem.unit, Validators.required),
-    'price': new FormControl(this.data.invoiceItem.price, Validators.compose([Validators.required,Validators.pattern("[1-9][0-9]*")])),
-    'description': new FormControl(this.data.invoiceItem.description),
+    'product': new FormControl(this.data.invoiceItem.product,Validators.compose([
+                                  Validators.required,
+                                  Validators.pattern("[A-ZŰÁÉÚŐÓÜÖ]+[A-Za-zűáéúőóüöŰÁÉÚŐÓÜÖ \-\.1-9]*"),
+                                  Validators.maxLength(30)])),
+    'quantity': new FormControl(this.data.invoiceItem.quantity, Validators.compose([
+                                  Validators.required, 
+                                  Validators.pattern("[1-9][0-9]*"),
+                                  Validators.maxLength(7)])),
+    'unit': new FormControl(this.data.invoiceItem.unit,Validators.compose([ 
+                                  Validators.required,
+                                  Validators.maxLength(10)])),
+    'price': new FormControl(this.data.invoiceItem.price, Validators.compose([
+                                  Validators.required,
+                                  Validators.pattern("[1-9][0-9]*"),
+                                  Validators.maxLength(7)])),
+    'description': new FormControl(this.data.invoiceItem.description,
+                                  Validators.maxLength(50)),
   })
 
   get product() { return this.itemForm.get('product'); }

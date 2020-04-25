@@ -13,39 +13,43 @@
             (click)="deleteWarehouse()" 
             class="saveButton" 
             color="warn"
-            [disabled]="detailedWarehouse.id == null"><mat-icon>delete</mat-icon> Raktár törlése </button>
+            *ngIf="detailedWarehouse.id != null"><mat-icon>delete</mat-icon> Raktár törlése </button>
 
     <div class="addressRow">
         <div class="zip">
-            <h3>Irányítószám</h3>
-            <mat-form-field appearance="standard">
+            <h3>Irányítószám*</h3>
+            <mat-form-field appearance="standard" style="width: 250px;">
                 <input matInput placeholder="eg. 2660" name="zipCode" formControlName="zipCode" [(ngModel)]="detailedWarehouse.zipCode">
                 <mat-error *ngIf="zipCode.errors?.required && (zipCode.dirty || zipCode.touched)"> Kérem adja meg az irányítószámot! </mat-error>
                 <mat-error *ngIf="zipCode.errors?.pattern && (zipCode.dirty || zipCode.touched)"> Helytelen formátum! (pl. 2660) </mat-error>
+                <mat-error *ngIf="zipCode.errors?.maxlength && (zipCode.dirty || zipCode.touched)"> Maximum 30 karakter lehet! </mat-error>
             </mat-form-field>
         </div>
         <div class="city">
-            <h3>Város</h3>
-            <mat-form-field appearance="standard">
+            <h3>Város*</h3>
+            <mat-form-field appearance="standard" style="width: 250px;">
                 <input matInput placeholder="eg. Budapest" name="city" formControlName="city" [(ngModel)]="detailedWarehouse.city">
                 <mat-error *ngIf="city.errors?.required && (city.dirty || city.touched)"> Kérem adja meg a várost! </mat-error>
-                <mat-error *ngIf="city.errors?.pattern && (city.dirty || city.touched)"> Helytelen formátum! (pl. Budapest) </mat-error>
+                <mat-error *ngIf="city.errors?.pattern && (city.dirty || city.touched)"> Nagybetűvel kezdődhet, vesszőt, pontot és szóközt tartalmazhat! </mat-error>
+                <mat-error *ngIf="city.errors?.maxlength && (city.dirty || city.touched)"> Maximum 30 karakter lehet! </mat-error>
             </mat-form-field>
         </div>
         <div class="stree">
-            <h3>Út / Utca</h3>
-            <mat-form-field appearance="standard">
+            <h3>Út / Utca*</h3>
+            <mat-form-field appearance="standard" style="width: 250px;">
                 <input matInput placeholder="eg. Móricz Zsigmond utca" name="street" formControlName="street" [(ngModel)]="detailedWarehouse.street">
                 <mat-error *ngIf="street.errors?.required && (street.dirty || street.touched)"> Kérem adja meg az utcát! </mat-error>
-                <mat-error *ngIf="street.errors?.pattern && (street.dirty || street.touched)"> Helytelen formátum! (pl. Móricz Zsigmond utca) </mat-error>
+                <mat-error *ngIf="street.errors?.pattern && (street.dirty || street.touched)"> Nagybetűvel kezdődhet, vesszőt, pontot és szóközt tartalmazhat! </mat-error>
+                <mat-error *ngIf="street.errors?.maxlength && (street.dirty || street.touched)"> Maximum 30 karakter lehet! </mat-error>
             </mat-form-field>
         </div>
         <div class="streetNumber">
-            <h3>Házszám</h3>
-            <mat-form-field appearance="standard">
+            <h3>Házszám*</h3>
+            <mat-form-field appearance="standard" style="width: 250px;">
                 <input matInput placeholder="eg. 12" name="streetNumber" formControlName="streetNumber" [(ngModel)]="detailedWarehouse.streetNumber">
                 <mat-error *ngIf="streetNumber.errors?.required && (streetNumber.dirty || streetNumber.touched)"> Kérem adja meg az utcaszámot! </mat-error>
-                <mat-error *ngIf="streetNumber.errors?.pattern && (streetNumber.dirty || streetNumber.touched)"> Helytelen formátum! (pl. 12) </mat-error>
+                <mat-error *ngIf="streetNumber.errors?.pattern && (streetNumber.dirty || streetNumber.touched)"> Csak számot tartalmazhat </mat-error>
+                <mat-error *ngIf="streetNumber.errors?.maxlength && (streetNumber.dirty || streetNumber.touched)"> Maximum 4 karakter lehet! </mat-error>
             </mat-form-field>
         </div>
     </div>

@@ -29,8 +29,8 @@ export class RouteService {
     return this.http.get<Route>(`${this.routeURL}/${id}`, httpOptions).toPromise();
   }
   
-  createRoute(whId: number,vehicleId: number, route: Route): Promise<Route> {
-    return this.http.post<Route>(`${this.routeURL}/${whId}/${vehicleId}`, route, httpOptions).toPromise();
+  createRoute(route: Route): Promise<Route> {
+    return this.http.post<Route>(`${this.routeURL}`, route, httpOptions).toPromise();
   }
   
   updateRoute(route: Route): Promise<Route> {

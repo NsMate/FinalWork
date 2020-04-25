@@ -20,6 +20,7 @@ interface ProductNode {
   id: number;
   groupId: number;
   children?: ProductNode[];
+  code: number;
 }
 
 interface FlatNode {
@@ -87,11 +88,11 @@ export class ProductTreeComponent implements OnInit {
 
   fillUpTreeData(): void{
     this.productGroups.forEach(element => {
-      let node: ProductNode = {name: null, children: [], id: null, group: true, groupId: element.id};
+      let node: ProductNode = {name: null, children: [], id: null, group: true, groupId: element.id, code: null};
       node.name = element.groupName;
       node.id = element.id;
       element.productList.forEach(product => {
-        let childrenNode: ProductNode = {name: null, children: null, id: null, group: false, groupId: element.id};
+        let childrenNode: ProductNode = {name: null, children: null, id: null, group: false, groupId: element.id, code: product.code};
         childrenNode.name = product.productName;
         childrenNode.id = product.id;
         node.children.push(childrenNode);
@@ -112,6 +113,7 @@ export class ProductTreeComponent implements OnInit {
       group: node.group,
       groupId: node.groupId,
       level: level,
+      code: node.code,
     };
   }
 
@@ -147,7 +149,9 @@ export class ProductTreeComponent implements OnInit {
       data: dialogData,
     }).afterClosed().subscribe(res => {
 
-      this.ngOnInit();
+      if(res.refresh == true){
+        this.ngOnInit();
+      }
 
     });
   }
@@ -168,7 +172,9 @@ export class ProductTreeComponent implements OnInit {
       data: dialogData,
     }).afterClosed().subscribe(res => {
 
-      this.ngOnInit()
+      if(res.refresh == true){
+        this.ngOnInit();
+      }
 
     });
   }
@@ -184,6 +190,12 @@ export class ProductTreeComponent implements OnInit {
       this.openProductGroupDialog(id);
     }else{
       this.openProductDialog(groupId,id);
+    }
+  }
+
+  ifProductReturnCodeOfProuct(node): string{
+    if(node.code != null){
+      return " | Kód: " + node.code.toString();
     }
   }
 }
@@ -224,29 +236,41 @@ export class ProductGroupDialog{
     if(this.data.isNew){
 
       await this.productGroupService.createProductGroup(this.data.productGroup).then(res => {
+
         this._snackBar.open('Sikeresen létrehozott termékcsoport!', '', {
           duration: 2000,
           panelClass: ['success'],
         })
+
+        this.dialogRef.close({refresh: true});
+
       }).catch(e => {
+
         this._snackBar.open('Problémam merült fel :( status: ' + e.error, '', {
           duration: 5000,
           panelClass: ['error'],
         })
+
       });
 
     }else{
 
       await this.productGroupService.updateProductGroup(this.data.productGroup).then(res => {
+
         this._snackBar.open('Sikeresen frissítette!', '', {
           duration: 2000,
           panelClass: ['success'],
         })
+
+        this.dialogRef.close({refresh: true});
+
       }).catch(e => {
+
         this._snackBar.open('Probléma merült fel :( status' + e.error, '', {
           duration: 5000,
           panelClass: ['error'],
         })
+
       });
     }
 
@@ -269,6 +293,8 @@ export class ProductGroupDialog{
         panelClass: ['success'],
       })
 
+      this.dialogRef.close({refresh: true});
+
     }).catch(e => {
 
       this._snackBar.open('Probléma merült fel :( status: ' + e.error, '', {
@@ -278,7 +304,6 @@ export class ProductGroupDialog{
 
     });
 
-    this.dialogRef.close();
   }
 
   /**
@@ -299,6 +324,7 @@ export class ProductGroupDialog{
     dialogRef.afterClosed().subscribe(async result => {
       if(result){
         this.deleteProductGroup();
+        this.dialogRef.close({refresh: true});
       }
     })
 
@@ -310,8 +336,9 @@ export class ProductGroupDialog{
   */
 
   productGroupForm = this.formBuilder.group({
-    'groupName': new FormControl (this.data.productGroup.groupName, Validators.compose([Validators.required,Validators.pattern("[A-ZÁÉŰÚŐÓÜÖ][A-Za-z0-9 áéíúőóüöűÁÉŰÚŐÓÜÖ]*")])),
-    'groupDescription': new FormControl (this.data.productGroup.description, Validators.pattern("[A-Za-z0-9áéíúőóüöűÁÉŰÚŐÓÜÖ ,.]*"))
+    'groupName': new FormControl (this.data.productGroup.groupName, Validators.compose([
+                                  Validators.required])),
+    'groupDescription': new FormControl (this.data.productGroup.description)
   })
 
   get groupName() { return this.productGroupForm.get('groupName'); }
@@ -371,10 +398,13 @@ export class ProductDialog implements OnInit{
   async saveProduct(): Promise<void>{
 
     await this.productGroupService.insertProductIntoProductGroup(this.modifiedProductGroup, this.data.product).then(res => {
+
       this._snackBar.open('Sikeresen hozzáadta a terméket!', '', {
         duration: 2000,        
         panelClass: ['success'],
       })
+
+      this.dialogRef.close({refresh: true});
 
     }).catch(e => {
 
@@ -384,7 +414,6 @@ export class ProductDialog implements OnInit{
       })
     });
 
-    this.dialogRef.close();
   }
 
   /**
@@ -402,6 +431,8 @@ export class ProductDialog implements OnInit{
         panelClass: ['success'],
       })
 
+      this.dialogRef.close({refresh: true});
+
     }).catch(e => {
       this._snackBar.open('Probléma merült fel :( status: ' + e.error, '', {
         duration: 5000,
@@ -409,7 +440,6 @@ export class ProductDialog implements OnInit{
       })
     });
 
-    this.dialogRef.close();
   }
 
   /**
@@ -431,6 +461,7 @@ export class ProductDialog implements OnInit{
     dialogRef.afterClosed().subscribe(async result => {
       if(result){
         this.deleteProduct();
+        this.dialogRef.close({refresh: true});
       }
     })
 
@@ -442,12 +473,23 @@ export class ProductDialog implements OnInit{
   */
 
   productForm = this.formBuilder.group({
-    'productName': new FormControl (this.data.product.productName, Validators.compose([Validators.required,Validators.pattern("[A-ZÁÉŰÚŐÓÜÖ][A-Za-z0-9 áéíúőóüöűÁÉŰÚŐÓÜÖ]*")])),
-    'productDescription': new FormControl (this.data.product.productDescription, Validators.pattern("[A-Za-z0-9áéíúőóüöűÁÉŰÚŐÓÜÖ ,.]*")),
-    'productPrice': new FormControl (this.data.product.price, Validators.compose([Validators.required,Validators.pattern("[1-9][0-9]*")])),
-    'currency': new FormControl (this.data.product.currency, Validators.required),
-    'productCode': new FormControl (this.data.product.code, Validators.compose([Validators.required,Validators.pattern("[0-9]*")]),
-    this.validateCode.bind(this))
+    'productName': new FormControl (this.data.product.productName, Validators.compose([
+                                            Validators.required,
+                                            Validators.pattern("[A-ZÁÉŰÚŐÓÜÖ][A-Za-z0-9 áéíúőóüöűÁÉŰÚŐÓÜÖ]*"),
+                                            Validators.maxLength(30)])),
+    'productDescription': new FormControl (this.data.product.productDescription, 
+                                            Validators.maxLength(255)),
+    'productPrice': new FormControl (this.data.product.price, Validators.compose([
+                                            Validators.required,
+                                            Validators.pattern("[1-9][0-9]*"),
+                                            Validators.maxLength(8)])),
+    'currency': new FormControl (this.data.product.currency, 
+                                            Validators.required),
+    'productCode': new FormControl (this.data.product.code, Validators.compose([
+                                            Validators.required,
+                                            Validators.pattern("[0-9]*"),
+                                            Validators.maxLength(4)]),
+                                            this.validateCode.bind(this))
   })
 
   get productName() { return this.productForm.get('productName'); }
@@ -463,8 +505,8 @@ export class ProductDialog implements OnInit{
   */
 
   async validateCode(control: AbstractControl){
-    const code = parseInt(control.value);
-    let product = await this.productService.getProductByCode(code);
+    const code: number = parseInt(control.value);
+    let product: Product = await this.productService.getProductByCode(code);
     return product == null || product.id == this.data.product.id ?
       null : {codeTaken: true}
   }

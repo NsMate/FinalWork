@@ -62,3 +62,12 @@ h1{
 ::ng-deep .itemForm{
     text-align: center;
 }
+
+.backGround{
+    opacity: 5%;
+    position: absolute;
+    transform: scale(33);
+    z-index: -1;
+    top: 60%;
+    left: 25%;
+}

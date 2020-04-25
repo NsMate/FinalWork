@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 
@@ -21,10 +22,12 @@ public class Vehicle implements Serializable{
 
     @Column(name = "manufacturer")
     @NotNull
+    @Size(max = 15)
     private String manufacturer;
 
     @Column(name = "vehicle_type")
     @NotNull
+    @Size(max = 10)
     private String vehicleType;
 
     @Column(name = "license_plate_number")

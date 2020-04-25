@@ -20,3 +20,13 @@
     left: 90vh;
     top: 40vh;
 }
+
+::ng-deep .success {
+    background: green;
+    color: white;
+}
+
+::ng-deep .error {
+    background: red;
+    color: white;
+}

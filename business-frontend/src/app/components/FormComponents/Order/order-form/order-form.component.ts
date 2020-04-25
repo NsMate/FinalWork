@@ -3,7 +3,7 @@ import { InvoiceItem } from 'src/app/models/BusinessModels/InvoiceItem/invoice-i
 import { BusinessOrder } from 'src/app/models/BusinessModels/BusinessOrder/business-order';
 import { Partner } from 'src/app/models/BusinessModels/Partner/partner';
 import { Observable, from } from 'rxjs';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { PartnerService } from 'src/app/services/BusinessServices/Partner/partner.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -146,12 +146,21 @@ export class OrderFormComponent implements OnInit {
    *    and the validators
    */
   orderForm = this.formBuilder.group({
-    'partner': new FormControl(this.detailedOrder.partner, Validators.required),
-    'issueDate': new FormControl(this.detailedOrder.issueDate, Validators.compose([Validators.required])),
-    'dueDate': new FormControl(this.detailedOrder.dueDate, Validators.compose([Validators.required])),
-    'orderDescription': new FormControl(this.detailedOrder.orderDescription),
-    'vat': new FormControl(this.detailedOrder.vat, Validators.compose([Validators.required,Validators.pattern("[1-9][0-9]*"),Validators.maxLength(2)])),
-    'paymentType': new FormControl(this.detailedOrder.paymentType, Validators.required),
+    'partner': new FormControl(this.detailedOrder.partner, 
+                                  Validators.required,
+                                  this.validatePartner.bind(this)),
+    'issueDate': new FormControl(this.detailedOrder.issueDate, Validators.compose([
+                                  Validators.required])),
+    'dueDate': new FormControl(this.detailedOrder.dueDate, Validators.compose([
+                                  Validators.required])),
+    'orderDescription': new FormControl(this.detailedOrder.orderDescription,
+                                  Validators.maxLength(100)),
+    'vat': new FormControl(this.detailedOrder.vat, Validators.compose([
+                                  Validators.required,
+                                  Validators.pattern("[1-9][0-9]*"),
+                                  Validators.maxLength(2)])),
+    'paymentType': new FormControl(this.detailedOrder.paymentType, 
+                                  Validators.required),
   })
 
   get partner() { return this.orderForm.get('partner'); }
@@ -167,6 +176,13 @@ export class OrderFormComponent implements OnInit {
    */
   displayFn(val: Partner) {
     return val ? val.partnerName : val;
+  }
+
+  async validatePartner(control: AbstractControl){
+    const partner = control.value;
+    let foundPartner = await this.partnerService.getPartnerByName(partner);
+    return foundPartner == null ?
+      null : {noPartner: true}
   }
 
   /**
@@ -388,7 +404,7 @@ export class OrderFormComponent implements OnInit {
     }
 
     const dialogRef = this.itemDialog.open(OrderItemDialog, {
-      width: '500px',
+      width: '650px',
       data: dialogData
     }).afterClosed().subscribe(result => {
 
@@ -465,11 +481,23 @@ export class OrderItemDialog{
    * Form control for the item form, validators added here for fields.
    */
   itemForm = this.formBuilder.group({
-    'product': new FormControl(this.data.orderItem.product,Validators.required),
-    'quantity': new FormControl(this.data.orderItem.quantity, Validators.compose([Validators.required, Validators.pattern("[1-9][0-9]*")])),
-    'unit': new FormControl(this.data.orderItem.unit, Validators.required),
-    'price': new FormControl(this.data.orderItem.price, Validators.compose([Validators.required,Validators.pattern("[1-9][0-9]*")])),
-    'description': new FormControl(this.data.orderItem.description),
+    'product': new FormControl(this.data.orderItem.product,Validators.compose([
+                                  Validators.required,
+                                  Validators.pattern("[A-ZŰÁÉÚŐÓÜÖ]+[A-Za-zűáéúőóüöŰÁÉÚŐÓÜÖ \-\.1-9]*"),
+                                  Validators.maxLength(30)])),
+    'quantity': new FormControl(this.data.orderItem.quantity, Validators.compose([
+                                  Validators.required, 
+                                  Validators.pattern("[1-9][0-9]*"),
+                                  Validators.maxLength(7)])),
+    'unit': new FormControl(this.data.orderItem.unit,Validators.compose([ 
+                                  Validators.required,
+                                  Validators.maxLength(10)])),
+    'price': new FormControl(this.data.orderItem.price, Validators.compose([
+                                  Validators.required,
+                                  Validators.pattern("[1-9][0-9]*"),
+                                  Validators.maxLength(7)])),
+    'description': new FormControl(this.data.orderItem.description,
+                                  Validators.maxLength(50)),
   })
 
   get product() { return this.itemForm.get('product'); }

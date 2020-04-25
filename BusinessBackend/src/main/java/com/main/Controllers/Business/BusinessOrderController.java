@@ -48,9 +48,6 @@ public class BusinessOrderController {
     public ResponseEntity<BusinessOrder> modifyBusinessOrderById(@PathVariable Long id, @RequestBody BusinessOrder businessOrder){
         Optional<BusinessOrder> oldBusinessOrder = businessOrderRepository.findById(id);
         if(oldBusinessOrder.isPresent()){
-            if(oldBusinessOrder.get().getRoute() != null){
-                businessOrder.setRoute(oldBusinessOrder.get().getRoute());
-            }
             businessOrder.setId(id);
             return ResponseEntity.ok(businessOrderRepository.save(businessOrder));
         }else{

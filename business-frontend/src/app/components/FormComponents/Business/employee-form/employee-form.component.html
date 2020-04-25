@@ -5,7 +5,8 @@
 <div class="buttonRow">
     <button mat-raised-button class="saveButton" 
         (click)="saveEmployee()" 
-        color="primary" 
+        color="primary"
+        [disabled]="employeeForm.invalid" 
         class="saveButton"><mat-icon>save</mat-icon>Változtatások mentése</button>
 
     <button mat-raised-button 
@@ -23,7 +24,8 @@
             <mat-form-field appearance="standard">
                 <input matInput placeholder="eg. Nagy" name="lastName" formControlName="lastName" [(ngModel)]="detailedEmployee.lastName">                
                 <mat-error *ngIf="lastName.errors?.required && (lastName.dirty || lastName.touched)"> Adja meg a vezetéknevet! </mat-error>
-                <mat-error *ngIf="lastName.errors?.pattern && (lastName.dirty || lastName.touched)"> Helytelen formátum </mat-error>
+                <mat-error *ngIf="lastName.errors?.pattern && (lastName.dirty || lastName.touched)"> Nagybetűvel kell kezdődnie, csak betűt tartalmazhat! </mat-error>
+                <mat-error *ngIf="lastName.errors?.maxlength && (lastName.dirty || lastName.touched)"> Maximum 30 karakter lehet! </mat-error>
             </mat-form-field>
         </div>
         <div class="firstName">
@@ -31,7 +33,8 @@
             <mat-form-field appearance="standard">
                 <input matInput placeholder="eg. Máté" name="firstName" formControlName="firstName" [(ngModel)]="detailedEmployee.firstName">                
                 <mat-error *ngIf="firstName.errors?.required && (firstName.dirty || firstName.touched)"> Adja meg a keresztnevet! </mat-error>
-                <mat-error *ngIf="firstName.errors?.pattern && (firstName.dirty || firstName.touched)"> Helytelen formátum </mat-error>
+                <mat-error *ngIf="firstName.errors?.pattern && (firstName.dirty || firstName.touched)"> Nagybetűvel kell kezdődnie!, csak betűt tartalmazhat </mat-error>
+                <mat-error *ngIf="firstName.errors?.maxlength && (firstName.dirty || firstName.touched)"> Maximum 25 karakter lehet! </mat-error>
             </mat-form-field>
         </div>
     </div>
@@ -42,7 +45,7 @@
             <mat-form-field appearance="standard">
                 <input matInput placeholder="eg. +36205050088" name="phoneNumber" formControlName="phoneNumber" [(ngModel)]="detailedEmployee.phoneNumber">                
                 <mat-error *ngIf="phoneNumber.errors?.required && (phoneNumber.dirty || phoneNumber.touched)"> Adja meg a telefonszámot! </mat-error>
-                <mat-error *ngIf="phoneNumber.errors?.pattern && (phoneNumber.dirty || phoneNumber.touched)"> Helytelen formátum </mat-error>
+                <mat-error *ngIf="phoneNumber.errors?.pattern && (phoneNumber.dirty || phoneNumber.touched)"> +36 vagy 06-al kezdődhet, egyben kell megadni! </mat-error>
             </mat-form-field>
         </div>
         <div class="email">
@@ -50,7 +53,8 @@
             <mat-form-field appearance="standard">
                 <input matInput placeholder="eg. example@example.com" name="email" formControlName="email" [(ngModel)]="detailedEmployee.email">                
                 <mat-error *ngIf="email.errors?.required && (email.dirty || email.touched)"> Adja meg az email címet! </mat-error>
-                <mat-error *ngIf="email.errors?.pattern && (email.dirty || email.touched)"> Helytelen formátum </mat-error>
+                <mat-error *ngIf="email.errors?.email && (email.dirty || email.touched)"> Helytelen formátum pl.example@example.com</mat-error>
+                <mat-error *ngIf="email.errors?.maxlength && (email.dirty || email.touched)"> Maximum 30 karakter lehet! </mat-error>
             </mat-form-field>
         </div>
     </div>

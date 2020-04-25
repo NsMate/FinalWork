@@ -350,7 +350,7 @@ export class EventDialog implements OnInit{
 
     if(this.detailedRoute.id == null){
 
-      await this.routeService.createRoute(this.detailedRoute.warehouse.id,this.detailedRoute.vehicle.id,this.detailedRoute).then(result => {
+      await this.routeService.createRoute(this.detailedRoute).then(result => {
 
         this._snackBar.open('Sikeresen létrehozott út!','',{
           duration: 2000,
@@ -380,6 +380,8 @@ export class EventDialog implements OnInit{
           duration: 4000,
           panelClass: ['error'],
         })
+
+        console.log(e);
 
       });
     }
@@ -453,6 +455,8 @@ export class EventDialog implements OnInit{
             duration: 2000,
             panelClass: ['error'],
           })
+
+          console.log(e);
 
         })
       }

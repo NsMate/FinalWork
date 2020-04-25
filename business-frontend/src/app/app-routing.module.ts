@@ -20,11 +20,6 @@ import { OrderFormComponent } from './components/FormComponents/Order/order-form
 
 const routes: Routes = [
   {
-    path: '',
-    redirectTo: '/login',
-    pathMatch: 'full'
-  },
-  {
     path: 'login',
     component: LoginFormComponent
   },
@@ -92,7 +87,16 @@ const routes: Routes = [
     path: 'orderForm',
     component: OrderFormComponent,
     canActivate: [ AuthGuard ]
-  }
+  },
+  {
+    path: '',
+    redirectTo: '/login',
+    pathMatch: 'full'
+  },
+  {
+    path: '**',
+    redirectTo: '/login',
+  },
 ];
 
 @NgModule({

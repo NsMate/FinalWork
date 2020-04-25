@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
@@ -19,9 +20,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Table(name = "employee")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
 public class Employee implements Serializable {
 
     @Id
@@ -31,13 +29,16 @@ public class Employee implements Serializable {
 
     @Column(name = "first_name")
     @NotNull
+    @Size(max = 30)
     private String firstName;
 
     @Column(name = "last_name")
     @NotNull
+    @Size(max = 25)
     private String lastName;
 
     @Column(name = "email")
+    @Size(max = 30)
     private String email;
 
     @Column(name = "phone_number")
@@ -45,6 +46,7 @@ public class Employee implements Serializable {
 
     @Column(name = "department")
     @NotNull
+    @Size(max = 30)
     private String department;
 
     @OneToOne(mappedBy = "employee", cascade = CascadeType.REMOVE)

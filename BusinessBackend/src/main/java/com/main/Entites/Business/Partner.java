@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,34 +28,42 @@ public class Partner implements Serializable {
 
     @Column(name = "partner_name")
     @NotNull
+    @Size(min = 3, max = 40)
     private String partnerName;
 
     @Column(name = "zip_code")
     @NotNull
+    @Size(max = 4)
     private BigDecimal zipCode;
 
     @Column(name = "city")
     @NotNull
+    @Size(max = 40)
     private String city;
 
     @Column(name = "street")
     @NotNull
+    @Size(max = 40)
     private String street;
 
     @Column(name = "street_number")
     @NotNull
+    @Size(max = 6)
     private BigDecimal streetNumber;
 
     @Column(name = "contact_first_name")
     @NotNull
+    @Size(max = 30)
     private String contactFirstName;
 
     @Column(name = "contact_last_name")
     @NotNull
+    @Size(max = 25)
     private String contactLastName;
 
     @Column(name = "contact_email")
     @NotNull
+    @Size(max = 30)
     private String contactEmail;
 
     @Column(name = "contact_phone_number")

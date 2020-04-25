@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Date;
 
@@ -31,6 +32,7 @@ public class Route implements Serializable{
     private String routeType;
 
     @Column(name = "destination")
+    @Size(max = 30)
     private String destination;
 
     @Column(name = "delivery_date")
@@ -49,9 +51,11 @@ public class Route implements Serializable{
     @JoinColumn(name = "vehicle_id", referencedColumnName = "id")
     private Vehicle vehicle;
 
-    @OneToOne(mappedBy = "route")
+    @OneToOne
+    @JoinColumn(name = "invoice_id", referencedColumnName = "id")
     private Invoice invoice;
 
-    @OneToOne(mappedBy = "route")
+    @OneToOne
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
     private BusinessOrder businessOrder;
 }

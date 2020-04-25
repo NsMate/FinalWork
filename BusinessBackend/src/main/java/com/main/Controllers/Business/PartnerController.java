@@ -43,6 +43,16 @@ public class PartnerController {
         }
     }
 
+    @GetMapping("/byname/{name}")
+    public ResponseEntity<Partner> getParnterByName(@PathVariable String name){
+        Optional<Partner> partner = partnerRepository.findByPartnerName(name);
+        if(partner.isPresent()){
+            return ResponseEntity.ok(partner.get());
+        }else{
+            return null;
+        }
+    }
+
     @PostMapping("")
     public ResponseEntity<Partner> newPartner(@RequestBody Partner partner){
         Partner savedPartner = partnerRepository.save(partner);

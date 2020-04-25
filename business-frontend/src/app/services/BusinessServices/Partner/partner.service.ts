@@ -28,6 +28,10 @@ export class PartnerService {
     return this.http.get<Partner>(`${this.partnerUrl}/${id}`, httpOptions).toPromise();
   }
 
+  getPartnerByName(name: string): Promise<Partner>{
+    return this.http.get<Partner>(`${this.partnerUrl}/byname/${name}`, httpOptions).toPromise();
+  }
+
   updatePartner(partner: Partner): Promise<Partner>{
     return this.http.put<Partner>(`${this.partnerUrl}/${partner.id}`, partner,  httpOptions).toPromise();
   }

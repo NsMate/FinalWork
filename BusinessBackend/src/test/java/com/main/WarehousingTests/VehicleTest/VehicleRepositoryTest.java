@@ -50,46 +50,6 @@ public class VehicleRepositoryTest {
     }
 
     @Test
-    public void savingVehicleToDb(){
-        Vehicle vehicle = createVehicle(null,"KLM-123");
-
-        List<Vehicle> vehicleList = new ArrayList<>();
-        vehicleRepository.findAll().forEach(vehicleList::add);
-
-        Assert.assertEquals(1,vehicleList.size());
-        Assert.assertNotNull(vehicleList.get(0).getId());
-    }
-
-    @Test
-    public void getAllVehiclesFromDb(){
-        Vehicle vehicle1 = createVehicle(null,"KLM-123");
-        Vehicle vehicle2 = createVehicle(null,"KLM-345");
-
-        vehicleRepository.save(vehicle1);
-        vehicleRepository.save(vehicle2);
-
-        List<Vehicle> vehicleList = new ArrayList<>();
-        vehicleRepository.findAll().forEach(vehicleList::add);
-
-        Assert.assertEquals(2,vehicleList.size());
-    }
-
-    @Test
-    public void deleteVehicleFromDb(){
-        Vehicle vehicleToDelete = createVehicle(null,"KLM-123");
-
-        Optional<Vehicle> foundVehicle = vehicleRepository.findById(vehicleToDelete.getId());
-
-        Assert.assertTrue(foundVehicle.isPresent());
-
-        vehicleRepository.deleteById(vehicleToDelete.getId());
-
-        Optional<Vehicle> notFoundVehicle = vehicleRepository.findById(vehicleToDelete.getId());
-
-        Assert.assertTrue(!notFoundVehicle.isPresent());
-    }
-
-    @Test
     public void gettingFreeVehiclesFromDb(){
         Warehouse warehouse = createWarehouse(1L);
 

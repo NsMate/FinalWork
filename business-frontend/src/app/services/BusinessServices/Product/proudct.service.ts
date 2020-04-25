@@ -31,6 +31,10 @@ export class ProudctService {
     return this.http.get<Product>(`${this.productUrl}/${id}`, httpOptions).toPromise();
   }
 
+  getProductByName(name: string): Promise<Product>{
+    return this.http.get<Product>(`${this.productUrl}/byname/${name}`, httpOptions).toPromise();
+  }
+
   updateProduct(product: Product): Promise<Product>{
     return this.http.put<Product>(`${this.productUrl}/${product.id}`, product,  httpOptions).toPromise();
   }

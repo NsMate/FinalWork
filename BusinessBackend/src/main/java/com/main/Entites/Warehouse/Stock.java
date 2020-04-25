@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -26,6 +27,8 @@ public class Stock implements Serializable {
     private Long id;
 
     @Column(name = "quantity")
+    @NotNull
+    @Size(max = 7)
     private BigDecimal quantity;
 
     @ManyToOne
@@ -35,9 +38,11 @@ public class Stock implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @Size(max = 30)
     private Product product;
 
     @Column(name = "unit")
     @NotNull
+    @Size(max = 10)
     private String unit;
 }

@@ -11,6 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
@@ -36,10 +37,12 @@ public class Invoice implements Serializable {
     private Date dueDate;
 
     @Column(name = "invoice_description")
+    @Size(max = 100)
     private String invoiceDescription;
 
     @Column(name = "vat")
     @NotNull
+    @Size(max = 2)
     private String vat;
 
     @Column(name = "status")
@@ -57,8 +60,7 @@ public class Invoice implements Serializable {
     @JoinColumn(name = "partner_id",referencedColumnName = "id")
     private Partner partner;
 
-    @OneToOne
-    @JoinColumn(name = "route_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "invoice")
     @JsonIgnore
     private Route route;
 }

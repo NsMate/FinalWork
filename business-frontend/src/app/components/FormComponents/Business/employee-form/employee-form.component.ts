@@ -5,7 +5,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfdialogComponent, ConfirmationDialogText } from 'src/app/components/ConfirmationDialog/confdialog/confdialog.component';
-import { MatDialogRef, MatDialog } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-employee-form',
@@ -69,11 +69,23 @@ export class EmployeeFormComponent implements OnInit {
    */
 
   employeeForm = this.formBuilder.group({
-    'lastName': new FormControl(this.detailedEmployee.lastName, Validators.compose([Validators.required, Validators.pattern("[A-ZÁÉŰÚŐÓÜÖ][a-záéíúőóüöű A-ZÁÉŰÚŐÓÜÖ \-]*")])),
-    'firstName': new FormControl(this.detailedEmployee.firstName, Validators.compose([Validators.required, Validators.pattern("[A-ZÁÉŰÚŐÓÜÖ][a-záéíúőóüöű]*")])),
-    'email': new FormControl(this.detailedEmployee.email, Validators.compose([Validators.required,Validators.email])),
-    'phoneNumber': new FormControl(this.detailedEmployee.phoneNumber, Validators.compose([Validators.required,Validators.pattern("[\+]*[0-9]{11,}")])),
-    'department': new FormControl(this.detailedEmployee.department, Validators.required),
+    'lastName': new FormControl(this.detailedEmployee.lastName, Validators.compose([
+                                  Validators.required, 
+                                  Validators.pattern("[A-ZÁÉŰÚŐÓÜÖ][a-záéíúőóüöű A-ZÁÉŰÚŐÓÜÖ \-]*"),
+                                  Validators.maxLength(30)])),
+    'firstName': new FormControl(this.detailedEmployee.firstName, Validators.compose([
+                                  Validators.required, 
+                                  Validators.pattern("[A-ZÁÉŰÚŐÓÜÖ][a-záéíúőóüöű ]*"),
+                                  Validators.maxLength(25)])),
+    'email': new FormControl(this.detailedEmployee.email, Validators.compose([
+                                  Validators.required,
+                                  Validators.email,
+                                  Validators.maxLength(30)])),
+    'phoneNumber': new FormControl(this.detailedEmployee.phoneNumber, Validators.compose([
+                                  Validators.required,
+                                  Validators.pattern("[\+]?[0-9]{11,}")])),
+    'department': new FormControl(this.detailedEmployee.department, 
+                                  Validators.required),
   })
 
   get lastName() { return this.employeeForm.get('lastName'); }
@@ -141,10 +153,12 @@ export class EmployeeFormComponent implements OnInit {
 
       if(res){
         await this.employeeService.deleteEmployee(this.detailedEmployee.id).then(res => {
+
           this._snackBar.open('Sikeresen törölte a dolgozót!','', {
             duration: 2000,
             panelClass: ['success'],
           })
+          this.router.navigate(['/employeeList']);
 
         }).catch(e => {
 
@@ -154,7 +168,6 @@ export class EmployeeFormComponent implements OnInit {
           })
         });
 
-        this.router.navigate(['/employeeList']);
       }
     })
   }

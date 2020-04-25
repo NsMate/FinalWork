@@ -12,7 +12,8 @@ import java.util.Optional;
 @Repository
 public interface BusinessOrderRepository extends CrudRepository<BusinessOrder,Long> {
 
-    @Query("select b from BusinessOrder b where b.route is NULL and b.status = 'CLOSED'")
+    @Query("select b from BusinessOrder b where b.status = 'CLOSED' and b.id not in " +
+            "(select r.businessOrder.id from Route r where r.businessOrder != null)")
     List<BusinessOrder> findAllClosedOrders();
 
     @Query("select b from BusinessOrder b where b.route.id = ?1")

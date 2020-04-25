@@ -33,6 +33,16 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/byname/{name}")
+    public ResponseEntity<Product> findPorductByName(@PathVariable String name){
+        Optional<Product> product = productRepository.findByProductName(name);
+        if(product.isPresent()){
+            return ResponseEntity.ok(product.get());
+        }else{
+            return null;
+        }
+    }
+
     @PostMapping("")
     public ResponseEntity<Product> newProduct(@RequestBody Product product){
         Product newProduct = productRepository.save(product);

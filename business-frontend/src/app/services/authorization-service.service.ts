@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { AppUser } from '../models/AppUser/app-user';
 import { Employee } from '../models/Employee/employee';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 export const httpOptions = {
   headers: new HttpHeaders({
@@ -22,7 +24,9 @@ export class AuthorizationService {
   private authUrl: string = 'http://localhost:8080/app_users';
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private _snackBar: MatSnackBar,
+    private routing: Router
   ) { }
 
   async login(appUserName: string, appUserPassword: string): Promise<AppUser> {
@@ -61,6 +65,12 @@ export class AuthorizationService {
     this.appUser = null;
     sessionStorage.clear();
     localStorage.clear();
-    window.location.reload();
+
+    this._snackBar.open('Sikeresen kijelentkezett!','',{
+      duration:2000,
+      panelClass: ['success'],
+    })
+
+    this.routing.navigate(['']);
   }
 }

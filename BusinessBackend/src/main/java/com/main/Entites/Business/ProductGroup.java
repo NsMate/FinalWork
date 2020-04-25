@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 
@@ -27,9 +28,11 @@ public class ProductGroup implements Serializable {
 
     @Column(name = "group_name")
     @NotNull
+    @Size(max = 30)
     private String groupName;
 
     @Column(name = "description")
+    @Size(max = 100)
     private String description;
 
     @OneToMany(mappedBy = "productGroup", cascade = CascadeType.ALL)

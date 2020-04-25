@@ -179,9 +179,16 @@ export class VehicleOverviewDialog{
    */
 
   vehicleForm = this.formBuilder.group({
-    'type': new FormControl (this.data.vehicle.vehicleType, Validators.required),
-    'licensePlate': new FormControl (this.data.vehicle.licensePlateNumber, Validators.compose([Validators.pattern("[A-Z][A-Z][A-Z]-[0-9][0-9][0-9]"), Validators.required])),
-    'manufacturer': new FormControl (this.data.vehicle.manufacturer, Validators.compose([Validators.required, Validators.pattern("[A-Za-zÉÁŰÚŐÓÜÖéáűúőóüö .\-]*")]))
+    'type': new FormControl (this.data.vehicle.vehicleType, Validators.compose([
+                              Validators.required,
+                              Validators.maxLength(15)])),
+    'licensePlate': new FormControl (this.data.vehicle.licensePlateNumber, Validators.compose([
+                              Validators.pattern("[A-Z][A-Z][A-Z]-[0-9][0-9][0-9]"), 
+                              Validators.required])),
+    'manufacturer': new FormControl (this.data.vehicle.manufacturer, Validators.compose(
+                              [Validators.required, 
+                              Validators.pattern("[A-ZÉÁŰÚŐÓÜÖ]+[A-Za-zŰÁÚŐÓÜÖéáűúőóüö1-9 .\-]*"),
+                              Validators.maxLength(15)]))
   })
 
   get type() { return this.vehicleForm.get('type'); }

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -25,6 +26,7 @@ public class InvoiceItem implements Serializable {
     private Long id;
 
     @Column(name = "quantity")
+    @Size(max = 7)
     private BigDecimal quantity;
 
     @Column(name = "discount")
@@ -37,16 +39,20 @@ public class InvoiceItem implements Serializable {
 
     @Column(name = "product")
     @NotNull
+    @Size(max = 30)
     private String product;
 
     @Column(name = "description")
+    @Size(max = 50)
     private String description;
 
     @Column(name = "unit")
     @NotNull
+    @Size(max = 10)
     private String unit;
 
     @Column(name = "price")
     @NotNull
+    @Size(max = 7)
     private String price;
 }

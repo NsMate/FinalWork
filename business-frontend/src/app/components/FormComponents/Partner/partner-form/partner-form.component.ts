@@ -91,6 +91,7 @@ export class PartnerFormComponent implements OnInit {
           panelClass: ['success'],
         })
 
+        this.companyName = res.partnerName;
         this.detailedPartner = res;
 
       }).catch(e => {
@@ -125,6 +126,8 @@ export class PartnerFormComponent implements OnInit {
             panelClass: ['success'],
           })
 
+          this.routing.navigate(['/partnerList']);
+
         }).catch(e => {
 
           this._snackBar.open('Valami hiba történt! ' + e.status,'', {
@@ -134,23 +137,50 @@ export class PartnerFormComponent implements OnInit {
   
         })
       }
-
-      this.routing.navigate(['/partnerList']);
     })
   }
 
   partnerForm = this.formBuilder.group({
-    'partnerName': new FormControl(this.detailedPartner.partnerName, Validators.compose([Validators.required, Validators.pattern("[A-ZÁÉŰÚŐÓÜÖ1-9][a-záéíúőóüöű A-ZÁÉŰÚŐÓÜÖ \-.1-9]*")])),
-    'zipCode': new FormControl(this.detailedPartner.zipCode, Validators.compose([Validators.required, Validators.pattern("[0-9][0-9][0-9][0-9]")])),
-    'city': new FormControl(this.detailedPartner.city, Validators.compose([Validators.required, Validators.pattern("[A-ZÁÉŰÚŐÓÜÖ][a-záéíúőóüöű A-ZÁÉŰÚŐÓÜÖ \-]*")])),
-    'street': new FormControl(this.detailedPartner.street, Validators.compose([Validators.required, Validators.pattern("[A-ZÁÉŰÚŐÓÜÖ1-9][a-záéíúőóüöű A-ZÁÉŰÚŐÓÜÖ \-.1-9]*")])),
-    'streetNumber': new FormControl(this.detailedPartner.streetNumber, Validators.compose([Validators.required,Validators.pattern("[1-9][0-9]*")])),
-    'contactFirstName': new FormControl(this.detailedPartner.contactFirstName, Validators.compose([Validators.required, Validators.pattern("[A-ZÁÉŰÚŐÓÜÖ][a-záéíúőóüöű A-ZÁÉŰÚŐÓÜÖ \-]*")])),
-    'contactLastName': new FormControl(this.detailedPartner.contactLastName, Validators.compose([Validators.required, Validators.pattern("[A-ZÁÉŰÚŐÓÜÖ][a-záéíúőóüöű A-ZÁÉŰÚŐÓÜÖ \-]*")])),
-    'contactEmail': new FormControl(this.detailedPartner.contactEmail, Validators.compose([Validators.required,Validators.email])),
-    'contactPhoneNumber': new FormControl(this.detailedPartner.contactPhoneNumber, Validators.compose([Validators.required, Validators.pattern("[+]+[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]")])),
-    'vatNumber': new FormControl(this.detailedPartner.vatNumber, Validators.compose([Validators.pattern("[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-[0-9]-[0-9][0-9]"), Validators.required])),
-    'partnershipType': new FormControl(this.detailedPartner.partnershipType, Validators.required),
+    'partnerName': new FormControl(this.detailedPartner.partnerName, Validators.compose([
+                        Validators.required, 
+                        Validators.pattern("[A-ZÁÉŰÚŐÓÜÖ1-9][a-záéíúőóüöű A-ZÁÉŰÚŐÓÜÖ \-.1-9]*"),
+                        Validators.minLength(3),
+                        Validators.maxLength(40)])),
+    'zipCode': new FormControl(this.detailedPartner.zipCode, Validators.compose([
+                        Validators.required, 
+                        Validators.pattern("[0-9][0-9][0-9][0-9]")])),
+    'city': new FormControl(this.detailedPartner.city, Validators.compose([
+                        Validators.required, 
+                        Validators.pattern("[A-ZÁÉŰÚŐÓÜÖ][a-záéíúőóüöű A-ZÁÉŰÚŐÓÜÖ \-]*"),
+                        Validators.maxLength(40)])),
+    'street': new FormControl(this.detailedPartner.street, Validators.compose([
+                        Validators.required, 
+                        Validators.pattern("[A-ZÁÉŰÚŐÓÜÖ1-9][a-záéíúőóüöű A-ZÁÉŰÚŐÓÜÖ \-.1-9]*"),
+                        Validators.maxLength(40)])),
+    'streetNumber': new FormControl(this.detailedPartner.streetNumber, Validators.compose([
+                        Validators.required,
+                        Validators.pattern("[1-9][0-9]*"),
+                        Validators.maxLength(6)])),
+    'contactFirstName': new FormControl(this.detailedPartner.contactFirstName, Validators.compose([
+                        Validators.required, 
+                        Validators.pattern("[A-ZÁÉŰÚŐÓÜÖ][a-záéíúőóüöű A-ZÁÉŰÚŐÓÜÖ \-]*"),
+                        Validators.maxLength(30)])),
+    'contactLastName': new FormControl(this.detailedPartner.contactLastName, Validators.compose([
+                        Validators.required, 
+                        Validators.pattern("[A-ZÁÉŰÚŐÓÜÖ][a-záéíúőóüöű A-ZÁÉŰÚŐÓÜÖ \-]*"),
+                        Validators.maxLength(25)])),
+    'contactEmail': new FormControl(this.detailedPartner.contactEmail, Validators.compose([
+                        Validators.required,
+                        Validators.email,
+                        Validators.maxLength(30)])),
+    'contactPhoneNumber': new FormControl(this.detailedPartner.contactPhoneNumber, Validators.compose([
+                        Validators.required, 
+                        Validators.pattern("[\+]?[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]")])),
+    'vatNumber': new FormControl(this.detailedPartner.vatNumber, Validators.compose([
+                        Validators.pattern("[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-[0-9]-[0-9][0-9]"), 
+                        Validators.required])),
+    'partnershipType': new FormControl(this.detailedPartner.partnershipType, Validators.compose([
+                        Validators.maxLength(30)])),
   })
 
   get partnerName() { return this.partnerForm.get('partnerName'); }

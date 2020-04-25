@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -32,14 +33,17 @@ public class Warehouse implements Serializable {
 
     @Column(name = "city")
     @NotNull
+    @Size(max = 30)
     private String city;
 
     @Column(name = "street")
     @NotNull
+    @Size(max = 30)
     private String street;
 
     @Column(name = "street_number")
     @NotNull
+    @Size(max = 6)
     private String streetNumber;
 
     @OneToMany(mappedBy = "warehouse")

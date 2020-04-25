@@ -33,12 +33,6 @@ public class RouteController {
     private WarehouseRepository warehouseRepository;
 
     @Autowired
-    private BusinessOrderRepository businessOrderRepository;
-
-    @Autowired
-    private InvoiceRepository invoiceRepository;
-
-    @Autowired
     private VehicleRepository vehicleRepository;
 
     @GetMapping("")
@@ -56,39 +50,9 @@ public class RouteController {
         }
     }
 
-    @PostMapping("/{warehouseId}/{vehicleId}")
-    public ResponseEntity<Route> newRoute(@RequestBody Route route,
-                                          @PathVariable Long warehouseId, @PathVariable Long vehicleId){
-        Optional<Warehouse> wh = warehouseRepository.findById(warehouseId);
-        Optional<Vehicle> vh = vehicleRepository.findById(vehicleId);
-        route.setWarehouse(wh.get());
-        route.setVehicle(vh.get());
-
-        Long invoiceId = null;
-        Long orderId = null;
-
-        if(route.getBusinessOrder() != null){
-            orderId = route.getBusinessOrder().getId();
-            route.setInvoice(null);
-        }
-        if(route.getInvoice() != null){
-            invoiceId = route.getInvoice().getId();
-            route.setBusinessOrder(null);
-        }
-
+    @PostMapping("")
+    public ResponseEntity<Route> newRoute(@RequestBody Route route){
         Route savedRoute = routeRepository.save(route);
-        if(invoiceId != null){
-            Optional<Invoice> invoice = invoiceRepository.findById(invoiceId);
-            Invoice tmp = invoice.get();
-            tmp.setRoute(route);
-            invoiceRepository.save(tmp);
-        }
-        if(orderId != null) {
-            Optional<BusinessOrder> order = businessOrderRepository.findById(orderId);
-            BusinessOrder tmp = order.get();
-            tmp.setRoute(route);
-            businessOrderRepository.save(tmp);
-        }
         return ResponseEntity.ok(savedRoute);
     }
 
@@ -96,35 +60,9 @@ public class RouteController {
     public ResponseEntity<Route> modifyRouteById(@PathVariable Long id, @RequestBody Route route){
         Optional<Route> oldRoute = routeRepository.findById(id);
         if(oldRoute.isPresent()){
-            Optional<Invoice> inv = invoiceRepository.findInvoiceByRoute(oldRoute.get().getId());
-            Optional<BusinessOrder> ord = businessOrderRepository.findOrderByRoute(oldRoute.get().getId());
-            if(inv.isPresent()){
-                Invoice i = inv.get();
-                i.setRoute(null);
-                invoiceRepository.save(i);
-            }
-            if(ord.isPresent()){
-                BusinessOrder o = ord.get();
-                o.setRoute(null);
-                businessOrderRepository.save(o);
-            }
-            if(route.getInvoice() != null){
-                Optional<Invoice> invoice = invoiceRepository.findById(route.getInvoice().getId());
-                Invoice tmp = invoice.get();
-                tmp.setRoute(route);
-                invoiceRepository.save(tmp);
-                route.setInvoice(null);
-            }
-            if(route.getBusinessOrder() != null){
-                Optional<BusinessOrder> order = businessOrderRepository.findById(route.getBusinessOrder().getId());
-                BusinessOrder tmp = order.get();
-                tmp.setRoute(route);
-                businessOrderRepository.save(tmp);
-                route.setBusinessOrder(null);
-            }
-
             route.setId(id);
-            return ResponseEntity.ok(routeRepository.save(route));
+            Route savedRoute = routeRepository.save(route);
+            return ResponseEntity.ok(savedRoute);
         }else{
             return ResponseEntity.notFound().build();
         }
@@ -134,21 +72,6 @@ public class RouteController {
     public ResponseEntity deleteById(@PathVariable Long id){
         Optional<Route> oldRoute = routeRepository.findById(id);
         if(oldRoute.isPresent()){
-            Route route = oldRoute.get();
-            if(route.getInvoice() != null){
-                Optional<Invoice> invoice = invoiceRepository.findById(route.getInvoice().getId());
-                Invoice tmp = invoice.get();
-                tmp.setRoute(null);
-                invoiceRepository.save(tmp);
-                route.setInvoice(null);
-            }
-            if(route.getBusinessOrder() != null){
-                Optional<BusinessOrder> order = businessOrderRepository.findById(route.getBusinessOrder().getId());
-                BusinessOrder tmp = order.get();
-                tmp.setRoute(null);
-                businessOrderRepository.save(tmp);
-                route.setBusinessOrder(null);
-            }
             routeRepository.deleteById(id);
             return ResponseEntity.ok().build();
         }else{

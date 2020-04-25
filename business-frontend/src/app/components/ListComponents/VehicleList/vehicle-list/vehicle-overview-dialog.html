@@ -10,7 +10,8 @@
       <mat-form-field appearance="standard">
         <input matInput placeholder="eg. Opel" [(ngModel)]="data.vehicle.manufacturer" name="manufacturer" formControlName="manufacturer">
         <mat-error *ngIf="manufacturer.errors?.required && (manufacturer.dirty || manufacturer.touched)"> Kérem adja meg a gyártót! </mat-error>
-        <mat-error *ngIf="manufacturer.errors?.pattern && (manufacturer.dirty || manufacturer.touched)"> Helytelen formátum </mat-error>
+        <mat-error *ngIf="manufacturer.errors?.maxlength && (manufacturer.dirty || manufacturer.touched)"> Maximum 15 karakter lehet! </mat-error>
+        <mat-error *ngIf="manufacturer.errors?.pattern && (manufacturer.dirty || manufacturer.touched)"> Nagybetűvel kezdődhet, csak betűt, számot, vesszőt és kötőjelet tartalmazhat! </mat-error>
       </mat-form-field>
     </div>
 
@@ -26,11 +27,9 @@
     <div>
       <h2>Rendeltetés</h2>
       <mat-form-field appearance="standard">
-        <mat-label>{{ data.vehicle.vehicleType }}</mat-label>
         <mat-select [(value)]="data.vehicle.vehicleType" formControlName="type">
           <mat-option value="Személyes">Személyes</mat-option>
-          <mat-option value="Transport">Szállítás</mat-option>
-          <mat-option value="Combi">Combi</mat-option>
+          <mat-option value="Szállítás">Szállítás</mat-option>
         </mat-select>
         <mat-error *ngIf="type.errors?.required && (type.dirty || type.touched)"> Kérem adja meg a típust! </mat-error>
       </mat-form-field>
