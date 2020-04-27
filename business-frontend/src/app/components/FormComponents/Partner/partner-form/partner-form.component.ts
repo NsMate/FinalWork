@@ -37,6 +37,10 @@ export class PartnerFormComponent implements OnInit {
     this.route.queryParams.subscribe(async params => {
       console.log(params);
 
+      if(params == null){
+        this.routing.navigate(['/partnerForm'],{queryParams: {new: 'yes'}});
+      }
+
       if (params.own != null) {
 
         this.detailedPartner = await this.partnerService.getOwnCompany();
@@ -47,13 +51,25 @@ export class PartnerFormComponent implements OnInit {
           this.detailedPartner.own = 1;
         }
 
-      } else {
+      } else if(params.new == 'no'){
 
-        if (params.new == 'no') {
-          this.detailedPartner = await this.partnerService.getPartner(parseInt(params.id));
-        } else {
-          this.detailedPartner = new Partner();
-        }
+          try {
+
+            this.detailedPartner = await this.partnerService.getPartner(parseInt(params.id));
+
+          } catch (error) {
+            
+            this._snackBar.open('Nincs ilyen partner vagy rosszul adta meg az URL-t!','', {
+              duration: 2000,
+              panelClass: ['error'],
+            })
+
+            this.routing.navigate(['/partnerForm'],{queryParams: {new: 'yes'}});
+
+          }
+      }else{
+
+        this.routing.navigate(['/partnerForm'],{queryParams: {new: 'yes'}});
 
       }
 

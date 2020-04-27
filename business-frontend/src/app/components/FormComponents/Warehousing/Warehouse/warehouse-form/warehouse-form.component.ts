@@ -72,21 +72,50 @@ export class WarehouseFormComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.route.queryParams.subscribe(async params => {
-      if(params.new == 'no'){
-        this.detailedWarehouse = await this.warehouseService.getWarehouse(parseInt(params.id));
-        this.detailedWarehouseStockList = this.detailedWarehouse.stockList;
-        this.employeeList = this.detailedWarehouse.employeeList;
-        this.vehicleList = this.detailedWarehouse.vehicleList;
 
-        this.dataSource = new MatTableDataSource(this.detailedWarehouseStockList);
-        this.employeeSource = new MatTableDataSource(this.employeeList);
-        this.vehicleSource = new MatTableDataSource(this.vehicleList);
-      }else{
+      if(params == null){
+
+        this.routing.navigate(['/warehouseForm'],{queryParams: {new: 'yes'}});
+
+      }
+
+      if(params.new == 'yes'){
+
         this.detailedWarehouse = new Warehouse();
         this.employeeList = [];
         this.vehicleList = [];
         this.detailedWarehouseStockList = [];
+
+      }else if(params.new == 'no'){
+        
+        try {
+
+          this.detailedWarehouse = await this.warehouseService.getWarehouse(parseInt(params.id));
+          this.detailedWarehouseStockList = this.detailedWarehouse.stockList;
+          this.employeeList = this.detailedWarehouse.employeeList;
+          this.vehicleList = this.detailedWarehouse.vehicleList;
+
+          this.dataSource = new MatTableDataSource(this.detailedWarehouseStockList);
+          this.employeeSource = new MatTableDataSource(this.employeeList);
+          this.vehicleSource = new MatTableDataSource(this.vehicleList);
+
+        } catch (error) {
+          
+          this._snackBar.open('Nincs ilyen raktár vagy rosszul adta meg az URL-t!','', {
+            duration: 2000,
+            panelClass: ['error'],
+          })
+
+          this.routing.navigate(['/warehouseForm'],{queryParams: {new: 'yes'}});
+
+        }
+      }else{
+        
+        this.routing.navigate(['/warehouseForm'],{queryParams: {new: 'yes'}});
+
       }
+
+
     })
 
       this.dataSource.sort = this.sort;

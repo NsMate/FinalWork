@@ -50,14 +50,35 @@ export class EmployeeFormComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.route.queryParams.subscribe(async params => {
 
+      if(params == null){
+        this.router.navigate(['/employeeForm'],{queryParams: {new: 'yes'}});
+      }
+
       if(params.new == 'yes'){
 
         this.isNew = true;
+        this.detailedEmployee = new Employee();
+
+      }else if(params.new == 'no'){
+
+        try {
+
+          this.detailedEmployee = await this.employeeService.getEmployee(parseInt(params.id));
+
+        } catch (error) {
+
+          this._snackBar.open('Nincs ilyen alkalmazott vagy nem jól adta meg!','', {
+            duration: 2000,
+            panelClass: ['error'],
+          })
+
+          this.router.navigate(['/employeeForm'],{queryParams: {new: 'yes'}});
+
+        }
 
       }else{
 
-        this.detailedEmployee = await this.employeeService.getEmployee(parseInt(params.id));
-        this.isNew = false;
+        this.router.navigate(['/employeeForm'],{queryParams: {new: 'yes'}});
 
       }
     })

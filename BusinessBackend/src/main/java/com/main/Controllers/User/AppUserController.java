@@ -49,7 +49,7 @@ public class AppUserController {
         Optional<AppUser> oldUser = appUserRepository.findById(id);
         if(oldUser.isPresent()){
             appUser.setId(id);
-            
+            appUser.setAppUserPassword(oldUser.get().getAppUserPassword());
             return ResponseEntity.ok(appUserRepository.save(appUser));
         }else{
             return ResponseEntity.notFound().build();

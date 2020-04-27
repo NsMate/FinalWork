@@ -104,9 +104,31 @@ export class OrderFormComponent implements OnInit {
    */
   async ngOnInit(): Promise<void> {
     this.route.queryParams.subscribe(async params => {
-      if(params.new == 'no'){
-        this.detailedOrder = await this.orderService.getBusinessOrder(parseInt(params.id));
-        this.orderItems = await this.orderService.getBusinessOrdersItems(parseInt(params.id));
+      if(params == null){
+        this.routing.navigate(['/invoiceForm'],{queryParams: {new: 'yes'}});
+      }
+      if(params.new == 'yes'){
+        this.detailedOrder = new BusinessOrder();
+      }else if(params.new == 'no'){
+        try {
+
+          this.detailedOrder = await this.orderService.getBusinessOrder(parseInt(params.id));
+          this.orderItems = await this.orderService.getBusinessOrdersItems(parseInt(params.id));
+
+        } catch (error) {
+
+          this._snackBar.open('Nincs ilyen számla vagy rosszul adta meg az URL-t!','', {
+            duration:2000,
+            panelClass: ['error'],
+          })
+          
+          this.routing.navigate(['/invoiceForm'],{queryParams: {new: 'yes'}});
+
+        }
+      }else{
+
+        this.routing.navigate(['/invoiceForm'],{queryParams: {new: 'yes'}});
+
       }
       this.dataSource = new MatTableDataSource(this.orderItems);
       this.dataSource.sort = this.sort;

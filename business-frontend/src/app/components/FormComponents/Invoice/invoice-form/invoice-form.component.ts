@@ -111,9 +111,31 @@ export class InvoiceFormComponent implements OnInit {
    */
   async ngOnInit(): Promise<void> {
     this.route.queryParams.subscribe(async params => {
-      if(params.new == 'no'){
-        this.detailedInvoice = await this.invoiceService.getInvoice(parseInt(params.id));
-        this.invoiceItems = await this.invoiceService.getInvoiceItems(parseInt(params.id));
+      if(params == null){
+        this.routing.navigate(['/invoiceForm'],{queryParams: {new: 'yes'}});
+      }
+      if(params.new == 'yes'){
+        this.detailedInvoice = new Invoice();
+      }else if(params.new == 'no'){
+        try {
+
+          this.detailedInvoice = await this.invoiceService.getInvoice(parseInt(params.id));
+          this.invoiceItems = await this.invoiceService.getInvoiceItems(parseInt(params.id));
+
+        } catch (error) {
+
+          this._snackBar.open('Nincs ilyen számla vagy rosszul adta meg az URL-t!','', {
+            duration:2000,
+            panelClass: ['error'],
+          })
+          
+          this.routing.navigate(['/invoiceForm'],{queryParams: {new: 'yes'}});
+
+        }
+      }else{
+
+        this.routing.navigate(['/invoiceForm'],{queryParams: {new: 'yes'}});
+
       }
       this.dataSource = new MatTableDataSource(this.invoiceItems);
       this.dataSource.sort = this.sort;
