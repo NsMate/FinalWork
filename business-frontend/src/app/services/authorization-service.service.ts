@@ -20,6 +20,7 @@ export class AuthorizationService {
   public isLoggedIn: boolean = false;
   public appUser: AppUser;
   public redirectUrl: string;
+  public ownCompanyExists: boolean;
 
   private authUrl: string = 'http://localhost:8080/app_users';
 
@@ -53,6 +54,10 @@ export class AuthorizationService {
 
   updateUser(appUser: AppUser): Promise<AppUser>{
     return this.http.put<AppUser>(`${this.authUrl}/${appUser.id}`, appUser, httpOptions).toPromise();
+  }
+
+  updateUserWithNewPassword(appUser: AppUser): Promise<AppUser>{
+    return this.http.put<AppUser>(`${this.authUrl}/newPassword/${appUser.id}`, appUser, httpOptions).toPromise();
   }
   
   deleteUser(id:number): Promise<AppUser>{

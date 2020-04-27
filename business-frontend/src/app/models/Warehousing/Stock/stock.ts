@@ -4,5 +4,5 @@ export class Stock {
     id: number;
     quantity: number = 0;
     product: Product = null;
-    unit: string = "";
+    unit: string = null;
 }

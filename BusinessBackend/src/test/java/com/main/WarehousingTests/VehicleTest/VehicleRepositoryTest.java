@@ -42,7 +42,7 @@ public class VehicleRepositoryTest {
     public Warehouse createWarehouse(Long id){
         Warehouse warehouse = new Warehouse();
         warehouse.setId(id);
-        warehouse.setZipCode(BigDecimal.valueOf(1111));
+        warehouse.setZipCode(1111);
         warehouse.setCity("Budapest");
         warehouse.setStreet("Deák út");
         warehouse.setStreetNumber("12");

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { WarehouseService } from 'src/app/services/Warehousing/Warehouse/warehouse.service';
-import { FormBuilder, FormControl, Validators, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormControl, Validators, AbstractControl, Form, FormGroup, ValidatorFn } from '@angular/forms';
 import { Stock } from 'src/app/models/Warehousing/Stock/stock';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
@@ -10,7 +10,7 @@ import { Product } from 'src/app/models/BusinessModels/Product/product';
 import { ProudctService } from 'src/app/services/BusinessServices/Product/proudct.service';
 import { ConfdialogComponent, ConfirmationDialogText } from 'src/app/components/ConfirmationDialog/confdialog/confdialog.component';
 import { StockService } from 'src/app/services/Warehousing/Stock/stock.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Employee } from 'src/app/models/Employee/employee';
 import { Vehicle } from 'src/app/models/Warehousing/Vehicle/vehicle';
 import { EmployeeService } from 'src/app/services/BusinessServices/Employee/employee.service';
@@ -44,6 +44,8 @@ export class WarehouseFormComponent implements OnInit {
   public employeeSource;
   public vehicleSource;
 
+  public navigationSubscription;
+
   constructor(
     private warehouseService: WarehouseService,
     private employeeService: EmployeeService,
@@ -59,7 +61,14 @@ export class WarehouseFormComponent implements OnInit {
     private route: ActivatedRoute,
 
     private _snackBar: MatSnackBar
-  ) { }
+  ) { 
+    this.navigationSubscription = this.routing.events.subscribe((e: any) => {
+      // If it is a NavigationEnd event re-initalise the component
+      if (e instanceof NavigationEnd) {
+        this.ngOnInit();
+      }
+    });
+   }
 
   async ngOnInit(): Promise<void> {
     this.route.queryParams.subscribe(async params => {
@@ -134,7 +143,21 @@ export class WarehouseFormComponent implements OnInit {
     dialogRef.afterClosed().subscribe(async result => {
       if(result.newStock != null){
 
-        await this.warehouseService.insertStockIntoWarehouse(this.detailedWarehouse.id,result.newStock);
+        await this.warehouseService.insertStockIntoWarehouse(this.detailedWarehouse.id,result.newStock).then(res => {
+
+          this._snackBar.open('Sikeresen létrehozta a készletet!','', {
+            duration: 2000,
+            panelClass: ['success']
+          })
+
+        }).catch(e => {
+
+          this._snackBar.open('Hiba történt! Status:' + e.status,'', {
+            duration: 5000,
+            panelClass: ['error']
+          })
+
+        });
 
       }
 
@@ -326,11 +349,11 @@ export class WarehouseFormStockDialog implements OnInit{
     return val ? val.productName + " C: " + val.code : val;
   }
   
-  stockForm = this.formBuilder.group({
+  stockForm = new FormGroup({
     'product': new FormControl (this.data.stock.product, Validators.compose([
                                   Validators.required,
-                                  Validators.maxLength(30)]),
-                                  this.validateProduct.bind(this)),
+                                  Validators.maxLength(30),
+                                  this.validateProduct])),
     'quantity': new FormControl (this.data.stock.quantity, Validators.compose([
                                   Validators.pattern("[0-9]*"),
                                   Validators.required,
@@ -343,13 +366,32 @@ export class WarehouseFormStockDialog implements OnInit{
   get product() { return this.stockForm.get('product'); }
   get quantity() { return this.stockForm.get('quantity'); }
   get unit() { return this.stockForm.get('unit'); }
-
-  async validateProduct(control: AbstractControl){
-    const product = control.value;
-    let foundProduct = await this.productService.getProductByName(product);
-    return foundProduct == null ?
-      null : {noProduct: true}
+  
+  validateProduct(control: AbstractControl){
+    if(control.value == null){
+      return {noProduct: true};
+    }
+    if(control.value.id != null){
+      return null;
+    }else{
+      return {noProduct: true};
+    }
   }
+
+  /*
+  validateProduct(): ValidatorFn {
+    return async (control: AbstractControl): Promise<{[key: string]: any} | null> => {
+      let prod = control.value.trim();
+      console.log(prod);
+      if(prod == ''){
+        return {'noProduct': true}
+      }else{
+        let foundProduct = await this.productService.getProductByName(prod);
+        return foundProduct == null ?
+          null : {'noProduct': true}
+    }
+    };
+  }*/
 
   openConfDialog(){
 
@@ -373,6 +415,8 @@ export class WarehouseFormStockDialog implements OnInit{
           panelClass: ['success']
         })
 
+        this.dialogRef.close({newStock: null});
+
         });
       }
 
@@ -394,6 +438,8 @@ export class WarehouseFormStockDialog implements OnInit{
           panelClass: ['success'],
         })
 
+        this.dialogRef.close({newStock: null});
+
       }).catch(e => {
 
         this._snackBar.open('Valami hiba történt! ' + e.status,'', {
@@ -402,8 +448,6 @@ export class WarehouseFormStockDialog implements OnInit{
         })
 
       });
-
-      this.dialogRef.close({newStock: null});
 
     }
   }

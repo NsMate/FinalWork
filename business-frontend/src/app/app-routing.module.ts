@@ -41,7 +41,8 @@ const routes: Routes = [
   {
     path: 'warehouseForm',
     component: WarehouseFormComponent,
-    canActivate: [ AuthGuard ]
+    canActivate: [ AuthGuard ],
+    runGuardsAndResolvers: 'always',
   },
   {
     path: 'employeeList',
@@ -100,7 +101,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {onSameUrlNavigation: 'reload'})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

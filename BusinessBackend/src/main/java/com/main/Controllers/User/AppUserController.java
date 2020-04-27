@@ -49,6 +49,18 @@ public class AppUserController {
         Optional<AppUser> oldUser = appUserRepository.findById(id);
         if(oldUser.isPresent()){
             appUser.setId(id);
+            
+            return ResponseEntity.ok(appUserRepository.save(appUser));
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/newPassword/{id}")
+    public ResponseEntity<AppUser> modifyAppUserByIdNewPassword(@PathVariable Long id, @RequestBody AppUser appUser){
+        Optional<AppUser> oldUser = appUserRepository.findById(id);
+        if(oldUser.isPresent()){
+            appUser.setId(id);
             appUser.setAppUserPassword(passwordEncoder.encode(appUser.getAppUserPassword()));
             return ResponseEntity.ok(appUserRepository.save(appUser));
         }else{

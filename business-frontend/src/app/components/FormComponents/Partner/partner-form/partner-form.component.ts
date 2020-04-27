@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfdialogComponent, ConfirmationDialogText } from 'src/app/components/ConfirmationDialog/confdialog/confdialog.component';
+import { AuthorizationService } from 'src/app/services/authorization-service.service';
 
 @Component({
   selector: 'app-partner-form',
@@ -28,7 +29,8 @@ export class PartnerFormComponent implements OnInit {
     private route: ActivatedRoute,
     private _snackBar: MatSnackBar,
     private routing: Router,
-    private confDialog: MatDialog
+    private confDialog: MatDialog,
+    private authService: AuthorizationService
   ) { }
 
   ngOnInit(): void {
@@ -70,6 +72,7 @@ export class PartnerFormComponent implements OnInit {
         })
         if(this.own){
           this.ngOnInit();
+          this.authService.ownCompanyExists = true;
         }else{
           this.routing.navigate(['.'], { relativeTo: this.route, queryParams: { new: 'no', id: res.id }});
         }

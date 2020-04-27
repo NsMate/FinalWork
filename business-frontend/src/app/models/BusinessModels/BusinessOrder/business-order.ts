@@ -9,6 +9,6 @@ export class BusinessOrder {
     orderItems: OrderItem[] = [];
     partner: Partner = null;
     vat: number = 27;
-    paymentType: string = "";
+    paymentType: string = "Átutalás";
     status: string = "OPEN";
 }

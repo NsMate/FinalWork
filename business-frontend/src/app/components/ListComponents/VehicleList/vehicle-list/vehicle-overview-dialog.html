@@ -6,7 +6,7 @@
   <form #addForm="ngForm" [formGroup]="vehicleForm" style="text-align: center;">
 
     <div>
-      <h2>Gyártó</h2>
+      <h2>Gyártó*</h2>
       <mat-form-field appearance="standard">
         <input matInput placeholder="eg. Opel" [(ngModel)]="data.vehicle.manufacturer" name="manufacturer" formControlName="manufacturer">
         <mat-error *ngIf="manufacturer.errors?.required && (manufacturer.dirty || manufacturer.touched)"> Kérem adja meg a gyártót! </mat-error>
@@ -16,7 +16,7 @@
     </div>
 
     <div>
-      <h2>Rendszám</h2>
+      <h2>Rendszám*</h2>
       <mat-form-field appearance="standard"> 
         <input matInput placeholder="ABC-123" [(ngModel)]="data.vehicle.licensePlateNumber" name="licensePlate" formControlName="licensePlate">
         <mat-error *ngIf="licensePlate.errors?.required && (licensePlate.dirty || licensePlate.touched)"> Kérem adja meg a rendszámot! </mat-error>
@@ -25,7 +25,7 @@
     </div>
 
     <div>
-      <h2>Rendeltetés</h2>
+      <h2>Rendeltetés*</h2>
       <mat-form-field appearance="standard">
         <mat-select [(value)]="data.vehicle.vehicleType" formControlName="type">
           <mat-option value="Személyes">Személyes</mat-option>

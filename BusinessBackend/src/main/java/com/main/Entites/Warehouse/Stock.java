@@ -28,8 +28,7 @@ public class Stock implements Serializable {
 
     @Column(name = "quantity")
     @NotNull
-    @Size(max = 7)
-    private BigDecimal quantity;
+    private Integer quantity;
 
     @ManyToOne
     @JoinColumn(name = "warehouse_id", referencedColumnName = "id")
@@ -38,7 +37,6 @@ public class Stock implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id")
-    @Size(max = 30)
     private Product product;
 
     @Column(name = "unit")

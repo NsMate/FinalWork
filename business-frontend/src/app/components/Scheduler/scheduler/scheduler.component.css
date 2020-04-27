@@ -9,8 +9,8 @@ mwl-calendar-week-view{
     margin-bottom: 15px;
 }
 
-.btn-group{
-    justify-content: space-evenly;
+.dateButton{
+    margin-right: 18px;
 }
 
 .text-center{

@@ -60,7 +60,7 @@
     </div>
 
     <div>
-        <h2>Munkakör</h2>
+        <h3>Munkakör</h3>
         <mat-form-field appearance="standard">
           <mat-select [(ngModel)]="detailedEmployee.department" formControlName="department">
             <mat-option value="Vezető">Vezető</mat-option>
@@ -68,7 +68,7 @@
             <mat-option value="Logisztika">Logisztika</mat-option>
             <mat-option value="Munkás">Munkás</mat-option>
           </mat-select> 
-          <mat-error *ngIf="department.errors?.required && (department.dirty || department.touched)"> Adja meg az email címet! </mat-error>
+          <mat-error *ngIf="department.errors?.required && (department.dirty || department.touched)"> Adja meg a munkakört! </mat-error>
         </mat-form-field>
       </div>
 

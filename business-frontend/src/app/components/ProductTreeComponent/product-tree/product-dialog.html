@@ -7,7 +7,7 @@
     <form #addForm="ngForm" [formGroup]="productForm" style="text-align: center;">
       <div>
         <h2>A termék csoportja: {{ modifiedProductGroup.groupName }}</h2>
-        <h2>Termék neve</h2>
+        <h2>Termék neve*</h2>
         <mat-form-field appearance="standard">
           <input matInput placeholder="eg. Alma" [(ngModel)]="data.product.productName" name="productName" formControlName="productName">
           <mat-error *ngIf="productName.errors?.required && (productName.dirty || productName.touched)"> Kérem adja meg a termék nevét! </mat-error>
@@ -16,7 +16,7 @@
         </mat-form-field>
       </div>
       <div>
-        <h2>Termék ára</h2>
+        <h2>Termék ára*</h2>
         <mat-form-field appearance="standard">
           <input matInput placeholder="eg. 1000" [(ngModel)]="data.product.price" name="productPrice" formControlName="productPrice">
           <mat-error *ngIf="productPrice.errors?.required && (productPrice.dirty || productPrice.touched)"> Kérem adja meg a termék árát! </mat-error>
@@ -32,7 +32,7 @@
         </mat-form-field>
       </div>
       <div>
-        <h2>Termék kódja</h2>
+        <h2>Termék kódja*</h2>
         <mat-form-field appearance="standard"> 
           <input matInput placeholder="eg 1001" [(ngModel)]="data.product.code" name="productCode" formControlName="productCode">
           <mat-error *ngIf="productCode.errors?.required && (productCode.dirty || productCode.touched)"> Kérem adja meg a termék kódját! </mat-error>

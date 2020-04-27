@@ -1,3 +1,5 @@
+<h1 class="appName" *ngIf="!getAuthService().isLoggedIn">Core</h1>
+
 <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="!getAuthService().isLoggedIn">
   
   <mat-form-field class="usernameField">
@@ -11,8 +13,6 @@
     <mat-error *ngIf="password.invalid">Password is required</mat-error>
   </mat-form-field>
   
-  <div class="saveButton">
-    <button mat-flat-button type="submit" color="primary" [disabled]="form.invalid">Belépés</button>
-  </div>
+  <button mat-raised-button type="submit" color="primary" [disabled]="form.invalid">Belépés</button>
   
 </form>

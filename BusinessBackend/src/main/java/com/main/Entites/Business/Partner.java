@@ -33,8 +33,7 @@ public class Partner implements Serializable {
 
     @Column(name = "zip_code")
     @NotNull
-    @Size(max = 4)
-    private BigDecimal zipCode;
+    private int zipCode;
 
     @Column(name = "city")
     @NotNull
@@ -48,8 +47,7 @@ public class Partner implements Serializable {
 
     @Column(name = "street_number")
     @NotNull
-    @Size(max = 6)
-    private BigDecimal streetNumber;
+    private int streetNumber;
 
     @Column(name = "contact_first_name")
     @NotNull

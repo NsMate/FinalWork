@@ -31,23 +31,26 @@
 
     <ng-container matColumnDef="department">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Munkakör </th>
-        <td mat-cell *matCellDef="let employee"><a (click)="showDetailedEmployee(employee)"> {{employee.department}} </a></td>
-    </ng-container>
-
-    <ng-container matColumnDef="icon">
-        <th mat-header-cell *matHeaderCellDef ></th>
-        <td mat-header-cell *matCellDef="let employee"> 
-          <mat-icon *ngIf="employee.department == 'Vezető'">work</mat-icon> 
-          <mat-icon *ngIf="employee.department == 'Pénzügy'">attach_money</mat-icon>
-          <mat-icon *ngIf="employee.department == 'Logisztika'">format_list_numbered</mat-icon>
-          <mat-icon *ngIf="employee.department == 'Munkás'">home_work</mat-icon>
+        <td mat-cell *matCellDef="let employee">
+          <a (click)="showDetailedEmployee(employee)"> 
+            {{employee.department}}  
+            <mat-icon *ngIf="employee.department == 'Vezető'" matSuffix style="margin-left: 5px;">work</mat-icon> 
+            <mat-icon *ngIf="employee.department == 'Pénzügy'" matSuffix style="margin-left: 5px;">attach_money</mat-icon>
+            <mat-icon *ngIf="employee.department == 'Logisztika'" matSuffix style="margin-left: 5px;">format_list_numbered</mat-icon>
+            <mat-icon *ngIf="employee.department == 'Munkás'" matSuffix style="margin-left: 5px;">home_work</mat-icon>
+          </a>
         </td>
     </ng-container>
-
+    
     <ng-container matColumnDef="userButton">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Felhasználó hozzáadása </th>
-        <td mat-cell *matCellDef="let employee"> <button mat-raised-button (click)="openDialog(employee)" color="primary" 
-          [disabled]="!(getAuthService().appUser.appUserGroup == 'ROLE_ADMIN')" *ngIf="employee.department != 'Munkás'"><mat-icon>create</mat-icon> Új / módosítás </button> </td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Felhasználó kezelése </th>
+        <td mat-cell *matCellDef="let employee" style="text-align: center;">
+          <button mat-raised-button 
+                  (click)="openDialog(employee)" 
+                  color="primary" 
+                  [disabled]="!(getAuthService().appUser.appUserGroup == 'ROLE_ADMIN')" 
+                  *ngIf="employee.department != 'Munkás'"><mat-icon>create</mat-icon> Módosítás </button> 
+        </td>
     </ng-container>
   
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

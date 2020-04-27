@@ -9,6 +9,6 @@ export class Invoice {
     invoiceItems: InvoiceItem[] = [];
     partner: Partner = null;
     vat: number = 27;
-    paymentType: string = "";
+    paymentType: string = "Átutalás";
     status: string = "OPEN";
 }

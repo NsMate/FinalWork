@@ -29,7 +29,7 @@ public class Warehouse implements Serializable {
 
     @Column(name = "zip_code")
     @NotNull
-    private BigDecimal zipCode;
+    private int zipCode;
 
     @Column(name = "city")
     @NotNull
@@ -43,7 +43,6 @@ public class Warehouse implements Serializable {
 
     @Column(name = "street_number")
     @NotNull
-    @Size(max = 6)
     private String streetNumber;
 
     @OneToMany(mappedBy = "warehouse")

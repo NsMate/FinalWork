@@ -4,7 +4,8 @@
         <button
             mat-raised-button
             color="primary"
-          class="dataChangerButton"
+          class="dateButton"
+          style="margin: 0 14px 0 14px;"
           mwlCalendarPreviousView
           [view]="view"
           [(viewDate)]="viewDate"
@@ -15,7 +16,8 @@
         <button
             mat-raised-button
             color="accent"
-            class="dataChangerButton"
+            class="dateButton"
+            style="margin: 0 14px 0 14px;"
           mwlCalendarToday
           [(viewDate)]="viewDate"
           (viewDateChange)="viewDateChange.next(viewDate); getEvents()"
@@ -25,7 +27,8 @@
         <button
             mat-raised-button
             color="primary"
-            class="dataChangerButton"
+            class="dateButton"
+            style="margin: 0 14px 0 14px;"
           mwlCalendarNextView
           [view]="view"
           [(viewDate)]="viewDate"
@@ -35,7 +38,7 @@
         </button>
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4" style="margin-right: 24px;">
       <h2>{{ viewDate | calendarDate: view + 'ViewTitle':locale }}</h2>
     </div>
   </div>

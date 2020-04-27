@@ -273,8 +273,6 @@ export class ProductGroupDialog{
 
       });
     }
-
-    this.dialogRef.close();
   }
 
   /**

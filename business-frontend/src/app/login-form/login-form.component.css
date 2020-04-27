@@ -1,24 +1,22 @@
-*{
-    margin: 0;
-}
 
-.passwordField, .usernameField, .saveButton{
+.appName{
     position: absolute;
-}
-
-.passwordField{
-    left: 60vh;
-    top: 40vh;
-}
-
-.usernameField{
-    left: 60vh;
     top: 30vh;
+    left: 40vh;
+    color: rgb(165, 83, 97);
+    font-style: italic;
+    font-size: 64px;
+    letter-spacing: 3px;
 }
 
-.saveButton{
-    left: 90vh;
-    top: 40vh;
+form{
+    position: absolute;
+    top: 50vh;
+    left: 40vh;
+}
+
+.usernameField, .passwordField{
+    margin-right: 10px;
 }
 
 ::ng-deep .success {

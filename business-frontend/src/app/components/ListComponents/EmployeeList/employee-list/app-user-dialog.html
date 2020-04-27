@@ -18,7 +18,7 @@
         </mat-form-field>
       </div>
 
-      <div *ngIf="data.employee.appUser.id == null">
+      <div *ngIf="data.employee.appUser.id == null || showNewPassword">
         <h2> Jelszó* </h2>
         <mat-form-field appearance="standard"> 
           <input matInput [(ngModel)]="data.employee.appUser.appUserPassword" 
@@ -31,9 +31,7 @@
                 <mat-error *ngIf="userPassword.errors?.pattern && (userPassword.dirty || userPassword.touched)"> Használhat betűket, számokat, illetve: ". _ " speciális karaktereket! </mat-error>
                 <mat-error *ngIf="userPassword.errors?.minlength"> Legalább 5 karakter hosszúnak kell lennie! </mat-error>
         </mat-form-field>
-      </div>
 
-      <div *ngIf="data.employee.appUser.id == null">
         <h2> Jelszó mégegyszer* </h2>
         <mat-form-field appearance="standard"> 
           <input matInput [(ngModel)]="passwordAgain" 
@@ -43,18 +41,8 @@
                   [autocomplete]="autoComplete"
                   [errorStateMatcher]="errorMatcher"
                   required>
-                  <mat-error *ngIf="userForm.hasError('wrongPassword')"> A jelszavak nem egyeznek! </mat-error>
-        </mat-form-field>
-      </div>
-
-      <div *ngIf="data.employee.appUser.id != null">
-        <h2> Új jelszó </h2>
-        <mat-form-field appearance="standard"> 
-          <input matInput [(ngModel)]="newPassword"
-                  name="newPassword" 
-                  formControlName="newPassword" 
-                  [type]="hidePassword ? 'password' : 'text'" 
-                  [autocomplete]="autoComplete">
+                  <mat-error *ngIf="userForm.hasError('wrongPassword') && 
+                                    (userPasswordAgain.dirty || userPasswordAgain.touched)"> A jelszavak nem egyeznek! </mat-error>
         </mat-form-field>
       </div>
       
@@ -75,9 +63,9 @@
   </div>
   
   <div mat-dialog-action style="display: flex; justify-content: space-evenly;">
-    <button mat-raised-button *ngIf="data.employee.appUser.id == null" [disabled]="userForm.invalid" (click)="saveUser()" color="primary"><mat-icon>save</mat-icon>Mentés</button>
+    <button mat-raised-button [disabled]="userForm.invalid" (click)="saveUser()" color="primary"><mat-icon>save</mat-icon>Mentés</button>
 
-    <button mat-raised-button *ngIf="data.employee.appUser.id != null" (click)="saveUser()" color="primary"><mat-icon>save</mat-icon>Mentés</button>
+    <button mat-raised-button *ngIf="data.employee.appUser.id != null" (click)="newPasswordShow()" color="accent"><mat-icon>warning</mat-icon> Jelszó megváltoztatása </button>
   
     <button mat-raised-button color="warn" *ngIf="data.employee.appUser.id != null" (click)="openConfDialog()"><mat-icon>delete</mat-icon>Törlés</button>
   </div>

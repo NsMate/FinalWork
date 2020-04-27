@@ -6,19 +6,25 @@
     margin-right: auto;
 }
 
-table {
-    width: 50%;
-    margin: 0 auto 18px auto;
-}
-
 th{
     height: 50px;
     font-size: medium;
     color: black;
 }
 
-th,td{
-    width: auto;
+.customEmployeeWidth{
+    width: 110px;
+}
+.customVehicleWidth{
+    width: 80px;
+}
+.customStockWidth{
+    width: 180px;
+}
+
+.mat-sort-header-container {
+    display:flex;
+    justify-content:center;
 }
 
 h1{
@@ -31,8 +37,10 @@ th.mat-sort-header-sorted {
 }
 
 .newButton{
-    margin-left:25%;
     margin-bottom: 18px;
+}
+.newStockButtonDiv{
+    text-align: center;
 }
 
 .saveButton{
@@ -48,19 +56,6 @@ th.mat-sort-header-sorted {
     left: 25%;
 }
 
-.empTable,.vehicleTable{
-    margin-left: 25%;
-    align-items: left;
-}
-
-.tableHeader{
-    margin-bottom: 12px;
-}
-
-.tableButton{
-    margin-bottom: 8px;
-}
-
 ::ng-deep .success {
     background: green;
     color: white;
@@ -73,4 +68,18 @@ th.mat-sort-header-sorted {
 
 a:hover{
     cursor: pointer;
+}
+
+.empAndVehicleTable{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.stockTableDiv{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.tableButton{
+    margin-bottom: 12px;
 }

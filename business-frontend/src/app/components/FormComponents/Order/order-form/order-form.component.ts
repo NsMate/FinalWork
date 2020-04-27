@@ -147,8 +147,10 @@ export class OrderFormComponent implements OnInit {
    */
   orderForm = this.formBuilder.group({
     'partner': new FormControl(this.detailedOrder.partner, 
-                                  Validators.required,
-                                  this.validatePartner.bind(this)),
+                                  Validators.compose([
+                                    Validators.required,
+                                    this.validatePartner
+                                  ])),
     'issueDate': new FormControl(this.detailedOrder.issueDate, Validators.compose([
                                   Validators.required])),
     'dueDate': new FormControl(this.detailedOrder.dueDate, Validators.compose([
@@ -159,8 +161,7 @@ export class OrderFormComponent implements OnInit {
                                   Validators.required,
                                   Validators.pattern("[1-9][0-9]*"),
                                   Validators.maxLength(2)])),
-    'paymentType': new FormControl(this.detailedOrder.paymentType, 
-                                  Validators.required),
+    'paymentType': new FormControl(this.detailedOrder.paymentType, Validators.compose([Validators.required])),
   })
 
   get partner() { return this.orderForm.get('partner'); }
@@ -178,11 +179,15 @@ export class OrderFormComponent implements OnInit {
     return val ? val.partnerName : val;
   }
 
-  async validatePartner(control: AbstractControl){
-    const partner = control.value;
-    let foundPartner = await this.partnerService.getPartnerByName(partner);
-    return foundPartner == null ?
-      null : {noPartner: true}
+  validatePartner(control: AbstractControl){
+    if(control.value == null){
+      return {noPartner: true};
+    }
+    if(control.value.id != null){
+      return null;
+    }else{
+      return {noPartner: true};
+    }
   }
 
   /**

@@ -154,8 +154,10 @@ export class InvoiceFormComponent implements OnInit {
    */
   invoiceForm = this.formBuilder.group({
     'partner': new FormControl(this.detailedInvoice.partner, 
-                                Validators.required, 
-                                this.validatePartner.bind(this)),
+                                Validators.compose([
+                                Validators.required,
+                                this.validatePartner,
+                                ])),
     'issueDate': new FormControl(this.detailedInvoice.issueDate, Validators.compose([
                                 Validators.required])),
     'dueDate': new FormControl(this.detailedInvoice.dueDate, Validators.compose([
@@ -185,11 +187,15 @@ export class InvoiceFormComponent implements OnInit {
     return val ? val.partnerName : val;
   }
 
-  async validatePartner(control: AbstractControl){
-    const partner = control.value;
-    let foundPartner = await this.partnerService.getPartnerByName(partner);
-    return foundPartner == null ?
-      null : {noPartner: true}
+  validatePartner(control: AbstractControl){
+    if(control.value == null){
+      return {noPartner: true};
+    }
+    if(control.value.id != null){
+      return null;
+    }else{
+      return {noPartner: true};
+    }
   }
 
   /**

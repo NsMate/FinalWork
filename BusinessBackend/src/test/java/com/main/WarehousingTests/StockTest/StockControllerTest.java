@@ -42,7 +42,7 @@ public class StockControllerTest {
 
     public Stock createStock(){
         Stock stock = new Stock();
-        stock.setQuantity(BigDecimal.valueOf(10));
+        stock.setQuantity(10);
         stock.setUnit("kg");
         return stock;
     }

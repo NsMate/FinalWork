@@ -256,7 +256,7 @@ export class EventDialog implements OnInit{
         this.disableRouteForm();
       }
 
-      this.selectableVehicle = await this.vehicleService.getVehicles();
+      this.selectableVehicle = await this.data.route.warehouse.vehicleList;
 
       if( this.detailedRoute.routeType == 'Kimenő'){
 
