@@ -8,7 +8,7 @@
         <a mat-menu-item [routerLink]="'/partnerForm'" 
                           [queryParams]="{own: 'own'}"> Saját vállalat </a>
         <a mat-menu-item [routerLink]="'/employeeList'" 
-                          [disabled]="!getAuthService().ownCompanyExists"
+                          [disabled]="!getAuthService().ownCompanyExists || getAuthService().appUser.appUserGroup == 'ROLE_FINANCE'"
                           matTooltip="Először állítsa be a saját vállalatát!"
                           [matTooltipDisabled]="getAuthService().ownCompanyExists"> Dolgozók </a>
         <a mat-menu-item [routerLink]="'/productTree'" 
@@ -22,11 +22,11 @@
                         [matTooltipDisabled]="getAuthService().ownCompanyExists"><mat-icon>local_atm</mat-icon> Pénzügy </button>
       <mat-menu #penz="matMenu">
         <a mat-menu-item [routerLink]="'/invoiceList'"> Számlák </a>
-        <a mat-menu-item [routerLink]="'/offerList'"> Rendelések </a>
+        <a mat-menu-item [routerLink]="'/orderList'"> Rendelések </a>
         <a mat-menu-item [routerLink]="'/partnerList'"> Partnerek </a>
       </mat-menu>
       <button mat-button [matMenuTriggerFor]="raktar" 
-                          [disabled]="!getAuthService().ownCompanyExists"
+                          [disabled]="!getAuthService().ownCompanyExists || getAuthService().appUser.appUserGroup == 'ROLE_FINANCE'"
                           matTooltip="Először állítsa be a saját vállalatát!"
                           [matTooltipDisabled]="getAuthService().ownCompanyExists"><mat-icon>widgets</mat-icon> Raktárkezelés </button>
       <mat-menu #raktar="matMenu">
@@ -34,7 +34,7 @@
         <a mat-menu-item [routerLink]="'/warehouses'"> Raktárak </a>
       </mat-menu>
       <button mat-button [routerLink]="'/schedule'" 
-                          [disabled]="!getAuthService().ownCompanyExists"
+                          [disabled]="!getAuthService().ownCompanyExists || getAuthService().appUser.appUserGroup == 'ROLE_FINANCE'"
                           matTooltip="Először állítsa be a saját vállalatát!"
                           [matTooltipDisabled]="getAuthService().ownCompanyExists"><mat-icon>local_shipping</mat-icon> Forgalomkezelés </button>
     </div>

@@ -11,7 +11,7 @@
 	<groupId>com.main</groupId>
 	<artifactId>BusinessBackend</artifactId>
 	<version>1.0</version>
-	<name>BusinessBackend</name>
+	<name>BusinessApplication</name>
 	<description>Backend for business application</description>
 
 	<properties>

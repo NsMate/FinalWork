@@ -225,15 +225,15 @@ export class PdfGenerator implements OnInit{
               columns:[
                 [
                   {
-                    text: 'Részösszeg: ' + this.netWorth.toFixed(2) + ' HUF',
-                    fontSize: 14,
+                    text: 'Részösszeg: ' + this.netWorth.toLocaleString('hu',{minimumFractionDigits: 2}) + ' HUF',
+                    fontSize: 12,
                     margin: [0,32,0,8],
                     alignment: 'right',
                     bold: true
                   },
                   {
-                    text: 'Adó(' + detailedInvoice.vat + ' %): ' + this.plusVat.toFixed(2) + ' HUF',
-                    fontSize: 14,
+                    text: 'Adó(' + detailedInvoice.vat + ' %): ' + this.plusVat.toLocaleString('hu',{minimumFractionDigits: 2}) + ' HUF',
+                    fontSize: 12,
                     margin: [0,0,0,0],
                     alignment: 'right',
                     color: 'red',
@@ -250,8 +250,8 @@ export class PdfGenerator implements OnInit{
                     ]
                   },
                   {
-                    text: 'Teljes összeg: ' + this.totalPrice.toFixed(2) + ' HUF',
-                    fontSize: 14,
+                    text: 'Teljes összeg: ' + this.totalPrice.toLocaleString('hu',{minimumFractionDigits: 2}) + ' HUF',
+                    fontSize: 12,
                     margin: [0,16,0,8],
                     alignment: 'right',
                     decoration: 'underline',
@@ -270,7 +270,7 @@ export class PdfGenerator implements OnInit{
        getItemsTable(invoiceItems: InvoiceItem[], invoice: Invoice){
         return{
           table: {
-            widths: [50,50,85,50,50,50,75],
+            widths: [40,50,85,50,60,60,75],
             body: [
               [
                 {
@@ -313,11 +313,11 @@ export class PdfGenerator implements OnInit{
                 return [item.product,
                           item.quantity + " " + item.unit, 
                           item.description,
-                          (item.price * (1 - (invoice.vat /100))).toFixed(2),
-                          (((item.price * (1 - (invoice.vat /100)))) * item.quantity).toFixed(2),
+                          (item.price * (1 - (invoice.vat /100))).toLocaleString('hu',{minimumFractionDigits: 2}),
+                          (((item.price * (1 - (invoice.vat /100)))) * item.quantity).toLocaleString('hu',{minimumFractionDigits: 2}),
                           ((item.price * item.quantity) 
-                            - (( (item.price * (1 - (invoice.vat /100)))) * item.quantity)).toFixed(2),
-                          (item.price * item.quantity).toFixed(2) + ' HUF'];
+                            - (( (item.price * (1 - (invoice.vat /100)))) * item.quantity)).toLocaleString('hu',{minimumFractionDigits: 2}),
+                          (item.price * item.quantity).toLocaleString('hu',{minimumFractionDigits: 2}) + ' HUF'];
               })
             ],
           },layout: 'lightHorizontalLines', fontSize: 10
@@ -489,15 +489,15 @@ export class PdfGenerator implements OnInit{
               columns:[
                 [
                   {
-                    text: 'Részösszeg: ' + this.netWorth.toFixed(2) + ' HUF',
-                    fontSize: 14,
+                    text: 'Részösszeg: ' + this.netWorth.toLocaleString('hu',{minimumFractionDigits: 2}) + ' HUF',
+                    fontSize: 12,
                     margin: [0,32,0,8],
                     alignment: 'right',
                     bold: true
                   },
                   {
-                    text: 'Adó(' + detailedOrder.vat + ' %): ' + this.plusVat.toFixed(2) + ' HUF',
-                    fontSize: 14,
+                    text: 'Adó(' + detailedOrder.vat + ' %): ' + this.plusVat.toLocaleString('hu',{minimumFractionDigits: 2}) + ' HUF',
+                    fontSize: 12,
                     margin: [0,0,0,0],
                     alignment: 'right',
                     color: 'red',
@@ -514,8 +514,8 @@ export class PdfGenerator implements OnInit{
                     ]
                   },
                   {
-                    text: 'Teljes összeg: ' + this.totalPrice.toFixed(2) + ' HUF',
-                    fontSize: 14,
+                    text: 'Teljes összeg: ' + this.totalPrice.toLocaleString('hu',{minimumFractionDigits: 2}) + ' HUF',
+                    fontSize: 12,
                     margin: [0,16,0,8],
                     alignment: 'right',
                     decoration: 'underline',
@@ -534,7 +534,7 @@ export class PdfGenerator implements OnInit{
        getOrderItemsTable(orderItems: OrderItem[], order: BusinessOrder){
         return{
           table: {
-            widths: [50,50,85,50,50,50,75],
+            widths: [40,50,85,50,60,60,75],
             body: [
               [
                 {
@@ -577,14 +577,14 @@ export class PdfGenerator implements OnInit{
                 return [item.product,
                           item.quantity + " " + item.unit, 
                           item.description,
-                          (item.price * (1 - (order.vat /100))).toFixed(2),
-                          (((item.price * (1 - (order.vat /100)))) * item.quantity).toFixed(2),
+                          (item.price * (1 - (order.vat /100))).toLocaleString('hu',{minimumFractionDigits: 2}),
+                          (((item.price * (1 - (order.vat /100)))) * item.quantity).toLocaleString('hu',{minimumFractionDigits: 2}),
                           ((item.price * item.quantity) 
-                            - (( (item.price * (1 - (order.vat /100)))) * item.quantity)).toFixed(2),
-                          (item.price * item.quantity).toFixed(2) + ' HUF'];
+                            - (( (item.price * (1 - (order.vat /100)))) * item.quantity)).toLocaleString('hu',{minimumFractionDigits: 2}),
+                          (item.price * item.quantity).toLocaleString('hu',{minimumFractionDigits: 2}) + ' HUF'];
               })
             ],
-          },layout: 'lightHorizontalLines', fontSize: 10
+          },layout: 'lightHorizontalLines', fontSize: 8
         }
       }
 }

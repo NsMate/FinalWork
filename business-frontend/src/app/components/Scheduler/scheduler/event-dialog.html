@@ -24,7 +24,7 @@
             </mat-form-field>
         </div>
         <div *ngIf="this.detailedRoute.routeType != ''">
-            <h2 *ngIf="this.detailedRoute.routeType == 'Kimenő'">Kiinduló raktá*r</h2>
+            <h2 *ngIf="this.detailedRoute.routeType == 'Kimenő'">Kiinduló raktár*</h2>
             <h2 *ngIf="this.detailedRoute.routeType == 'Bejövő'">Fogadó raktár*</h2>
             <mat-form-field appearance="standard" style="width: 300px;">
               <mat-select [(ngModel)]="detailedRoute.warehouse" formControlName="warehouse" [compareWith]="warehouseComparisonFunction">

@@ -139,17 +139,17 @@
       <div class="prices">
         <div class="totalPrice">
           <h2>
-            Részösszeg(Nettó): {{ netWorth.toFixed(2) }} Ft
+            Részösszeg(Nettó): {{ netWorth.toFixed(2) | number }} Ft
           </h2>
         </div>
         <div class="plusVat">
           <h2 style="color: red;">
-            Áfa: {{ plusVat.toFixed(2) }} Ft
+            Áfa: {{ plusVat.toFixed(2) | number }} Ft
           </h2>
         </div>
         <div class="totalPriceWithVat">
           <h2 style="color: green; text-decoration: underline;">
-            Végösszeg(Bruttó): {{ totalPrice.toFixed(2) }} Ft
+            Végösszeg(Bruttó): {{ totalPrice.toFixed(2) | number }} Ft
           </h2>
         </div>
       </div>
@@ -188,7 +188,7 @@
     <ng-container matColumnDef="price">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Egységár </th>
       <td mat-cell *matCellDef="let invoiceItem"> 
-        <a *ngIf="detailedInvoice.status == 'OPEN'" style="cursor: pointer;" (click)="openItemDialog(invoiceItem)">{{invoiceItem.price}} Ft</a> 
+        <a *ngIf="detailedInvoice.status == 'OPEN'" style="cursor: pointer;" (click)="openItemDialog(invoiceItem)">{{invoiceItem.price | number}} Ft</a> 
         <p *ngIf="detailedInvoice.status != 'OPEN'">{{invoiceItem.price}}</p>
       </td>
     </ng-container>
@@ -196,7 +196,7 @@
     <ng-container matColumnDef="totalPrice">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Teljes Ár </th>
       <td mat-cell *matCellDef="let invoiceItem">
-       <a *ngIf="detailedInvoice.status == 'OPEN'" style="cursor: pointer;" (click)="openItemDialog(invoiceItem)"> {{invoiceItem.quantity * invoiceItem.price}} Ft</a> 
+       <a *ngIf="detailedInvoice.status == 'OPEN'" style="cursor: pointer;" (click)="openItemDialog(invoiceItem)"> {{invoiceItem.quantity * invoiceItem.price | number}} Ft</a> 
        <p *ngIf="detailedInvoice.status != 'OPEN'">{{invoiceItem.quantity * invoiceItem.price}} Ft</p>
       </td>
     </ng-container>

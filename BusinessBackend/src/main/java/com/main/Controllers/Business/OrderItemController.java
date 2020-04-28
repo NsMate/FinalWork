@@ -43,6 +43,7 @@ public class OrderItemController {
         Optional<OrderItem> oldOrderItem = orderItemRepository.findById(id);
         if(oldOrderItem.isPresent()){
             orderItem.setId(id);
+            orderItem.setBusinessOrder(oldOrderItem.get().getBusinessOrder());
             return ResponseEntity.ok(orderItemRepository.save(orderItem));
         }else{
             return ResponseEntity.notFound().build();

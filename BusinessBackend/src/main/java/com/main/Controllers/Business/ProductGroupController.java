@@ -48,6 +48,7 @@ public class ProductGroupController {
         Optional<ProductGroup> oldProductGroup = productGroupRepository.findById(id);
         if(oldProductGroup.isPresent()){
             productGroup.setId(id);
+            productGroup.setProductList(oldProductGroup.get().getProductList());
             ProductGroup newProductGroup = productGroupRepository.save(productGroup);
             return ResponseEntity.ok(newProductGroup);
         }else{

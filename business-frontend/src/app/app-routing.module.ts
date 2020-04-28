@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoginFormComponent } from './login-form/login-form.component'
 import { VehicleListComponent } from './components/ListComponents/VehicleList/vehicle-list/vehicle-list.component';
 import { AuthGuard } from './AuthorizationGuard/auth-guard';
+import { LogisticGuard } from './AuthorizationGuard/logistic-guard';
 import { SchedulerComponent } from './components/Scheduler/scheduler/scheduler.component';
 import { WarehouseListComponent } from './components/ListComponents/WarehouseList/warehouse-list/warehouse-list.component';
 import { WarehouseFormComponent } from './components/FormComponents/Warehousing/Warehouse/warehouse-form/warehouse-form.component';
@@ -26,33 +27,32 @@ const routes: Routes = [
   {
     path: 'vehicleList',
     component: VehicleListComponent,
-    canActivate: [ AuthGuard ]
+    canActivate: [ LogisticGuard ]
   },
   {
     path: 'schedule',
     component: SchedulerComponent,
-    canActivate: [ AuthGuard ]
+    canActivate: [ LogisticGuard ]
   },
   {
     path: 'warehouses',
     component: WarehouseListComponent,
-    canActivate: [ AuthGuard ]
+    canActivate: [ LogisticGuard ]
   },
   {
     path: 'warehouseForm',
     component: WarehouseFormComponent,
-    canActivate: [ AuthGuard ],
-    runGuardsAndResolvers: 'always',
+    canActivate: [ LogisticGuard ],
   },
   {
     path: 'employeeList',
     component: EmployeeListComponent,
-    canActivate: [ AuthGuard ]
+    canActivate: [ LogisticGuard ]
   },
   {
     path: 'employeeForm',
     component: EmployeeFormComponent,
-    canActivate: [ AuthGuard ]
+    canActivate: [ LogisticGuard ]
   },
   {
     path: 'productTree',
@@ -70,7 +70,7 @@ const routes: Routes = [
     canActivate: [ AuthGuard ]
   },
   {
-    path: 'offerList',
+    path: 'orderList',
     component: OfferListComponent,
     canActivate: [ AuthGuard ]
   },

@@ -35,6 +35,6 @@ public class ProductGroup implements Serializable {
     @Size(max = 100)
     private String description;
 
-    @OneToMany(mappedBy = "productGroup", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "productGroup", cascade = CascadeType.REMOVE)
     private List<Product> productList;
 }

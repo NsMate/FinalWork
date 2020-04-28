@@ -1,0 +1,1 @@
+Powershell.exe -executionpolicy remotesigned ./stop.ps1

@@ -3,7 +3,7 @@
 }
 
 .backGround{
-    opacity: 5%;
+    opacity: 0.05;
     position: absolute;
     transform: scale(33);
     z-index: -0.5;
