@@ -41,14 +41,6 @@ export class ProductGroupService {
     return this.http.delete<ProductGroup>(`${this.groupUrl}/${id}`, httpOptions).toPromise();
   }
 
-  getProductGroupProducts(productGroup: ProductGroup): Promise<Product[]>{
-    return this.http.get<Product[]>(`${this.groupUrl}/${productGroup.id}/products`, httpOptions).toPromise();
-  }
-
-  modifyOrAddProductToProductGroup(productGroup: ProductGroup, products: Product[]): Promise<Product[]>{
-    return this.http.put<Product[]>(`${this.groupUrl}/${productGroup.id}/products`, products, httpOptions).toPromise();
-  }
-
   insertProductIntoProductGroup(productGroup: ProductGroup, product: Product): Promise<Product>{
     return this.http.post<Product>(`${this.groupUrl}/${productGroup.id}/products`, product, httpOptions).toPromise();
   }

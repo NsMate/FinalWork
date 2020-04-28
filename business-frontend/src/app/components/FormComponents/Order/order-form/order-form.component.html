@@ -10,35 +10,47 @@
 <button mat-raised-button color="accent" 
         (click)="preViewOrderPdf()" 
         class="saveButton" 
-        [disabled]="detailedOrder.id == null"><mat-icon>visibility</mat-icon> Előnézet </button>
+        [disabled]="detailedOrder.id == null"
+        matTooltip="Először hozza létre a rendelést!"
+        [matTooltipDisabled]="detailedOrder.id != null"><mat-icon>visibility</mat-icon> Előnézet </button>
 
 <button mat-raised-button color="primary" 
         (click)="closeOrder()" 
         class="saveButton" 
-        [disabled]="detailedOrder.id == null || detailedOrder.status == 'CLOSED' || detailedOrder.status == 'DONE'"><mat-icon>gavel</mat-icon> Lezárás </button>
+        [disabled]="detailedOrder.id == null || detailedOrder.status == 'CLOSED' || detailedOrder.status == 'DONE'"
+        matTooltip="Először hozza létre a rendelést!"
+        [matTooltipDisabled]="detailedOrder.id != null"><mat-icon>gavel</mat-icon> Lezárás </button>
 
 <button mat-raised-button color="accent" 
         (click)="downloadOrderPdf()" 
         class="saveButton" 
-        [disabled]="detailedOrder.id == null"><mat-icon>get_app</mat-icon> Letöltés </button>
+        [disabled]="detailedOrder.id == null"
+        matTooltip="Először hozza létre a rendelést!"
+        [matTooltipDisabled]="detailedOrder.id != null"><mat-icon>get_app</mat-icon> Letöltés </button>
 
 <button mat-raised-button color="warn" 
         (click)="deleteOrder()" 
         class="saveButton" 
         [disabled]="(detailedOrder.id == null || detailedOrder.status == 'CLOSED' || detailedOrder.status == 'DONE')
-                      || !(getAuthService().appUser.appUserGroup == 'ROLE_ADMIN')"><mat-icon>delete</mat-icon> Törlés </button>
+                      || !(getAuthService().appUser.appUserGroup == 'ROLE_ADMIN')"
+        matTooltip="Először hozza létre a rendelést!"
+        [matTooltipDisabled]="detailedOrder.id != null"><mat-icon>delete</mat-icon> Törlés </button>
                     
 <button mat-raised-button color="primary" 
        (click)="orderIsPayed()" 
         class="saveButton"
         [disabled]="detailedOrder.status == 'OPEN' || detailedOrder.status == 'DONE'"
-        *ngIf="getAuthService().appUser.appUserGroup == 'ROLE_ADMIN'"><mat-icon>done</mat-icon> Teljesített </button>
+        *ngIf="getAuthService().appUser.appUserGroup == 'ROLE_ADMIN'"
+        matTooltip="Először hozza létre a rendelést!"
+        [matTooltipDisabled]="detailedOrder.id != null"><mat-icon>done</mat-icon> Teljesített </button>
 
 <button mat-raised-button color="primary" 
         (click)="openOrder()" 
         class="saveButton" 
         [disabled]="detailedOrder.status == 'OPEN' || detailedOrder.status == 'DONE'"
-        *ngIf="getAuthService().appUser.appUserGroup == 'ROLE_ADMIN'"><mat-icon>edit</mat-icon> Megnyitás </button>
+        *ngIf="getAuthService().appUser.appUserGroup == 'ROLE_ADMIN'"
+        matTooltip="Először hozza létre a rendelést!"
+        [matTooltipDisabled]="detailedOrder.id != null"><mat-icon>edit</mat-icon> Megnyitás </button>
 
 <form [formGroup]="orderForm">
   <div class="partnerAndDate">
@@ -147,19 +159,12 @@
 <h1 style="text-align: center;"> Rendelés tételei </h1>
 
 <button mat-raised-button 
-        *ngIf="detailedOrder.id != null" 
         class="newButton" 
         (click)="openItemDialog()" 
-        [disabled]="detailedOrder.status == 'CLOSED' || detailedOrder.status == 'DONE'"
+        [disabled]="detailedOrder.status == 'CLOSED' || detailedOrder.status == 'DONE' || detailedOrder.id == null"
+        matTooltip="Először hozza létre a rendelést!"
+        [matTooltipDisabled]="detailedOrder.id != null"
         color="primary"><mat-icon>add</mat-icon> Új tétel felvétele</button>
-
-<button mat-raised-button 
-        *ngIf="detailedOrder.id == null" 
-        class="newButton" 
-        (click)="openItemDialog()" 
-        color="primary"
-        matTooltip="Előbb hozza létre a rendelést!" 
-        [disabled]="true"><mat-icon>add</mat-icon> Új tétel felvétele</button>
 
 <div id="content" #content>
   <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" id="myTable" #myTable>

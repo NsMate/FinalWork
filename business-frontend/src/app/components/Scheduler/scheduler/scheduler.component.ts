@@ -309,6 +309,8 @@ export class EventDialog implements OnInit{
           this.selectableOrders.push(this.detailedRoute.businessOrder);
         }
 
+        this.routeForm.controls['destination'].setValidators(null);
+
       }else if(result == 'Kimenő'){
 
         this.selectableInvoices = await this.invoiceService.getClosedInvoices();
@@ -321,6 +323,7 @@ export class EventDialog implements OnInit{
           this.selectableInvoices.push(this.detailedRoute.invoice);
         }
 
+        this.routeForm.controls['destination'].setValidators(Validators.required);
       }
     })
 
@@ -335,6 +338,14 @@ export class EventDialog implements OnInit{
     'invoice': new FormControl(this.detailedRoute.invoice),
     'order': new FormControl(this.detailedRoute.businessOrder),
   });
+
+  get routeType() { return this.routeForm.get('routeType'); }
+  get deliveryDate() { return this.routeForm.get('deliveryDate'); }
+  get warehouse() { return this.routeForm.get('warehouse'); }
+  get vehicle() { return this.routeForm.get('vehicle'); }
+  get destination() { return this.routeForm.get('destination'); }
+  get invoice() { return this.routeForm.get('invoice'); }
+  get order() { return this.routeForm.get('order'); }
 
   disableRouteForm(): void{
     this.routeForm.get('routeType').disable();

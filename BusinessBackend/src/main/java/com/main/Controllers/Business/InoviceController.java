@@ -86,27 +86,6 @@ public class InoviceController {
         }
     }
 
-    @PutMapping("/{id}/invoice_items")
-    public ResponseEntity<Iterable<InvoiceItem>> modifyInvocieItemOnInoviceById(@PathVariable Long id, @RequestBody List<InvoiceItem> invoiceItems) {
-        Optional<Invoice> oldInvoice = invoiceRepository.findById(id);
-        if (oldInvoice.isPresent()) {
-            Invoice invoice = oldInvoice.get();
-
-            for (InvoiceItem invoiceItem : invoiceItems) {
-                if (invoiceItem.getId() == null) {
-                    invoiceItem.setInvoice(invoice);
-                    invoiceItemRepository.save(invoiceItem);
-                }
-            }
-
-            invoice.setInvoiceItems(invoiceItems);
-            invoiceRepository.save(invoice);
-            return ResponseEntity.ok(invoiceItems);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
     @GetMapping("/closedInvoices")
     public ResponseEntity<Iterable<Invoice>> getAllClosedInvoices(){
         List<Invoice> invoices = invoiceRepository.findClosedInvoices();

@@ -26,11 +26,10 @@ public class InvoiceItem implements Serializable {
     private Long id;
 
     @Column(name = "quantity")
-    @Size(max = 7)
-    private BigDecimal quantity;
+    private Integer quantity;
 
     @Column(name = "discount")
-    private BigDecimal discount;
+    private Integer discount;
 
     @ManyToOne
     @JoinColumn(name = "invoice_id", referencedColumnName = "id")

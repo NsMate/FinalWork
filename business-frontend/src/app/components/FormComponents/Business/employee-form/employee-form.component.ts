@@ -96,7 +96,7 @@ export class EmployeeFormComponent implements OnInit {
                                   Validators.maxLength(30)])),
     'firstName': new FormControl(this.detailedEmployee.firstName, Validators.compose([
                                   Validators.required, 
-                                  Validators.pattern("[A-ZÁÉŰÚŐÓÜÖ][a-záéíúőóüöű ]*"),
+                                  Validators.pattern("[A-ZÁÉŰÚŐÓÜÖ][a-záéíúőóüöű A-ZÁÉŰÚŐÓÜÖ \-]*"),
                                   Validators.maxLength(25)])),
     'email': new FormControl(this.detailedEmployee.email, Validators.compose([
                                   Validators.required,
@@ -127,11 +127,14 @@ export class EmployeeFormComponent implements OnInit {
     if(this.isNew){
 
       await this.employeeService.createEmployee(this.detailedEmployee).then(res => {
-        this.router.navigate(['.'], { relativeTo: this.route, queryParams: { new: 'no', id: res.id }});
+
+        this.router.navigate(['/employeeForm'],{queryParams: {new: 'no', id: res.id}});
+
         this._snackBar.open('Sikeresen hozzáadta a dolgozót!','', {
           duration: 2000,
           panelClass: ['success'],
         })
+
       }).catch(e => {
         this._snackBar.open('Valami probléma történt! ' + e.error ,'', {
           duration: 5000,

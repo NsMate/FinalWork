@@ -88,27 +88,6 @@ public class BusinessOrderController {
         }
     }
 
-    @PutMapping("/{id}/order_items")
-    public ResponseEntity<Iterable<OrderItem>> modifyOrderItemOnOrderById(@PathVariable Long id, @RequestBody List<OrderItem> orderItems) {
-        Optional<BusinessOrder> oldBusinessOrder = businessOrderRepository.findById(id);
-        if (oldBusinessOrder.isPresent()) {
-            BusinessOrder businessOrder = oldBusinessOrder.get();
-
-            for (OrderItem orderItem : orderItems) {
-                if (orderItem.getId() == null) {
-                    orderItem.setBusinessOrder(businessOrder);
-                    orderItemRepository.save(orderItem);
-                }
-            }
-
-            businessOrder.setOrderItemList(orderItems);
-            businessOrderRepository.save(businessOrder);
-            return ResponseEntity.ok(orderItems);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
     @GetMapping("/closedOrders")
     public ResponseEntity<Iterable<BusinessOrder>> getAllClosedOrders(){
         List<BusinessOrder> businessOrders = businessOrderRepository.findAllClosedOrders();

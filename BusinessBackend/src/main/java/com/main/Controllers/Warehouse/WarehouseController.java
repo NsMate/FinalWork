@@ -101,16 +101,6 @@ public class WarehouseController {
         }
     }
 
-    @GetMapping("/{id}/stocks")
-    public ResponseEntity<Iterable<Stock>> getAllStocksById(@PathVariable Long id) {
-        Optional<Warehouse> warehouse = warehouseRepository.findById(id);
-        if (warehouse.isPresent()) {
-            return ResponseEntity.ok(warehouse.get().getStockList());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
     @PostMapping("/{id}/stocks")
     public ResponseEntity<Stock> insertStockIntoWarehouseById(@PathVariable Long id, @RequestBody Stock stock) {
         Optional<Warehouse> oldWarehouse = warehouseRepository.findById(id);

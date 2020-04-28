@@ -12,6 +12,7 @@
                 <mat-option value="Bejövő"> Bejövő </mat-option>
                 <mat-option value="Kimenő"> Kimenő </mat-option>
               </mat-select>
+              <mat-error *ngIf="routeType.errors?.required && (routeType.dirty || routeType.touched)"> Adja meg az út típusát! </mat-error>
             </mat-form-field>
           </div>
         <div class="deliveryDate">
@@ -31,12 +32,14 @@
                     {{ warehouse.city }} {{ warehouse.street }} {{ warehouse.streetNumber }}
                 </mat-option>
               </mat-select>
+              <mat-error *ngIf="warehouse.errors?.required && (warehouse.dirty || warehouse.touched)"> Adja meg az útban részvevő raktárat! </mat-error>
             </mat-form-field>
         </div>
         <div class="destination" *ngIf="this.detailedRoute.routeType == 'Kimenő'">
           <h2>Úticél*</h2>
           <mat-form-field appearance="standard" style="width: 200px;">
               <input matInput name="destination" formControlName="destination" [(ngModel)]="detailedRoute.destination">
+              <mat-error *ngIf="destination.errors?.required && (destination.dirty || destination.touched)"> Adja meg az úticélt! </mat-error>
           </mat-form-field>
         </div>
         <div *ngIf="this.detailedRoute.routeType == 'Bejövő' || this.detailedRoute.routeType == 'Kimenő'" >
@@ -47,6 +50,7 @@
                     {{ vehicle.manufacturer }} {{ vehicle.licensePlateNumber }}
                 </mat-option>
               </mat-select>
+              <mat-error *ngIf="vehicle.errors?.required && (vehicle.dirty || vehicle.touched)"> Adja meg az útban résztvevő gépkocsit! </mat-error>
             </mat-form-field>
         </div>
         <div *ngIf="this.detailedRoute.routeType == 'Bejövő'" >

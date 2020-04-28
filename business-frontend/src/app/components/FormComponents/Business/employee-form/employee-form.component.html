@@ -13,7 +13,7 @@
         class="saveButton" 
         (click)="deleteEmployee()" 
         color="warn"
-        *ngIf="!isNew"><mat-icon>delete</mat-icon>Dolgozó törlése</button>
+        *ngIf="detailedEmployee.id != null"><mat-icon>delete</mat-icon>Dolgozó törlése</button>
 </div>
 
 <form [formGroup]="employeeForm">

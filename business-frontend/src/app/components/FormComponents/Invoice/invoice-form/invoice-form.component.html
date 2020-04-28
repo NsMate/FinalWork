@@ -10,34 +10,46 @@
 <button mat-raised-button color="accent" 
         (click)="preViewInvoicePdf()" 
         class="saveButton" 
-        [disabled]="detailedInvoice.id == null"><mat-icon>visibility</mat-icon> Előnézet </button>
+        [disabled]="detailedInvoice.id == null"
+        matTooltip="Először hozza létre a számlát!"
+        [matTooltipDisabled]="detailedInvoice.id != null"><mat-icon>visibility</mat-icon> Előnézet </button>
 
 <button mat-raised-button color="primary" 
         (click)="closeInvoice()" 
         class="saveButton" 
-        [disabled]="detailedInvoice.id == null || detailedInvoice.status == 'CLOSED' || detailedInvoice.status == 'DONE'"><mat-icon>gavel</mat-icon> Lezárás </button>
+        [disabled]="detailedInvoice.id == null || detailedInvoice.status == 'CLOSED' || detailedInvoice.status == 'DONE'"
+        matTooltip="Először hozza létre a számlát!"
+        [matTooltipDisabled]="detailedInvoice.id != null"><mat-icon>gavel</mat-icon> Lezárás </button>
 
 <button mat-raised-button color="accent" 
         (click)="downloadInvoicePdf()" 
         class="saveButton" 
-        [disabled]="detailedInvoice.id == null"><mat-icon>get_app</mat-icon> Letöltés </button>
+        [disabled]="detailedInvoice.id == null"
+        matTooltip="Először hozza létre a számlát!"
+        [matTooltipDisabled]="detailedInvoice.id != null"><mat-icon>get_app</mat-icon> Letöltés </button>
 
 <button mat-raised-button color="primary" 
         (click)="openInvoice()" 
         class="saveButton" 
         [disabled]="detailedInvoice.status == 'OPEN' || detailedInvoice.status == 'DONE'"
-        *ngIf="getAuthService().appUser.appUserGroup == 'ROLE_ADMIN'"><mat-icon>edit</mat-icon> Megnyitás </button>
+        *ngIf="getAuthService().appUser.appUserGroup == 'ROLE_ADMIN'"
+        matTooltip="Először hozza létre a számlát!"
+        [matTooltipDisabled]="detailedInvoice.id != null"><mat-icon>edit</mat-icon> Megnyitás </button>
 
 <button mat-raised-button color="primary" 
         (click)="invoiceIsPayed()" 
         class="saveButton"
         [disabled]="detailedInvoice.status == 'OPEN' || detailedInvoice.status == 'DONE'"
-        *ngIf="getAuthService().appUser.appUserGroup == 'ROLE_ADMIN'"><mat-icon>done</mat-icon> Teljesített </button>
+        *ngIf="getAuthService().appUser.appUserGroup == 'ROLE_ADMIN'"
+        matTooltip="Először hozza létre a számlát!"
+        [matTooltipDisabled]="detailedInvoice.id != null"><mat-icon>done</mat-icon> Teljesített </button>
 
 <button mat-raised-button color="warn" 
         (click)="deleteInvoice()" 
         class="saveButton" 
-        [disabled]="detailedInvoice.id == null || detailedInvoice.status == 'CLOSED'"><mat-icon>delete</mat-icon> Törlés </button>
+        [disabled]="detailedInvoice.id == null || detailedInvoice.status == 'CLOSED'"
+        matTooltip="Először hozza létre a számlát!"
+        [matTooltipDisabled]="detailedInvoice.id != null"><mat-icon>delete</mat-icon> Törlés </button>
 
 <form [formGroup]="invoiceForm">
   
@@ -147,19 +159,12 @@
 <h1 style="text-align: center;"> Számla tételei </h1>
 
 <button mat-raised-button 
-        *ngIf="detailedInvoice.id != null" 
         class="newButton" 
         (click)="openItemDialog()" 
-        [disabled]="detailedInvoice.status == 'CLOSED' || detailedInvoice.status == 'DONE'"
-        color="primary"><mat-icon>add</mat-icon> Új tétel felvétele</button>
-
-<button mat-raised-button 
-        *ngIf="detailedInvoice.id == null" 
-        class="newButton" 
-        (click)="openItemDialog()" 
+        [disabled]="detailedInvoice.status == 'CLOSED' || detailedInvoice.status == 'DONE' || detailedInvoice.id == null"
         color="primary"
-        matTooltip="Előbb hozza létre a számlát!" 
-        [disabled]="true"><mat-icon>add</mat-icon> Új tétel felvétele</button>
+        matTooltip="Először hozza létre a számlát!"
+        [matTooltipDisabled]="detailedInvoice.id != null"><mat-icon>add</mat-icon> Új tétel felvétele</button>
 
 <div id="content" #content>
   <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" id="myTable" #myTable>

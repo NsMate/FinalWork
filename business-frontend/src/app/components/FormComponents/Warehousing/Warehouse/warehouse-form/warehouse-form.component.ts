@@ -154,6 +154,11 @@ export class WarehouseFormComponent implements OnInit {
   get street() { return this.warehouseForm.get('street'); }
   get streetNumber() { return this.warehouseForm.get('streetNumber'); }
 
+
+  openEmployeeForm(id: number): void{
+    this.routing.navigate(['/employeeForm'],{queryParams: {new: 'no', id: id}});
+  }
+
   openDialog(stock?: Stock): void {
 
     if(stock == null){

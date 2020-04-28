@@ -63,13 +63,17 @@
                 class="tableButton" 
                 color="accent" 
                 (click)="openEmployeeDialog()"
-                [disabled]="detailedWarehouse.id == null"><mat-icon>add</mat-icon> Dolgozó hozzáadása </button>
+                [disabled]="detailedWarehouse.id == null"
+                matTooltip="Először hozza létre a raktárat!"
+                [matTooltipDisabled]="detailedWarehouse.id != null"><mat-icon>add</mat-icon> Dolgozó hozzáadása </button>
 
         <table mat-table [dataSource]="employeeSource" matSort  class="mat-elevation-z8 employeeTable">
   
             <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'customEmployeeWidth'"> Dolgozó </th>
-                <td mat-cell *matCellDef="let employee" [ngClass]="'customEmployeeWidth'"> {{ employee.lastName }}  {{ employee.firstName }} </td>
+                <td mat-cell *matCellDef="let employee" [ngClass]="'customEmployeeWidth'"> 
+                    <a (click)="openEmployeeForm(employee.id)"> {{ employee.lastName }}  {{ employee.firstName }}  </a>
+                </td>
             </ng-container>
 
             <ng-container matColumnDef="delete">
@@ -89,7 +93,9 @@
                 class="tableButton" 
                 color="accent" 
                 (click)="openVehicleDialog()" 
-                [disabled]="detailedWarehouse.id == null"><mat-icon>add</mat-icon> Jármű hozzáadása </button>
+                [disabled]="detailedWarehouse.id == null"
+                matTooltip="Először hozza létre a raktárat!"
+                [matTooltipDisabled]="detailedWarehouse.id != null"><mat-icon>add</mat-icon> Jármű hozzáadása </button>
 
         <table mat-table [dataSource]="vehicleSource" matSort class="mat-elevation-z8 vehicleTable">
   
@@ -121,7 +127,9 @@
         (click)="openDialog()"
         class="newButton"
         color="primary"
-        [disabled]="detailedWarehouse.id == null"><mat-icon>add</mat-icon> Új készlet felvétele </button>
+        [disabled]="detailedWarehouse.id == null"
+        matTooltip="Először hozza létre a raktárat!"
+        [matTooltipDisabled]="detailedWarehouse.id != null"><mat-icon>add</mat-icon> Új készlet felvétele </button>
 </div>
 
 <div class="stockTableDiv">

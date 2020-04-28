@@ -66,16 +66,6 @@ public class ProductGroupController {
         }
     }
 
-    @GetMapping("/{id}/products")
-    public ResponseEntity<Iterable<Product>> getAllProductsInGroup(@PathVariable Long id) {
-        Optional<ProductGroup> productGroup = productGroupRepository.findById(id);
-        if (productGroup.isPresent()) {
-            return ResponseEntity.ok(productGroup.get().getProductList());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
     @PostMapping("/{id}/products")
     public ResponseEntity<Product> insertProductIntoGroupById(@PathVariable Long id, @RequestBody Product product) {
         Optional<ProductGroup> oldProductGroup = productGroupRepository.findById(id);
@@ -84,27 +74,6 @@ public class ProductGroupController {
             product.setProductGroup(productGroup);
             Product newProduct = productRepository.save(product);
             return ResponseEntity.ok(newProduct);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @PutMapping("/{id}/products")
-    public ResponseEntity<Iterable<Product>> modifyProductInGroupById(@PathVariable Long id, @RequestBody List<Product> products) {
-        Optional<ProductGroup> oldProductGroup = productGroupRepository.findById(id);
-        if (oldProductGroup.isPresent()) {
-            ProductGroup productGroup = oldProductGroup.get();
-
-            for (Product product : products) {
-                if (product.getId() == null) {
-                    product.setProductGroup(productGroup);
-                    productRepository.save(product);
-                }
-            }
-
-            productGroup.setProductList(products);
-            productGroupRepository.save(productGroup);
-            return ResponseEntity.ok(products);
         } else {
             return ResponseEntity.notFound().build();
         }

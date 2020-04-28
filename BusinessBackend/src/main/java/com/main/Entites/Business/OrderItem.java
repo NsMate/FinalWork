@@ -24,11 +24,10 @@ public class OrderItem implements Serializable {
     private Long id;
 
     @Column(name = "quantity")
-    @Size(max = 7)
-    private BigDecimal quantity;
+    private Integer quantity;
 
     @Column(name = "discount")
-    private BigDecimal discount;
+    private Integer discount;
 
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")

@@ -43,10 +43,6 @@ export class WarehouseService {
     return this.http.delete<Warehouse>(`${this.warehouseURL}/${id}`, httpOptions).toPromise();
   }
 
-  getWarehousesStocks(id: number): Promise<Stock[]> {
-    return this.http.get<Stock[]>(`${this.warehouseURL}/${id}/stocks`, httpOptions).toPromise();
-  }
-
   getWarehousesVehicles(id: number): Promise<Vehicle[]> {
     return this.http.get<Vehicle[]>(`${this.warehouseURL}/${id}/vehicles`, httpOptions).toPromise();
   }

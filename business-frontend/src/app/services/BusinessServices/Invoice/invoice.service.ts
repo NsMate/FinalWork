@@ -52,11 +52,7 @@ export class InvoiceService {
   insertItemToInvoice(id: number,invoiceItem: InvoiceItem): Promise<Invoice> {
     return this.http.post<Invoice>(`${this.invoiceUrl}/${id}/invoice_items`, invoiceItem, httpOptions).toPromise();
   }
-
-  modifyItemOnInvoice(id: number,invoiceItems: InvoiceItem[]): Promise<Invoice> {
-    return this.http.put<Invoice>(`${this.invoiceUrl}/${id}/invoice_items`, invoiceItems, httpOptions).toPromise();
-  }
-
+  
   getClosedInvoices(): Promise<Invoice[]> {
     return this.http.get<Invoice[]>(`${this.invoiceUrl}/closedInvoices`, httpOptions).toPromise();
   }
