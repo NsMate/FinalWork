@@ -14,7 +14,7 @@ const httpOptions = {
 })
 export class InvoiceItemService {
 
-  private invoiceItemUrl:string = "http://localhost:8080/invoice_items";
+  private invoiceItemUrl:string = "http://localhost:8081/invoice_items";
 
   constructor(
     private http: HttpClient

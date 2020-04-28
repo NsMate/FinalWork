@@ -22,7 +22,7 @@ export class AuthorizationService {
   public redirectUrl: string;
   public ownCompanyExists: boolean;
 
-  private authUrl: string = 'http://localhost:8080/app_users';
+  private authUrl: string = 'http://localhost:8081/app_users';
 
   constructor(
     private http: HttpClient,

@@ -67,5 +67,5 @@
 
     <button mat-raised-button *ngIf="data.employee.appUser.id != null" (click)="newPasswordShow()" color="accent"><mat-icon>warning</mat-icon> Jelszó megváltoztatása </button>
   
-    <button mat-raised-button color="warn" *ngIf="data.employee.appUser.id != null" (click)="openConfDialog()"><mat-icon>delete</mat-icon>Törlés</button>
+    <button mat-raised-button color="warn" *ngIf="(data.employee.appUser.id != null && data.employee.appUser.appUserGroup != 'ROLE_ADMIN')" (click)="openConfDialog()"><mat-icon>delete</mat-icon>Törlés</button>
   </div>

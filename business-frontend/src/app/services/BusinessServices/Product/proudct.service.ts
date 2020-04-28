@@ -13,7 +13,7 @@ const httpOptions = {
 })
 export class ProudctService {
 
-  private productUrl:string = "http://localhost:8080/products";
+  private productUrl:string = "http://localhost:8081/products";
 
   constructor(
     private http: HttpClient

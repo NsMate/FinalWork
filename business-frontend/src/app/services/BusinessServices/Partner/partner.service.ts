@@ -14,7 +14,7 @@ const httpOptions = {
 })
 export class PartnerService {
 
-  private partnerUrl:string = "http://localhost:8080/partners";
+  private partnerUrl:string = "http://localhost:8081/partners";
 
   constructor(
     private http: HttpClient

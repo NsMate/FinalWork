@@ -14,7 +14,7 @@ const httpOptions = {
 })
 export class EmployeeService {
 
-  private employeeUrl:string = "http://localhost:8080/employees";
+  private employeeUrl:string = "http://localhost:8081/employees";
 
   constructor(
     private http: HttpClient

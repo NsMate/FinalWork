@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfdialogComponent, ConfirmationDialogText } from 'src/app/components/ConfirmationDialog/confdialog/confdialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { AuthorizationService } from 'src/app/services/authorization-service.service';
 
 @Component({
   selector: 'app-employee-form',
@@ -38,7 +39,8 @@ export class EmployeeFormComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private _snackBar: MatSnackBar,
-    private confDialog: MatDialog
+    private confDialog: MatDialog,
+    private authService: AuthorizationService
   ) { }
 
   /**
@@ -82,6 +84,10 @@ export class EmployeeFormComponent implements OnInit {
 
       }
     })
+  }
+
+  getAuthorizationService(): AuthorizationService{
+    return this.authService;
   }
 
   /**

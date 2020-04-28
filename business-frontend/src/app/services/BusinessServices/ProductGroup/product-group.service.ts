@@ -15,7 +15,7 @@ const httpOptions = {
 })
 export class ProductGroupService {
 
-  private groupUrl:string = "http://localhost:8080/product_groups";
+  private groupUrl:string = "http://localhost:8081/product_groups";
 
   constructor(
     private http: HttpClient

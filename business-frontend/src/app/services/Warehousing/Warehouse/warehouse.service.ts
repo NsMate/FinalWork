@@ -17,7 +17,7 @@ const httpOptions = {
 })
 export class WarehouseService {
 
-  private warehouseURL:string = "http://localhost:8080/warehouses";
+  private warehouseURL:string = "http://localhost:8081/warehouses";
 
   constructor(
     private http: HttpClient

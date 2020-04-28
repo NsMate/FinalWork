@@ -14,7 +14,7 @@ const httpOptions = {
 })
 export class VehicleService {
 
-  private vehicleURL:string = "http://localhost:8080/vehicles";
+  private vehicleURL:string = "http://localhost:8081/vehicles";
 
   constructor(
     private http: HttpClient

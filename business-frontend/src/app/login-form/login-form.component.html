@@ -4,13 +4,13 @@
   
   <mat-form-field class="usernameField">
     <input matInput placeholder="Felhasználónév" formControlName="username" required>
-    <mat-error *ngIf="username.invalid">Username is required</mat-error>
+    <mat-error *ngIf="username.invalid">Adja meg a felhasználónevet!</mat-error>
   </mat-form-field>
   
   <mat-form-field class="passwordField">
     <input matInput placeholder="Jelszó" formControlName="password" required [type]="hidePassword ? 'password' : 'text'">
     <mat-icon matSuffix (click)="hidePassword = !hidePassword"></mat-icon>
-    <mat-error *ngIf="password.invalid">Password is required</mat-error>
+    <mat-error *ngIf="password.invalid">Adja meg a jelszót!</mat-error>
   </mat-form-field>
   
   <button mat-raised-button type="submit" color="primary" [disabled]="form.invalid">Belépés</button>

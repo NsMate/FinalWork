@@ -13,7 +13,7 @@ const httpOptions = {
 })
 export class OrderItemService {
 
-  private orderItemUrl:string = "http://localhost:8080/order_items";
+  private orderItemUrl:string = "http://localhost:8081/order_items";
 
   constructor(
     private http: HttpClient

@@ -14,7 +14,7 @@ const httpOptions = {
 })
 export class StockService {
 
-  private stockURL: string = "http://localhost:8080/stocks";
+  private stockURL: string = "http://localhost:8081/stocks";
 
   constructor(
     private http: HttpClient

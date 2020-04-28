@@ -46,7 +46,7 @@ public class Product implements Serializable {
     @NotNull
     private String currency;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<Stock> stockList;
 
