@@ -11,6 +11,7 @@ The repository contains a web based application that can a help a little busines
 2.Run generate_jar.bat and wait
 
 3.Run the genrated jar file
+  (For generation we need nodeJs, angular CLI, maven)
 
 4.Use your favourite browser and go to: localhost:8080/#/login
 
