@@ -29,9 +29,6 @@ public class WarehouseController {
     private StockRepository stockRepository;
 
     @Autowired
-    private RouteRepository routeRepository;
-
-    @Autowired
     private EmployeeRepository employeeRepository;
 
     @Autowired
@@ -74,29 +71,23 @@ public class WarehouseController {
         Optional<Warehouse> oldWarehouse = warehouseRepository.findById(id);
         if(oldWarehouse.isPresent()){
             Warehouse wh = oldWarehouse.get();
-            for(Vehicle vehicle : wh.getVehicleList()){
-                vehicle.setWarehouse(null);
-                vehicleRepository.save(vehicle);
+            if(wh.getVehicleList() != null && wh.getVehicleList().size() > 0){
+                for(Vehicle vehicle : wh.getVehicleList()){
+                    vehicle.setWarehouse(null);
+                    vehicleRepository.save(vehicle);
+                }
             }
-            for(Employee emp : wh.getEmployeeList()){
-                emp.setWarehouse(null);
-                employeeRepository.save(emp);
+            if(wh.getEmployeeList() != null && wh.getEmployeeList().size() > 0){
+                for(Employee emp : wh.getEmployeeList()){
+                    emp.setWarehouse(null);
+                    employeeRepository.save(emp);
+                }
             }
 
             warehouseRepository.deleteById(id);
 
             return ResponseEntity.ok().build();
         }else{
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @GetMapping("/{id}/routes")
-    public ResponseEntity<Iterable<Route>> getAllRoutesById(@PathVariable Long id) {
-        Optional<Warehouse> warehouse = warehouseRepository.findById(id);
-        if (warehouse.isPresent()) {
-            return ResponseEntity.ok(warehouse.get().getRouteList());
-        } else {
             return ResponseEntity.notFound().build();
         }
     }

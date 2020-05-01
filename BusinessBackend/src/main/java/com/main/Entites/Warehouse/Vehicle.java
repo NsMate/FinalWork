@@ -34,8 +34,7 @@ public class Vehicle implements Serializable{
     @NotNull
     private String licensePlateNumber;
 
-    @OneToMany(mappedBy = "vehicle", cascade = CascadeType.REMOVE
-    )
+    @OneToMany(mappedBy = "vehicle", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<Route> routeList;
 

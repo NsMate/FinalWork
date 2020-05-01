@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface EmployeeRepository extends CrudRepository<Employee,Long> {
 
-    @Query("select e from Employee e where e.warehouse is null and e.department = 'Munkás'")
+    @Query("select e from Employee e where (e.warehouse is null and e.department = 'Munkás')")
     List<Employee> getAllFreeWorkers();
 }

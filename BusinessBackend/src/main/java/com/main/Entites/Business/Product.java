@@ -43,7 +43,6 @@ public class Product implements Serializable {
     private int code;
 
     @Column(name = "currency")
-    @NotNull
     private String currency;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)

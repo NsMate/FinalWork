@@ -8,5 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface AppUserRepository extends CrudRepository<AppUser,Long> {
+
     Optional<AppUser> findByAppUserName(String appUserName);
+
 }

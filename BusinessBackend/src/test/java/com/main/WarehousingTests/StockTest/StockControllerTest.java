@@ -138,4 +138,6 @@ public class StockControllerTest {
         Mockito.verify(stockRepository,Mockito.times(1)).findById(1L);
         Mockito.verify(stockRepository,Mockito.times(1)).deleteById(1L);
     }
+
+
 }

@@ -3,6 +3,7 @@ package com.main.WarehousingTests.RouteTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.main.Controllers.Warehouse.RouteController;
 import com.main.Entites.Warehouse.Route;
+import com.main.Entites.Warehouse.Stock;
 import com.main.Entites.Warehouse.Vehicle;
 import com.main.Entites.Warehouse.Warehouse;
 import com.main.Repositories.Business.BusinessOrderRepository;
@@ -27,6 +28,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -108,7 +110,7 @@ public class RouteControllerTest {
         Mockito.verify(routeRepository,Mockito.times(1)).findAll();
     }
 
-    /*
+
     @Test
     public void getRouteByIdTest() throws Exception{
         Route route = createRoute("2020-12-12");
@@ -126,6 +128,7 @@ public class RouteControllerTest {
         Mockito.verify(routeRepository,Mockito.times(1)).findById(route.getId());
     }
 
+
     @Test
     public void postRouteTest() throws Exception{
         Route route = createRoute("2020-12-12");
@@ -133,18 +136,72 @@ public class RouteControllerTest {
 
         Mockito.when(routeRepository.save(route)).thenReturn(route);
 
-        MvcResult result = mvc.perform(post("/routes")
+        mvc.perform(post("/routes")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(route)))
                         .andExpect(status().isOk())
                         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andReturn();
 
-        Route createdRoute = mapper.readValue(result.getResponse().getContentAsString(),Route.class);
-
-        Assert.assertNotNull(createdRoute.getId());
+        Assert.assertNotNull(route.getId());
 
         Mockito.verify(routeRepository,Mockito.times(1)).save(route);
     }
-    */
+
+    @Test
+    public void putRouteTest() throws Exception{
+        Route route = createRoute("2020-12-12");
+        route.setId(1L);
+        Route newRoute = createRoute("2020-12-13");
+        newRoute.setId(1L);
+
+        Mockito.when(routeRepository.findById(route.getId())).thenReturn(Optional.of(route));
+        Mockito.when(routeRepository.save(newRoute)).thenReturn(newRoute);
+
+        mvc.perform(put("/routes/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(newRoute)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+        Assert.assertNotNull(newRoute.getId());
+
+        Mockito.verify(routeRepository,Mockito.times(1)).findById(route.getId());
+        Mockito.verify(routeRepository,Mockito.times(1)).save(newRoute);
+
+    }
+
+    @Test
+    public void deleteRouteTest() throws Exception{
+        Route route = createRoute("2020-12-12");
+        route.setId(1L);
+
+        Mockito.when(routeRepository.findById(1L)).thenReturn(Optional.of(route));
+
+        mvc.perform(delete("/routes/1")
+                .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+
+        Mockito.verify(routeRepository,Mockito.times(1)).findById(1L);
+        Mockito.verify(routeRepository,Mockito.times(1)).deleteById(1L);
+    }
+
+    @Test
+    public void getAllRoutesBetweenDatesTest() throws Exception {
+        Route route = createRoute("2020-04-20");
+        List<Route> routes = new ArrayList<>();
+        routes.add(route);
+
+        Mockito.when(routeRepository
+                .getRoutesBetweenDates(Date.valueOf("2020-04-20"),Date.valueOf("2020-04-27"))).thenReturn(routes);
+
+        mvc.perform(get("/routes/between/2020-04-20/2020-04-27")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].status").value("Tervezett"));
+
+        Mockito.verify(routeRepository,Mockito.times(1))
+                .getRoutesBetweenDates(Date.valueOf("2020-04-20"),Date.valueOf("2020-04-27"));
+    }
 }

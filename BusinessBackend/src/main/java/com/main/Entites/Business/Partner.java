@@ -73,7 +73,6 @@ public class Partner implements Serializable {
     private String vatNumber;
 
     @Column(name = "partnership_type")
-    @NotNull
     private String partnershipType;
 
     @Column(name = "own")
