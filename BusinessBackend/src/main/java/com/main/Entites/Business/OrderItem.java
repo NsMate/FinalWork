@@ -24,6 +24,7 @@ public class OrderItem implements Serializable {
     private Long id;
 
     @Column(name = "quantity")
+    @NotNull
     private Integer quantity;
 
     @Column(name = "discount")

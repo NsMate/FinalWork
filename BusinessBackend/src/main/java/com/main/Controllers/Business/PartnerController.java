@@ -22,12 +22,6 @@ public class PartnerController {
     @Autowired
     private PartnerRepository partnerRepository;
 
-    @Autowired
-    private InvoiceRepository invoiceRepository;
-
-    @Autowired
-    private BusinessOrderRepository businessOrderRepository;
-
     @GetMapping("")
     public ResponseEntity<Iterable<Partner>> getAll(){
         return ResponseEntity.ok(partnerRepository.findAll());

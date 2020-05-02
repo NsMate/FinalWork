@@ -15,7 +15,4 @@ public interface BusinessOrderRepository extends CrudRepository<BusinessOrder,Lo
     @Query("select b from BusinessOrder b where b.status = 'CLOSED' and b.id not in " +
             "(select r.businessOrder.id from Route r where r.businessOrder != null)")
     List<BusinessOrder> findAllClosedOrders();
-
-    @Query("select b from BusinessOrder b where b.route.id = ?1")
-    Optional<BusinessOrder> findOrderByRoute(Long id);
 }

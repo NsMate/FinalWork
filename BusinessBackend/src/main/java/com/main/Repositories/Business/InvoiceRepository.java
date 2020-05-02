@@ -14,7 +14,4 @@ public interface InvoiceRepository extends CrudRepository<Invoice,Long> {
     @Query("select i from Invoice i where i.status = 'CLOSED' and i.id not in " +
             "(select r.invoice.id from Route r where r.invoice != null)")
     List<Invoice> findClosedInvoices();
-
-    @Query("select i from Invoice i where i.route.id = ?1")
-    Optional<Invoice> findInvoiceByRoute(Long id);
 }
