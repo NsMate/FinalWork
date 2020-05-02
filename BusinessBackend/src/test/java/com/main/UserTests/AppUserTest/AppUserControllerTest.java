@@ -2,17 +2,14 @@ package com.main.UserTests.AppUserTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.main.Controllers.User.AppUserController;
-import com.main.Controllers.Warehouse.RouteController;
 import com.main.Entites.User.AppUser;
 import com.main.Entites.User.Employee;
-import com.main.Entites.Warehouse.Route;
 import com.main.Repositories.User.AppUserRepository;
 import com.main.Repositories.User.EmployeeRepository;
 import com.main.Security.AuthenticatedUser;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;

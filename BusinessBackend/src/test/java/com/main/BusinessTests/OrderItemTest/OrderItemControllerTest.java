@@ -3,8 +3,6 @@ package com.main.BusinessTests.OrderItemTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.main.Controllers.Business.OrderItemController;
 import com.main.Entites.Business.*;
-import com.main.Entites.User.AppUser;
-import com.main.Entites.User.Employee;
 import com.main.Repositories.Business.OrderItemRepository;
 import org.junit.Before;
 import org.junit.Test;

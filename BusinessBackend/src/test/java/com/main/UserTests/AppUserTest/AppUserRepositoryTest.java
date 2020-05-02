@@ -2,7 +2,6 @@ package com.main.UserTests.AppUserTest;
 
 import com.main.Entites.User.AppUser;
 import com.main.Entites.User.Employee;
-import com.main.Entites.Warehouse.Warehouse;
 import com.main.Repositories.User.AppUserRepository;
 import com.main.Repositories.User.EmployeeRepository;
 import org.junit.Assert;

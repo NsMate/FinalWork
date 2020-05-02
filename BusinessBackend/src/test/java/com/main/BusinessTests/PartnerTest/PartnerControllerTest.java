@@ -3,8 +3,6 @@ package com.main.BusinessTests.PartnerTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.main.Controllers.Business.PartnerController;
 import com.main.Entites.Business.Partner;
-import com.main.Entites.Business.Product;
-import com.main.Entites.Business.ProductGroup;
 import com.main.Repositories.Business.PartnerRepository;
 import org.junit.Before;
 import org.junit.Test;

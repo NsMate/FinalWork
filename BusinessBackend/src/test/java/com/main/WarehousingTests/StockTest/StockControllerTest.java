@@ -2,14 +2,11 @@ package com.main.WarehousingTests.StockTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.main.Controllers.Warehouse.StockController;
-import com.main.Controllers.Warehouse.VehicleController;
 import com.main.Entites.Warehouse.Stock;
 import com.main.Repositories.Warehouse.StockRepository;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +16,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

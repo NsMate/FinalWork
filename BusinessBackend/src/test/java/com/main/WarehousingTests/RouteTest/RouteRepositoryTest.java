@@ -32,6 +32,8 @@ public class RouteRepositoryTest {
 
     @Test
     public void gettingRoutesBetweenDatesFromDb(){
+        routeRepository.deleteAll();
+
         Route routeOk = createRoute("2020-04-20");
         Route routeOk1 = createRoute("2020-04-23");
         Route routeOk2 = createRoute("2020-04-26");

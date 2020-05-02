@@ -32,7 +32,7 @@ public class VehicleRepositoryTest {
         vehicle.setWarehouse(null);
         vehicle.setLicensePlateNumber(licensePlateNumber);
         vehicle.setManufacturer("Ford");
-        vehicle.setVehicleType("Transport");
+        vehicle.setVehicleType("Szállítás");
         vehicle.setRouteList(null);
         return vehicleRepository.save(vehicle);
     };
@@ -49,21 +49,16 @@ public class VehicleRepositoryTest {
 
     @Test
     public void gettingFreeVehiclesFromDb(){
+        vehicleRepository.deleteAll();
+
         Warehouse warehouse = createWarehouse(1L);
 
         Vehicle freeVehicle = createVehicle(null,"KLM-123");
         Vehicle freeVehicle2 = createVehicle(null,"KLM-456");
         Vehicle notFree = createVehicle(null,"ABD-123");
-        notFree.setWarehouse(warehouseRepository.findById(warehouse.getId()).get());
+        notFree.setWarehouse(warehouse);
         Vehicle notFree2 = createVehicle(null,"ABD-456");
-        notFree2.setWarehouse(warehouseRepository.findById(warehouse.getId()).get());
-
-        vehicleRepository.save(freeVehicle);
-        vehicleRepository.save(freeVehicle2);
-        vehicleRepository.save(notFree);
-        vehicleRepository.save(notFree2);
-
-        warehouseRepository.save(warehouse);
+        notFree2.setWarehouse(warehouse);
 
         List<Vehicle> vehicleList = new ArrayList<>();
         vehicleRepository.getFreeVehicles().forEach(vehicleList::add);

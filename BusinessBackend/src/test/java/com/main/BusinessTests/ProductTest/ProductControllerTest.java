@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.main.Controllers.Business.ProductController;
 import com.main.Entites.Business.Product;
 import com.main.Entites.Business.ProductGroup;
-import com.main.Entites.User.AppUser;
-import com.main.Entites.User.Employee;
 import com.main.Repositories.Business.ProductGroupRepository;
 import com.main.Repositories.Business.ProductRepository;
 import org.junit.Before;
