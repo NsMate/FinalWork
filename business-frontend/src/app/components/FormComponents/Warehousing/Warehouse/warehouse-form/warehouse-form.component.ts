@@ -61,14 +61,7 @@ export class WarehouseFormComponent implements OnInit {
     private route: ActivatedRoute,
 
     private _snackBar: MatSnackBar
-  ) { 
-    this.navigationSubscription = this.routing.events.subscribe((e: any) => {
-      // If it is a NavigationEnd event re-initalise the component
-      if (e instanceof NavigationEnd) {
-        this.ngOnInit();
-      }
-    });
-   }
+  ) {}
 
   async ngOnInit(): Promise<void> {
     this.route.queryParams.subscribe(async params => {
@@ -286,6 +279,8 @@ export class WarehouseFormComponent implements OnInit {
             panelClass: ['success']
           })
 
+          this.routing.navigate(['/warehouses']);
+
         }).catch(e => {
           
           this._snackBar.open('Valami hiba történt! ' + e.status,'', {
@@ -295,8 +290,6 @@ export class WarehouseFormComponent implements OnInit {
 
         })
       }
-
-      this.routing.navigate(['/warehouses']);
 
     })
   }

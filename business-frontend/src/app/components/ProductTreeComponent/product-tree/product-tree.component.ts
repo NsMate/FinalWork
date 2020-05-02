@@ -481,8 +481,6 @@ export class ProductDialog implements OnInit{
                                             Validators.required,
                                             Validators.pattern("[1-9][0-9]*"),
                                             Validators.maxLength(8)])),
-    'currency': new FormControl (this.data.product.currency, 
-                                            Validators.required),
     'productCode': new FormControl (this.data.product.code, Validators.compose([
                                             Validators.required,
                                             Validators.pattern("[0-9]*"),
@@ -493,7 +491,6 @@ export class ProductDialog implements OnInit{
   get productName() { return this.productForm.get('productName'); }
   get productDescription() { return this.productForm.get('productDescription'); }
   get productPrice() { return this.productForm.get('productPrice'); }
-  get currency() { return this.productForm.get('currency'); }
   get productCode() { return this.productForm.get('productCode'); }
 
   /**
