@@ -175,7 +175,7 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    public void putEmployeesUserByIdTest() throws Exception{
+    public void unbindEmployeeFromWarehouseTest() throws Exception{
         Employee employeeToFind = createEmployee();
         employeeToFind.setId(1L);
         employeeToFind.setWarehouse(null);

@@ -78,6 +78,8 @@ export class InvoiceFormComponent implements OnInit {
 
   public date: boolean = false;
 
+  public fontSize: string = 'x-large';
+
   /**
    * 
    * @param invoiceService used for invoice db operations
@@ -110,6 +112,13 @@ export class InvoiceFormComponent implements OnInit {
    *    if change get partners from db by value
    */
   async ngOnInit(): Promise<void> {
+
+    if(this.authService.fontSize == 'large'){
+      var sheet = document.createElement('host')
+      sheet.innerHTML = "div {border: 2px solid black; background-color: blue;}";
+      document.body.appendChild(sheet);
+    }
+
     this.route.queryParams.subscribe(async params => {
       if(params == null){
         this.routing.navigate(['/invoiceForm'],{queryParams: {new: 'yes'}});

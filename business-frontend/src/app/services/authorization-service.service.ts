@@ -22,6 +22,8 @@ export class AuthorizationService {
   public redirectUrl: string;
   public ownCompanyExists: boolean;
 
+  public fontSize: string = 'medium';
+
   private authUrl: string = 'http://localhost:8081/app_users';
 
   constructor(
@@ -77,5 +79,18 @@ export class AuthorizationService {
     })
 
     this.routing.navigate(['']);
+  }
+
+  changeFontSize(): void{
+    if(this.fontSize == 'medium'){
+      this.fontSize = 'large';
+      document.querySelector("body").style.cssText = "--else: 1.4vw";
+      document.querySelector("h1").style.cssText = "--header: 2.3vw";
+    }else{
+      this.fontSize = 'medium';
+      document.querySelector("body").style.cssText = "--else: 1.1vw";
+      document.querySelector("h1").style.cssText = "--header: 2.0vw";
+    }
+    console.log(this.fontSize);
   }
 }

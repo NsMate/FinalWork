@@ -1,3 +1,7 @@
+*{
+    font-size: var(--else);
+}
+
 table {
     width: 60%;
     margin: 0 auto 18px auto;
@@ -21,6 +25,11 @@ th,td{
 h1{
     text-align: center;
     margin-bottom: 32px;
+    font-size: var(--header);
+}
+
+.prices,.plusVat,.totalPriceWithVat{
+    font-size: var(--header);
 }
 
 .saveButton{

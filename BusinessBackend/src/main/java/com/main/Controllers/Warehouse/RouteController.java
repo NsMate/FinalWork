@@ -1,16 +1,9 @@
 package com.main.Controllers.Warehouse;
 
-import com.main.Entites.Business.BusinessOrder;
-import com.main.Entites.Business.Invoice;
 import com.main.Entites.Warehouse.Route;
-import com.main.Entites.Warehouse.Vehicle;
-import com.main.Entites.Warehouse.Warehouse;
-import com.main.Repositories.Business.BusinessOrderRepository;
-import com.main.Repositories.Business.InvoiceRepository;
 import com.main.Repositories.Warehouse.RouteRepository;
 import com.main.Repositories.Warehouse.VehicleRepository;
 import com.main.Repositories.Warehouse.WarehouseRepository;
-import com.sun.deploy.panel.ITreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -39,8 +39,9 @@
                           [matTooltipDisabled]="getAuthService().ownCompanyExists"><mat-icon>local_shipping</mat-icon> Forgalomkezelés </button>
     </div>
     <span class="example-spacer"></span>
+    <mat-icon style="margin-right: 10px; cursor: pointer;" (click)="getAuthService().changeFontSize()" matTooltip="Szöveg méret változtatása">settings</mat-icon>
     <mat-icon style="margin-right: 10px;">person_pin</mat-icon>
-    <h3>{{ getAuthService().appUser.employee.lastName }} {{ getAuthService().appUser.employee.firstName }}</h3>
+    <h2>{{ getAuthService().appUser.employee.lastName }} {{ getAuthService().appUser.employee.firstName }}</h2>
     <button mat-flat-button (click)="getAuthService().logout()" class="logout-button">Kilépés</button>
   </mat-toolbar-row>
 </mat-toolbar>

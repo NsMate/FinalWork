@@ -43,6 +43,7 @@ public class Warehouse implements Serializable {
 
     @Column(name = "street_number")
     @NotNull
+    @Size(max = 30)
     private String streetNumber;
 
     @OneToMany(mappedBy = "warehouse")

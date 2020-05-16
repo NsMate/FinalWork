@@ -3,4 +3,13 @@
 @import "../node_modules/angular-calendar/css/angular-calendar.css";
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
+    --else: 1.1vw; 
+}
+*{
+    font-size: var(--else);
+}
+h1{
+    --header: 2.0vw;
+    font-size: var(--header);
+}

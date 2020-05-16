@@ -27,9 +27,6 @@ public class OrderItem implements Serializable {
     @NotNull
     private Integer quantity;
 
-    @Column(name = "discount")
-    private Integer discount;
-
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     @JsonIgnore

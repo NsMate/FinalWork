@@ -18,6 +18,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -50,6 +52,25 @@ public class VehicleControllerTest {
     @Before
     public void setup(){
         MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    public void getAllVehiclesTest() throws Exception{
+        Vehicle vehicleToReturn1 = createVehicle(1L,"KLM-456");
+        Vehicle vehicleToReturn2 = createVehicle(2L,"KLM-426");
+
+        List<Vehicle> vehicles = new ArrayList<>();
+        vehicles.add(vehicleToReturn1);
+        vehicles.add(vehicleToReturn2);
+
+        Mockito.when(vehicleRepository.findAll()).thenReturn(vehicles);
+
+        mvc.perform(get("/vehicles")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+
+        Mockito.verify(vehicleRepository, Mockito.times(1)).findAll();
     }
 
     @Test
