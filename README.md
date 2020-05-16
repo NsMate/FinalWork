@@ -12,7 +12,7 @@ HOW TO USE
 
 3.Run start.bat file
 
-4.Use your favourite browser and go to: localhost:8081/#/login
+4.Use Mozilla or Chrome and go to: localhost:8081/#/login
 
 5.Use admin/password to start testing the application
 
